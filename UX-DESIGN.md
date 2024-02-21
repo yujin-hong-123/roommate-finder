@@ -9,4 +9,4 @@ Replace the contents of this file with the completed assignments, as described i
 
 
 ## App map for Roommate Finder
-[/ux-design/Roommate_Finder_SiteMap.png]
+![AppMap](ux-design/Roommate_Finder_SiteMap.png)
