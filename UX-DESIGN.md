@@ -12,7 +12,7 @@ Replace the contents of this file with the completed assignments, as described i
 ![AppMap](ux-design/Roommate_Finder_SiteMap.png)
 
 ## Wireframes
-[Login] (ux-design/Wireframes/Login.png)
+![Login] (ux-design/Wireframes/Login.png)
 
 [Register] (ux-design/Wireframes/Register.png)
 
