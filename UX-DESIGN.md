@@ -1,6 +1,7 @@
 # User Experience Design
 
 ## Link to Prototype
+https://www.figma.com/file/egok9lDfShOmKNLtFxo26K/RoomMate_Finder?type=design&node-id=0%3A1&mode=design&t=EUDlUqf8AKDYr4nV-1 
 
 ## App map for Roommate Finder
 ![AppMap](ux-design/Roommate_Finder_SiteMap.png)
