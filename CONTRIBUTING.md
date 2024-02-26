@@ -1,6 +1,6 @@
 # Guide to Contributing
 
-Team Names: Yujin Hong, Leena Vieltojarvi, Bobby Impastato, Ethan
+Team Names: Yujin Hong, Leena Vieltojarvi, Robert (Bobby) Impastato, Ethan
 
 Sprint 0
 1. Scrum Master: Leena Vieltojarvi
@@ -12,6 +12,15 @@ Team Norms:
 2. Communicate the distribution of roles before taking them up.
 3. Inform members ASAP if promised role cannot be completed.
 4. Make sure everyone is using the same developing environment(VS Code).
-5. Zoom call once a week.
+5. Zoom call once a week. Scrum Master is respossible for organizing.
+6. Scrum Master will coordinate roughly 2 standups per week according to the class schedule.
+7. Sprints will last approx 2 weeks according to the class schedule.
+
+Coding Standards:
+1. Use VSCode and lint using ESLint
+2. Only push working code and make small, gradual commits.
+3. Include comments in commits -m
+4. Include comments in code
+5. Automate tests with GitHub Actions
 
 
