@@ -22,6 +22,6 @@ Coding Standards:
 3. Include comments in commits -m
 4. Include comments in code
 5. Automate tests with GitHub Actions
-6. Be sure to commit your changes to a BRANCH. Code must be reviewed by a peer before merging to main branch.
+6. Be sure to commit your changes to a BRANCH other than the main branch. Code must be reviewed by a peer before merging to main branch.
 
 
