@@ -5,10 +5,10 @@ Every project must have a README.md that automatically renders on the project's 
 Product Vision Statement: (statement)
 
 Team Members
-1. Robert (Bobby) Impastato
-2. Yujin Hong
-3. Leena Vieltojarvi
-4. Ethan Delgado
+1. Robert (Bobby) Impastato [https://github.com/bobbyimpastato]
+2. Yujin Hong [https://github.com/bobbyimpastato]
+3. Leena Vieltojarvi [https://github.com/bobbyimpastato]
+4. Ethan Delgado [https://github.com/bobbyimpastato]
 
 
 
