@@ -1,0 +1,13 @@
+.Heading{
+    display: flex;
+    justify-content: center;
+}
+
+.AboutText{
+    margin: 40px;
+}
+
+.Footer{
+    display: flex;
+    justify-content: center;
+}
