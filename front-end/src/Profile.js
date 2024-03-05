@@ -5,8 +5,8 @@ function Profile() {
     return (
         <>
         <div className="Heading">
-            <Button text="Edit Profile"></Button>
-            <Button text="Retake Survey"></Button>
+            <Button text="Edit Profile" location="/EditProfile"></Button>
+            <Button text="Retake Survey" location="/Survey"></Button>
         </div>
         <div className="Profile">
             
@@ -22,8 +22,8 @@ function Profile() {
                 </p>
         </div>
         <div className="Footer">
-            <Button text="Preferences"></Button>
-            <Button text="Logout"></Button>
+            <Button text="Preferences" location="/Preferences"></Button>
+            <Button text="Logout" location="/Login"></Button>
         </div>
         </>
     );
