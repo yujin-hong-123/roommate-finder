@@ -1,8 +1,8 @@
-
+/* Survey page styles */
 .Survey {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  padding: 1rem;
   background-color: #F5F5FA;
 }
 
@@ -25,6 +25,7 @@ input[type="number"] {
   border: 1px solid #D1D1D1;
   border-radius: 4px;
   margin-bottom: 0.5rem;
+  box-sizing: border-box; /* Ensure padding and border don't increase element width */
 }
 
 button {
@@ -40,7 +41,7 @@ button:hover {
   background-color: #6D28D9;
 }
 
-
+/* Header styles (similar to chat-header) */
 .Header {
   display: flex;
   align-items: center;
@@ -48,4 +49,28 @@ button:hover {
   padding: 1rem;
   background-color: #57068C;
   color: white;
+}
+
+/* Additional styles specific to the survey page */
+/* You may need to customize or add more styles based on your design requirements */
+
+/* Media query for smaller screens (e.g., mobile devices) */
+@media only screen and (max-width: 480px) {
+  .Survey {
+    padding: 0.5rem;
+  }
+
+  .survey-question {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  select,
+  input[type="number"] {
+    padding: 0.5rem;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+  }
 }

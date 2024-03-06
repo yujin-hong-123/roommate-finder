@@ -15,10 +15,10 @@ function RegistrationForm() {
   };
 
   return (
-    <div className="container">
-      <div className="form-container">
-        <h2 className="title">NYU Roommate Finder</h2>
-        <form className="form" onSubmit={handleSubmit}>
+    <div className="landingPage-container">
+      <div className="landingPage-form-container">
+        <h2 className="landingPage-title">NYU Roommate Finder</h2>
+        <form className="landingPage-form" onSubmit={handleSubmit}>
           <input
             type="text"
             value={username}
@@ -40,7 +40,7 @@ function RegistrationForm() {
             placeholder="Confirm Password"
             className="input"
           />
-          <button type="submit" className="button">Register</button>
+          <button type="submit" className="landingPage-button">Register</button>
         </form>
       </div>
     </div>
