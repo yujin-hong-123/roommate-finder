@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import "./ChatList.css"
 import Header from "./Header"
 import profilepic from './ProfilePic.png';
-import logo from './logo.svg';
 
 function ChatList() {
   const navigate = useNavigate();
