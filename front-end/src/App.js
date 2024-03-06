@@ -1,22 +1,18 @@
-import './App.css';
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
-import Profile from './Profile'
-import TopMatches from './TopMatches'
-import Header from './Header'
-
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoginForm from './components/LoginForm';
+import RegistrationForm from './components/RegistrationForm';
 
 function App() {
   return (
-    <div className="App">
-      <Router>
-        <Header />
-        <main className="App-main">
-          <Routes>
-            <Route path="/" element={<Profile />}> </Route>
-          </Routes>
-        </main>
-      </Router>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/register" element={<RegistrationForm />} />
+        {/* Redirect all other paths to "/login" */}
+        <Route path="*" element={<Navigate replace to="/login" />} />
+      </Routes>
+    </Router>
   );
 }
 
