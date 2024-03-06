@@ -10,6 +10,7 @@ function Survey() {
     const [minRent, setMinRent] = useState(300);
     const [maxRent, setMaxRent] = useState(10000);
     const [desiredRoommates, setDesiredRoommates] = useState(1);
+    const [bedtime, setBedtime] = useState('11pm');
 
     const handlePetsChange = (value) => {
         setPetsPreference(value);
@@ -35,6 +36,11 @@ function Survey() {
         // Handle submission logic here later...
         navigate('/matches');
     };
+
+    const handleBedtimeChange = (event) => {
+        setBedtime(event.target.value);
+    };
+
 
     return (
         <div className="Survey">
@@ -119,6 +125,19 @@ function Survey() {
                     <option value={2}>2</option>
                     <option value={3}>3</option>
                     <option value={4}>4 or more</option>
+                </select>
+            </div>
+            <div className="survey-question">
+                <p>When is your usual bedtime?</p>
+                <select value={bedtime} onChange={handleBedtimeChange}>
+                    <option value="8pm">8pm</option>
+                    <option value="9pm">8pm</option>
+                    <option value="10pm">8pm</option>
+                    <option value="11pm">8pm</option>
+                    <option value="12am">8pm</option>
+                    <option value="1am">8pm</option>
+                    <option value="2am">3am</option>
+                    <option value="3am">3am</option>
                 </select>
             </div>
 
