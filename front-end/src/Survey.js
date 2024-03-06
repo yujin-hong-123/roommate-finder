@@ -131,12 +131,12 @@ function Survey() {
                 <p>When is your usual bedtime?</p>
                 <select value={bedtime} onChange={handleBedtimeChange}>
                     <option value="8pm">8pm</option>
-                    <option value="9pm">8pm</option>
-                    <option value="10pm">8pm</option>
-                    <option value="11pm">8pm</option>
-                    <option value="12am">8pm</option>
-                    <option value="1am">8pm</option>
-                    <option value="2am">3am</option>
+                    <option value="9pm">9pm</option>
+                    <option value="10pm">10pm</option>
+                    <option value="11pm">11pm</option>
+                    <option value="12am">12am</option>
+                    <option value="1am">1am</option>
+                    <option value="2am">2am</option>
                     <option value="3am">3am</option>
                 </select>
             </div>

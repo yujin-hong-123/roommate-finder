@@ -16,7 +16,7 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/chatlist" element={<ChatList />} />
         <Route path="/matches" element={<Matches />} />
-        <Route path="/survey" element={<Survey />} /> {/*REMEMEBER TO CHANGE THIS*/}
+        <Route path="/survey" element={<Survey />} /> {/*PLEASE ADD A BUTTON TO THIS ON PROFILE SCREEN*/}
         {/* Redirect all other paths to "/login" */}
         <Route path="*" element={<Navigate replace to="/login" />} />
       </Routes>
