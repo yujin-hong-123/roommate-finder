@@ -1,14 +1,19 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import "./ChatList.css"
 import Button from "./Button"
 import Header from "./Header"
 
 function ChatList() {
+  const navigate = useNavigate();
+
     return (
       <div className="ChatList">
         <Header />
-        <Button text="Enter Chat"></Button>
-        <Button text="Enter Chat"></Button>
+        <button onClick={() => navigate('/chat')} className="button">
+          Enter Chat
+        </button>
       </div>
     );
   }
