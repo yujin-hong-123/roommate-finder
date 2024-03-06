@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/chats.css';
+import './chats.css';
 
 function ChatPage() {
   const [message, setMessage] = useState('');
