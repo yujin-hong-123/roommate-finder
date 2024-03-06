@@ -12,10 +12,10 @@ const Header = props => {
       <nav className="Header-navbar">
         <ul className="nav-links">
           <li className="nav-item">
-            <Link to="/topmatches">Matches</Link>
+            <Link to="/matches">Matches</Link>
           </li>
           <li className="nav-item">
-            <Link to="/chats">Chats</Link>
+            <Link to="/chatlist">Chats</Link>
           </li>
           <li className="nav-item">
             <Link to="/profile">Profile</Link>

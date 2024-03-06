@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginForm from './components/LoginForm';
 import RegistrationForm from './components/RegistrationForm';
 import ChatPage from './components/ChatPage';
+import ChatList from './ChatList'
+import Matches from './Matches';
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegistrationForm />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/chatlist" element={<ChatList />} />
+        <Route path="/matches" element={<Matches />} />
         {/* Redirect all other paths to "/login" */}
         <Route path="*" element={<Navigate replace to="/login" />} />
       </Routes>
