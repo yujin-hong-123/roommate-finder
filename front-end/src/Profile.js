@@ -1,15 +1,20 @@
 import "./Profile.css"
 import Button from "./Button"
+import Header from "./Header"
+import LoginForm from "./LoginForm";
+import profilePicture from "./ProfilePic.png"
 
 function Profile() {
     return (
         <>
+        <Header />
         <div className="Heading">
-            <Button text="Edit Profile" location="/EditProfile"></Button>
-            <Button text="Retake Survey" location="/Survey"></Button>
+            <Button text="Edit Profile" location='/editprofile'></Button>
+            <Button text="Retake Survey" location="/survey"></Button>
         </div>
         <div className="Profile">
-            
+            <img src={profilePicture}></img>
+            <h2>Username</h2>
         </div>
         <div className="About">
             <p className="AboutText">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
@@ -22,8 +27,8 @@ function Profile() {
                 </p>
         </div>
         <div className="Footer">
-            <Button text="Preferences" location="/Preferences"></Button>
-            <Button text="Logout" location="/Login"></Button>
+            <Button text="Preferences" location="/preferences"></Button>
+            <Button text="Logout" location="/login"></Button>
         </div>
         </>
     );

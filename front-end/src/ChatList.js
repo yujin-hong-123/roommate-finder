@@ -11,7 +11,6 @@ function ChatList() {
     return (
       <div className="ChatList">
         <Header />
-        <button onClick={() => navigate('/matches')} className="button">
 
         <button onClick={() => navigate('/chat')} className="button">
 

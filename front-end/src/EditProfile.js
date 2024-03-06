@@ -3,6 +3,7 @@ import "./EditProfile.css"
 function EditProfile(){
     return (
     <>
+    
     </>);
 }
 

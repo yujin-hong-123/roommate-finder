@@ -1,13 +1,23 @@
 .Heading{
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
+    padding-top: 10px;
+}
+
+.Profile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
 }
 
 .AboutText{
-    margin: 40px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .Footer{
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
 }
