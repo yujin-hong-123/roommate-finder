@@ -11,9 +11,7 @@ function ChatList() {
     return (
       <div className="ChatList">
         <Header />
-        <button onClick={() => navigate('/matches')} className="button">
-
-        <button onClick={() => navigate('/chat')} className="button">
+        <button onClick={() => navigate('/chatpage')} className="wowbutton">
 
           <img src={profilepic} className="profilepic" alt="logo" />
           <p>Their Name</p>
