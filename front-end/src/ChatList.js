@@ -11,10 +11,12 @@ function ChatList() {
     return (
       <div className="ChatList">
         <Header />
-        <button onClick={() => navigate('/chat')} className="wowbutton">
+        <button onClick={() => navigate('/matches')} className="button">
+
+        <button onClick={() => navigate('/chat')} className="button">
+
           <img src={profilepic} className="profilepic" alt="logo" />
           <p>Their Name</p>
-          Enter Chat
         </button>
       </div>
     );
