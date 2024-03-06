@@ -5,6 +5,7 @@ import RegistrationForm from './components/RegistrationForm';
 import ChatPage from './components/ChatPage';
 import ChatList from './ChatList'
 import Matches from './Matches';
+import Profile from './Profile'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/chatlist" element={<ChatList />} />
         <Route path="/matches" element={<Matches />} />
+        <Route path="/profile" element={<Profile />} />
         {/* Redirect all other paths to "/login" */}
         <Route path="*" element={<Navigate replace to="/login" />} />
       </Routes>
