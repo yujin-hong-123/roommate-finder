@@ -103,6 +103,7 @@ function Survey() {
                             step="100"
                             value={minRent}
                             onChange={handleMinRentChange}
+                            inputMode="numeric"
                         />
                     </label><br />
                     <label>
@@ -114,6 +115,7 @@ function Survey() {
                             step="100"
                             value={maxRent}
                             onChange={handleMaxRentChange}
+                            inputMode="numeric"
                         />
                     </label>
                 </div>
