@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function RegistrationForm() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -12,6 +14,7 @@ function RegistrationForm() {
       return;
     }
     console.log('Register with:', username, password);
+    navigate('/survey');
   };
 
   return (
