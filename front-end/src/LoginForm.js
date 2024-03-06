@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import './landingPages.css';
+
 
 function LoginForm() {
   const [username, setUsername] = useState('');
@@ -14,9 +16,9 @@ function LoginForm() {
   };
 
   return (
-    <div className="container">
-      <div className="form-container">
-        <h2 className="title">NYU Roommate Finder</h2>
+    <div className="landingPage-container">
+      <div className="landingPage-form-container">
+        <h2 className="landingPage-title">NYU Roommate Finder</h2>
         <form className="form" onSubmit={handleSubmit}>
           <input
             type="text"
@@ -32,13 +34,13 @@ function LoginForm() {
             placeholder="Enter Password"
             className="input"
           />
-          <button type="submit" className="button">Login</button>
-          <div className="footer">
-            <Link to="/register" className="link">
+          <button type="submit" className="landingPage-button">Login</button>
+          <div className="landingPage-footer">
+            <Link to="/register" className="landingPage-link">
               Register
             </Link>
             {/* Add this button below your Login/Register links */}
-            <button onClick={() => navigate('/chat')} className="button">
+            <button onClick={() => navigate('/chatpage')} className="button">
               Go to Chat
             </button>
           </div>
