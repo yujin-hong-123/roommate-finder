@@ -1,0 +1,14 @@
+.EditHeader {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.UpdateFields {
+    display: flex;
+    flex-direction: column;
+}
+
+.UpdateProfile {
+    display: flex;
+    justify-content: space-evenly;
+}
