@@ -1,9 +1,14 @@
 import "./Button.css"
+import { Link} from "react-router-dom";
 
-function Button({text}){
+function Button({text, location}){
     return (
     <div>
-        <h3 className="button">{text}</h3>
+        <button className="profileButton">
+            <Link to={location} className="profileLinks">
+                <h3>{text}</h3>
+            </Link>
+        </button>
     </div>);
 }
 
