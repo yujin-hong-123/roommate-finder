@@ -6,13 +6,35 @@
     background-color: #F5F5FA;
 }
 
-.wowbutton {
-    border:2px black;
-    margin: 20px;
-    padding: 30px;
-    text-align: center;
+.rowbutton {
+    background-color: #dcdcdc;
+    display: flex;
+    flex-direction:row;
+    margin: 0.2rem 0rem;
+    padding: 20px;
+    text-align: left;
 }
 
-img {
-    max-width: 30vh;
+.rowbutton:hover {
+    background-color: white;
+}
+
+.profilepic {
+    max-width: 8vh;
+  }
+
+.chatentry {
+    list-style-type: none;
+}
+
+.username {
+    color: black;
+    padding-bottom: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.lastchat {
+    color: #505050;
+    font-size: 0.75rem
 }
