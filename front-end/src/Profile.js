@@ -14,9 +14,7 @@ function Profile() {
         <>
             <Header />
             <div className="Heading">
-                <button onClick={() => navigate('/editprofile')} className="profile_button">
-                    Edit Profile
-                </button>
+                <Button text="Edit Profile" location="/editprofile"></Button>
                 <Button text="Retake Survey" location="/survey"></Button>
             </div>
             <div className="Profile">
@@ -24,7 +22,7 @@ function Profile() {
                 <h2>Username</h2>
             </div>
             <div className="About">
-                <p className="AboutText">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                <p className="AboutText"> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Etiam consequat ante vel vehicula vulputate. Aliquam maximus turpis ut
                     porttitor imperdiet. Cras elementum orci id neque tincidunt finibus.
                     Proin accumsan suscipit elit, at varius eros scelerisque id.
