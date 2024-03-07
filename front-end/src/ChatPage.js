@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './chats.css';
+import './ChatPage.css';
 
 function ChatPage() {
   const [message, setMessage] = useState('');
@@ -15,7 +15,7 @@ function ChatPage() {
   return (
     <div className="chat-container">
       <header className="chat-header">
-        <Link to="/" className="back-button">Back</Link>
+        <Link to="/chatlist" className="back-button">Back</Link>
         <h1 className="chat-name">Name1</h1>
       </header>
       <ul className="chat-messages">
