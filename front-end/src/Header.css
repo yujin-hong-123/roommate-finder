@@ -7,6 +7,7 @@
   .Header-header {
     background-color: #57068C;
     padding: 1rem;
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
