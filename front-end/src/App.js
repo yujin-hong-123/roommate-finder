@@ -9,6 +9,7 @@ import Survey from './Survey';
 import Profile from './Profile'
 import MyPreferences from './MyPreferences'
 import OtherProfile from './OtherProfile';
+import EditProfile from './EditProfile'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/mypreferences" element={<MyPreferences />} />
         <Route path="/otheruser" element={<OtherProfile />} />
+        <Route path="/editprofile" element={<EditProfile />} />
         {/* Redirect all other paths to "/login" */}
         <Route path="*" element={<Navigate replace to="/login" />} />
       </Routes>
