@@ -6,7 +6,7 @@ function Button({text, location}){
     <div>
         <button className="profileButton">
             <Link to={location} className="profileLinks">
-                <h3>{text}</h3>
+                <h3 className="ButtonText">{text}</h3>
             </Link>
         </button>
     </div>);
