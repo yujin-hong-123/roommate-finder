@@ -1,12 +1,10 @@
 import "./OtherProfile.css"
-import Header from "./Header"
 import Button from "./Button"
 import profilePicture from "./ProfilePic.png"
 
 function OtherProfile() {
     return (
         <>
-        <Header />
         <div className="OtherBack"> 
             <Button text="Back to Top Matches" location="/matches"></Button>
         </div>
