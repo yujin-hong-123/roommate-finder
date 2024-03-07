@@ -34,15 +34,11 @@ function LoginForm() {
             placeholder="Enter Password"
             className="input"
           />
-          <button type="submit" className="landingPage-button">Login</button>
+          <button type="submit" onClick={() => navigate('/matches')} className="landingPage-button">Login</button>
           <div className="landingPage-footer">
             <Link to="/register" className="landingPage-link">
               Register
             </Link>
-            {/* Add this button below your Login/Register links */}
-            <button onClick={() => navigate('/chatpage')} className="button">
-              Go to Chat
-            </button>
           </div>
         </form>
       </div>
