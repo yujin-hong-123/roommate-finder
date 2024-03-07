@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom'
 import "./Profile.css"
 import Button from "./Button"
 import Header from "./Header"
@@ -8,8 +6,6 @@ import LoginForm from "./LoginForm";
 import profilePicture from "./ProfilePic.png"
 
 function Profile() {
-    const navigate = useNavigate();
-
     return (
         <>
             <Header />
