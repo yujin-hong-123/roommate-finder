@@ -1,4 +1,4 @@
-.ChatList {
+.MatchList {
     background-color: F5F5FA; 
     display: flex;
     flex-direction: column;
@@ -11,7 +11,7 @@
     display: flex;
     flex-direction:row;
     margin: 0.2rem 0rem;
-    padding: 20px;
+    padding: 10px;
     text-align: left;
 }
 
@@ -19,22 +19,22 @@
     background-color: white;
 }
 
-.profilepic_chat {
-    max-width: 8vh;
+.profilepic_match {
+    max-width: 7vh;
   }
 
-.chatentry {
+.matchentry {
     list-style-type: none;
 }
 
-.username_chat {
+.username_match {
     color: black;
     padding-bottom: 10px;
-    font-size: 1rem;
+    font-size: 0.7rem;
     font-weight: bold;
 }
 
-.lastchat {
+.bio {
     color: #505050;
-    font-size: 0.75rem
+    font-size: 0.5rem
 }

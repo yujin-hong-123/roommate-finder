@@ -1,3 +1,6 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import "./Profile.css"
 import Button from "./Button"
 import Header from "./Header"
@@ -5,11 +8,15 @@ import LoginForm from "./LoginForm";
 import profilePicture from "./ProfilePic.png"
 
 function Profile() {
+    const navigate = useNavigate();
+
     return (
         <>
             <Header />
             <div className="Heading">
-                <Button text="Edit Profile" location='/editprofile'></Button>
+                <button onClick={() => navigate('/editprofile')} className="profile_button">
+                    Edit Profile
+                </button>
                 <Button text="Retake Survey" location="/survey"></Button>
             </div>
             <div className="Profile">
