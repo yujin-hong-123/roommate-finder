@@ -10,7 +10,6 @@ import Profile from './Profile'
 import EditProfile from './EditProfile';
 import MyPreferences from './MyPreferences'
 import OtherProfile from './OtherProfile';
-import EditProfile from './EditProfile'
 
 function App() {
   return (
