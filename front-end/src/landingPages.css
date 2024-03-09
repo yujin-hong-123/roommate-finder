@@ -4,24 +4,26 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #F5F5FA;
+  background-color: #e0e0e0;
 }
 
 .landingPage-form-container {
   background-color: #FFFFFF;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   width: 90%;
   max-width: 400px;
   margin: auto;
+  box-sizing: border-box;
 }
 
 .landingPage-title {
   color: #57068C;
   text-align: center;
-  margin-bottom: 1rem;
-  font-size: 1.5rem; /* Larger text on smaller screens */
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .landingPage-form {
@@ -30,20 +32,24 @@
 }
 
 .landingPage-input {
-  padding: 0.5rem;
+  padding: 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #D1D1D1;
-  border-radius: 4px;
+  border: 2px solid #D1D1D1;
+  border-radius: 6px;
+  font-size: 1rem;
 }
 
 .landingPage-button {
   background-color: #57068C;
   color: #FFFFFF;
-  padding: 0.5rem;
+  padding: 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-bottom: 1rem;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
 .landingPage-button:hover {
@@ -52,40 +58,34 @@
 
 .landingPage-footer {
   text-align: center;
+  padding-top: 1rem;
 }
 
 .landingPage-link {
   color: #57068C;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .landingPage-link:hover {
   text-decoration: underline;
 }
 
-
-
-.rowbutton {
-  background-color: skyblue;
-}
-
 /* iPhone 14 Pro Max specific styles */
 @media only screen and (max-width: 428px) {
   .landingPage-form-container {
-    padding: 1.5rem; /* Slightly less padding on smaller screens */
+    padding: 1.5rem;
   }
   
   .landingPage-title {
-    font-size: 1.25rem; /* Adjust title size for smaller screens */
+    font-size: 1.75rem; 
   }
 
   .landingPage-input {
-    padding: 0.75rem; /* Larger tap targets for inputs */
+    padding: 0.75rem; 
   }
 
   .landingPage-button {
-    padding: 0.75rem; /* Larger tap targets for buttons */
+    padding: 0.75rem;
   }
 }
-
-  

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './landingPages.css';
 
 function RegistrationForm() {
   const navigate = useNavigate();
@@ -20,30 +21,30 @@ function RegistrationForm() {
   return (
     <div className="landingPage-container">
       <div className="landingPage-form-container">
-        <h2 className="landingPage-title">NYU Roommate Finder</h2>
+        <h2 className="landingPage-title">Create Your Account</h2>
         <form className="landingPage-form" onSubmit={handleSubmit}>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter Username"
-            className="input"
+            placeholder="Username"
+            className="landingPage-input"
           />
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter Password"
-            className="input"
+            placeholder="Password"
+            className="landingPage-input"
           />
           <input
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirm Password"
-            className="input"
+            className="landingPage-input"
           />
-          <button type="submit" className="landingPage-button">Register</button>
+          <button type="submit" className="landingPage-button">Sign Up</button>
         </form>
       </div>
     </div>
