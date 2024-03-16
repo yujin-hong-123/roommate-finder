@@ -4,5 +4,5 @@
     "guests": "yes",
     "rent_max": 10000,
     "rent_min": 300,
-    "bedtime": "late"
+    "bedtime": "irregular"
 }
