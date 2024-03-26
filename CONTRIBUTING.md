@@ -7,6 +7,10 @@ Sprint 0
 2. Product Owner: Bobby Impastato
 3. Estimated Time: 1 week
 
+Sprint 1
+1. Scrum Master: Bobby Impastato
+2. Product Owner: Yujin Hong
+
 Team Norms:
 1. Always respond to Discord within the same day.
 2. Communicate the distribution of roles before taking them up.
