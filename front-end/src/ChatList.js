@@ -1,60 +1,64 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 import { Link } from 'react-router-dom'
 import "./ChatList.css"
 import Header from "./Header"
 import profilepic from './ProfilePic.png';
 
-function ChatList() {
+const Chatlist = props => {
   const navigate = useNavigate();
+  const [loaded, setLoaded] = useState(false)
+  const [error, setError] = useState('')
+  const [feedback, setFeedback] = useState('')
+  const [chats, setChats] = useState([]);
 
-    return (
-      <div className="ChatList">
-        <Header />
-        <button onClick={() => navigate('/chatpage')} className="rowbutton">
-          <img src={profilepic} className="profilepic_chat" alt="profilepic" />
-          <ul className="chatentry">
-            <li className="username_chat">Name1</li>
-            <li className="lastchat">Lorem ipsum dolor sit amet, consectetur adipiscing elit..</li>
-          </ul>
-        </button>
-        <button onClick={() => navigate('/chatpage')} className="rowbutton">
-          <img src={profilepic} className="profilepic_chat" alt="profilepic" />
-          <ul className="chatentry">
-            <li className="username_chat">Name2</li>
-            <li className="lastchat">Lorem ipsum dolor sit amet, consectetur adipiscing elit..</li>
-          </ul>
-        </button>
-        <button onClick={() => navigate('/chatpage')} className="rowbutton">
-          <img src={profilepic} className="profilepic_chat" alt="profilepic" />
-          <ul className="chatentry">
-            <li className="username_chat">Name3</li>
-            <li className="lastchat">Lorem ipsum dolor sit amet, consectetur adipiscing elit..</li>
-          </ul>
-        </button>
-        <button onClick={() => navigate('/chatpage')} className="rowbutton">
-          <img src={profilepic} className="profilepic_chat" alt="profilepic" />
-          <ul className="chatentry">
-            <li className="username_chat">Name4</li>
-            <li className="lastchat">Lorem ipsum dolor sit amet, consectetur adipiscing elit..</li>
-          </ul>
-        </button>
-        <button onClick={() => navigate('/chatpage')} className="rowbutton">
-          <img src={profilepic} className="profilepic_chat" alt="profilepic" />
-          <ul className="chatentry">
-            <li className="username_chat">Name5</li>
-            <li className="lastchat">Lorem ipsum dolor sit amet, consectetur adipiscing elit..</li>
-          </ul>
-        </button>
-        <button onClick={() => navigate('/chatpage')} className="rowbutton">
-          <img src={profilepic} className="profilepic_chat" alt="profilepic" />
-          <ul className="chatentry">
-            <li className="username_chat">Name6</li>
-            <li className="lastchat">Lorem ipsum dolor sit amet, consectetur adipiscing elit..</li>
-          </ul>
-        </button>
-      </div>
-    );
-  }
+  const fetchChats = () => {
+    axios
+      .get('http://localhost:3001/chatlist')
+      .then(response => {
+        const chatsData = response.data; //response is an array of JSON objects
+        setChats(chatsData);
+      })
+      .catch(err => {
+        const errMsg = JSON.stringify(err, null, 2);
+        setError(errMsg);
+      })
+      .finally(() => {
+        setLoaded(true);
+      });
+  };
 
-export default ChatList
+  useEffect(() => {
+
+    fetchChats()
+
+    //set timer to load every n sec
+    const intervalHandle = setInterval(() => {
+      fetchChats()
+    }, 5000)
+
+    //
+    return e => {
+      //clear timer
+      clearInterval(intervalHandle)
+    }
+  }, [])
+
+  return (
+    <div className="ChatList">
+      <Header />
+      {chats.map((user, index) => (
+        <button key={index} onClick={() => navigate('/chatpage')} className="rowbutton">
+          <img src={profilepic} className="profilepic_chat" alt="profilepic" />
+          <ul className="chatentry">
+            <li className="username_chat">{user.name}</li>
+            <li className="lastchat">{user.bio}</li>
+          </ul>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export default Chatlist;

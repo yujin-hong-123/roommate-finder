@@ -9,7 +9,6 @@ import profilepic from './ProfilePic.png';
 const Matches = props => {
   const navigate = useNavigate();
 
-  const [Message, setMessage] = useState([])
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState('')
   const [feedback, setFeedback] = useState('')

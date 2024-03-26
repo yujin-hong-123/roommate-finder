@@ -24,7 +24,7 @@ app.get('/matches', async (req, res) => {
   try {
     //FIRST, DATA IS RETREIVED FROM THE DATABASE AND COMPILED INTO AN ARRAY
     const body1 = {
-      message: "Hello, I am the first user.",
+      bio: "Hello, I am the first user.",
       imagePath: "/static/images/donkey.jpg",
       user_id: "rkTV8JXlO1",
       name: "Bobby Impastato",
@@ -36,7 +36,7 @@ app.get('/matches', async (req, res) => {
     }
 
     const body2 = {
-      message: "Hello, I am the second user.",
+      bio: "Hello, I am the second user.",
       imagePath: "/static/images/donkey.jpg",
       user_id: "rkTV8JXlO1",
       name: "Barack Obama",
@@ -48,7 +48,7 @@ app.get('/matches', async (req, res) => {
     }
 
     const body3 = {
-      message: "Hello, I am the third user.",
+      bio: "Hello, I am the third user.",
       imagePath: "/static/images/donkey.jpg",
       user_id: "rkTV8JXlO1",
       name: "Taylor Swift",
@@ -60,7 +60,7 @@ app.get('/matches', async (req, res) => {
     }
 
     const body4 = {
-      message: "Hello, I am the fourth user.",
+      bio: "Hello, I am the fourth user.",
       imagePath: "/static/images/donkey.jpg",
       user_id: "rkTV8JXlO1",
       name: "Steve Jobs",
@@ -72,7 +72,7 @@ app.get('/matches', async (req, res) => {
     }
 
     const body5 = {
-      message: "Hello, I am the fifth user.",
+      bio: "Hello, I am the fifth user.",
       imagePath: "/static/images/donkey.jpg",
       user_id: "rkTV8JXlO1",
       name: "Michael Jordan",
@@ -84,6 +84,7 @@ app.get('/matches', async (req, res) => {
     }
 
     const jsonArray = [body1, body2, body3, body4, body5];
+    //jsonArray will be a list of all the user jsons retrieved from the database 
     //WE WOULD NOW SORT THIS ARRAY BASED ON THE SCORE
 
     res.json(jsonArray)//Now, send the array to the front end
@@ -94,8 +95,92 @@ app.get('/matches', async (req, res) => {
   }
 });
 
-app.get("/route2", (req, res) => {
-  res.json({ data: hardcodedJSONData });
+app.get('/chatlist', async (req, res) => {
+  try {
+    //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
+    const body1 = {
+      bio: "Eventually this will display the most recent message with Bobby",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Bobby Impastato",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+    const body2 = {
+      bio: "Eventually this will display the most recent message with Barack",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Barack Obama",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+    const body3 = {
+      bio: "Eventually this will display the most recent message with Taylor",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Taylor Swift",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+    const body4 = {
+      bio: "Hello, I am the fourth user.",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Michael Bossi",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+    const body5 = {
+      bio: "Hello, I am the fifth user.",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Bill Clinton",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+    const body6 = {
+      bio: "Hello, I am the sixth user.",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Lady Gaga",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+
+    const jsonArray = [body1, body2, body3, body4, body5, body6];
+    //jsonArray will be a list of all the user jsons retrieved from the database
+    //We could maybe sort this based on the most recent message first
+
+    res.json(jsonArray)//Now, send the array to the front end
+
+
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 module.exports = app;
