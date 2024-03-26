@@ -3,13 +3,11 @@ const express = require("express");
 const cors = require('cors') // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
 
 const app = express();
-const http = require("http")
-const ioServer = http.createServer(app)
-const { Server } = require("socket.io")
-const io = new Server(ioServer)
+const http = require("http");
+const server = http.createServer(app);
+const io = require("socket.io")(server, {cors : {}} );
 
 app.use(cors()) // allow cross-origin resource sharing
-
 
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
@@ -49,8 +47,16 @@ app.get("/route2", (req, res) => {
     res.json({ data: hardcodedJSONData });
 });
 
-ioServer.on('connection', (socket) => {
+app.get("/socketTest", (req, res) => {
+  res.send("<h1> Hello world </h1>");
+});
+
+io.on('connection', (socket) => {
     console.log("a user has connected");
+
+    socket.on('disconnect', (reason) => {
+      console.log(reason);
+    });
 });
 
 module.exports = app;

@@ -4,12 +4,17 @@ import {io} from 'socket.io-client'
 import './ChatPage.css';
 
 function ChatPage() {
-  const socket = io();
-  /*
-  useEffect (()=> {
-    const socket = io();
-  }, []);
-  */
+  useEffect(() => {
+    const socket = io('http://localhost:3000')
+
+    socket.on('connnect', ()=>console.log(socket.id));
+    socket.on('connect_error', () => {
+      console.log("Failed to connect, trying again...");
+      setTimeout(()=>socket.connect(), 50000);
+    });
+
+    socket.on('disconnect', ()=>console.log("disconnected"));
+  }, [])
 
   const [message, setMessage] = useState('');
   
