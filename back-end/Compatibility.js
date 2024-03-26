@@ -1,7 +1,7 @@
 const prefSarah = {
     "user_id": "rkTV8JXlO1",
     //must match
-    "gender": "okay", //same, okay
+    "gender": "okay", //same(female, male, other), okay
     "pets": "okay", //no, okay
     //rent price, but not always split equally
     "rent_max": 10000,
@@ -34,7 +34,10 @@ const ansJames = {
     "cleanliness": "clean", //clean, moderate, messy
 }
 
-function must(){
+function must(arg1, arg2){
+    if (arg1.gender === "same") {
+
+    }
 }
 
 console.log()
