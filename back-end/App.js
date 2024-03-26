@@ -8,6 +8,7 @@ app.use(cors()) // allow cross-origin resource sharing
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 console.log("created backend server!!!!!!!!!!!!!!!!")
+let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 
 //This is basically just the survey responses, for now we have just 1
 //Once we are able to ge this to send properly
@@ -181,6 +182,13 @@ app.get('/chatlist', async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+app.post('/survey', (req, res) => {
+  const surveyData = req.body;
+  surveyDataArray.push(surveyData);
+  console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
+  res.sendStatus(200); //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
 });
 
 module.exports = app;
