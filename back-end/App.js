@@ -17,6 +17,11 @@ const hardcodedJSONData = {
     "bedtime": "irregular"
 };
 
+app.get("/", (req, res) => {
+    const hardcodedString = "hello";
+    res.json({ data: hardcodedString });
+});
+
 app.get("/route1", (req, res) => {
     const hardcodedString = "This is some hardcoded data from the backend to be displayed in Matches";
     res.json({ data: hardcodedString });
