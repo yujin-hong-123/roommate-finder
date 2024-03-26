@@ -15,32 +15,87 @@ console.log("created backend server!!!!!!!!!!!!!!!!")
 //and the JSON Objects will be sorted according to
 //how much they match with the current user
 //Then we just send the whole SORTED list of JSON objects to the frontend 
-const hardcodedJSONData = {
-    "user_id": "rkTV8JXlO1",
-    "pets": "no",
-    "guests": "yes",
-    "rent_max": 10000,
-    "rent_min": 300,
-    "bedtime": "irregular"
-};
 
 app.get("/", (req, res) => {
-    res.json("hello");
+  res.json("hello");
 });
 
 app.get('/matches', async (req, res) => {
-    try {
-      res.json({
-        message: "Hi this is the matches page",
-        status: 'all good',
-      })
-    } catch(err) {
-      console.log(err);
+  try {
+    //FIRST, DATA IS RETREIVED FROM THE DATABASE AND COMPILED INTO AN ARRAY
+    const body1 = {
+      message: "Hello, I am the first user.",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Bobby Impastato",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
     }
-  });
+
+    const body2 = {
+      message: "Hello, I am the second user.",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Barack Obama",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+    const body3 = {
+      message: "Hello, I am the third user.",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Taylor Swift",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+    const body4 = {
+      message: "Hello, I am the fourth user.",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Steve Jobs",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+    const body5 = {
+      message: "Hello, I am the fifth user.",
+      imagePath: "/static/images/donkey.jpg",
+      user_id: "rkTV8JXlO1",
+      name: "Michael Jordan",
+      pets: "no",
+      guests: "yes",
+      rent_max: 10000,
+      rent_min: 300,
+      bedtime: "irregular"
+    }
+
+    const jsonArray = [body1, body2, body3, body4, body5];
+    //WE WOULD NOW SORT THIS ARRAY BASED ON THE SCORE
+
+    res.json(jsonArray)//Now, send the array to the front end
+
+
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 app.get("/route2", (req, res) => {
-    res.json({ data: hardcodedJSONData });
+  res.json({ data: hardcodedJSONData });
 });
 
 module.exports = app;
