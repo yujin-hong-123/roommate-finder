@@ -1,5 +1,11 @@
+const { Socket } = require("dgram");
 const express = require("express");
 const app = express();
+const http = require("http")
+const ioServer = http.createServer(app)
+const { ioServer } = require("socket.io")
+const io = new Server(ioServer)
+
 console.log("created backend server!!!!!!!!!!!!!!!!")
 
 //This is basically just the survey responses, for now we have just 1
@@ -24,6 +30,13 @@ app.get("/route1", (req, res) => {
 
 app.get("/route2", (req, res) => {
     res.json({ data: hardcodedJSONData });
+});
+
+ioServer.on('connection', (socket) => {
+    console.log("a user has connected");
+    socket.on('disconnect', () => {
+        console.log("a user disconnected");
+    })
 });
 
 module.exports = app;
