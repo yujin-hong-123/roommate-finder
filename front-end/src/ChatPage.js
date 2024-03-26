@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import {io} from 'socket.io-client'
 import './ChatPage.css';
 
 function ChatPage() {
-  const [message, setMessage] = useState('');
+  const socket = io();
+  /*
+  useEffect (()=> {
+    const socket = io();
+  }, []);
+  */
 
+  const [message, setMessage] = useState('');
+  
   // This will handle the sending of the message
   const sendMessage = (e) => {
     e.preventDefault();
