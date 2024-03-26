@@ -59,7 +59,7 @@ const Matches = props => {
               <img src={profilepic} className="profilepic_match" alt="profilepic" />
               <ul className="matchentry">
                 <li className="username_match">{match.name}</li>
-                <li className="bio">{match.message}</li>
+                <li className="bio">{match.bio}</li>
               </ul>
             </button>
           </div>
