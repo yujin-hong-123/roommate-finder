@@ -192,7 +192,7 @@ app.post('/survey', (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
-  //this is a mock profile
+
   const body1 = {
     bio: "Hello, here is some information about me. Please note, that this bio came from a mock profile hard coded into the backend. ",
     imagePath: "/static/images/donkey.jpg",
@@ -205,9 +205,55 @@ app.get('/profile', (req, res) => {
     bedtime: "irregular"
   }
 
+  const body2 = {
+    bio: "I'm an avid book reader and love to discuss literature. My ideal weekend involves a good book and a cup of coffee.",
+    imagePath: "/static/images/cat.png",
+    user_id: "u2LZxG3kA2",
+    name: "Samantha Doe",
+    pets: "yes",
+    guests: "no",
+    rent_max: 800,
+    rent_min: 400,
+    bedtime: "early"
+  };
+
+  const body3 = {
+    bio: "Outdoor enthusiast and tech startup founder. I enjoy hiking and discussing new technology trends.",
+    imagePath: "/static/images/dog.png",
+    user_id: "b3Jk9F4mA3",
+    name: "Alex Smith",
+    pets: "no",
+    guests: "sometimes",
+    rent_max: 1200,
+    rent_min: 600,
+    bedtime: "late"
+  };
+
+  const body4 = {
+    bio: "Music producer and DJ. Love to host small gatherings and share new music. Looking for someone who appreciates music.",
+    imagePath: "/static/images/parrot.png",
+    user_id: "d4PkS7ZnB4",
+    name: "Jordan Miles",
+    pets: "yes",
+    guests: "often",
+    rent_max: 1500,
+    rent_min: 700,
+    bedtime: "very late"
+  };
+
+  const body5 = {
+    bio: "Professional chef and food blogger. I spend most of my time experimenting with recipes. Prefer a clean and quiet living space.",
+    imagePath: "/static/images/rabbit.png",
+    user_id: "e5QtV8FoC5",
+    name: "Casey Rivera",
+    pets: "no",
+    guests: "rarely",
+    rent_max: 1000,
+    rent_min: 500,
+    bedtime: "irregular"
+  };
   //send mock data to frontend
   res.json(body1);
-
 
 });
 
