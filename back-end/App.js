@@ -102,7 +102,7 @@ app.get('/chatlist', async (req, res) => {
     const body1 = {
       bio: "Eventually this will display the most recent message with Bobby",
       imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
+      user_id: "BobbyImpasto",
       name: "Bobby Impastato",
       pets: "no",
       guests: "yes",
@@ -114,7 +114,7 @@ app.get('/chatlist', async (req, res) => {
     const body2 = {
       bio: "Eventually this will display the most recent message with Barack",
       imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
+      user_id: "BarackObama",
       name: "Barack Obama",
       pets: "no",
       guests: "yes",
@@ -126,7 +126,7 @@ app.get('/chatlist', async (req, res) => {
     const body3 = {
       bio: "Eventually this will display the most recent message with Taylor",
       imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
+      user_id: "TaylorSwift",
       name: "Taylor Swift",
       pets: "no",
       guests: "yes",
@@ -138,7 +138,7 @@ app.get('/chatlist', async (req, res) => {
     const body4 = {
       bio: "Hello, I am the fourth user.",
       imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
+      user_id: "MichaelBossi",
       name: "Michael Bossi",
       pets: "no",
       guests: "yes",
@@ -150,7 +150,7 @@ app.get('/chatlist', async (req, res) => {
     const body5 = {
       bio: "Hello, I am the fifth user.",
       imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
+      user_id: "BillClinton",
       name: "Bill Clinton",
       pets: "no",
       guests: "yes",
@@ -162,7 +162,7 @@ app.get('/chatlist', async (req, res) => {
     const body6 = {
       bio: "Hello, I am the sixth user.",
       imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
+      user_id: "LadyGaga",
       name: "Lady Gaga",
       pets: "no",
       guests: "yes",
