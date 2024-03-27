@@ -5,7 +5,7 @@ import './ChatPage.css';
 
 function ChatPage() {
   useEffect(() => {
-    const socket = io('http://localhost:3000')
+    const socket = io('http://localhost:3001')
 
     socket.on('connnect', ()=>console.log(socket.id));
     socket.on('connect_error', () => {

@@ -5,7 +5,8 @@ const cors = require('cors') // middleware for enabling CORS (Cross-Origin Resou
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
-const io = require("socket.io")(server, {cors : {}} );
+const {Server} = require('socket.io');
+const io = new Server(server);
 
 app.use(cors()) // allow cross-origin resource sharing
 
@@ -47,15 +48,12 @@ app.get("/route2", (req, res) => {
     res.json({ data: hardcodedJSONData });
 });
 
-app.get("/socketTest", (req, res) => {
-  res.send("<h1> Hello world </h1>");
-});
 
 io.on('connection', (socket) => {
     console.log("a user has connected");
 
-    socket.on('disconnect', (reason) => {
-      console.log(reason);
+    socket.on('disconnect', () => {
+      console.log("a user has disconnected");
     });
 });
 
