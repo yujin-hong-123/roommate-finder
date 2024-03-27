@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./Survey.css";
 import Header from "./Header";
+import axios from 'axios';
 
 function Survey() {
     const navigate = useNavigate();
@@ -33,8 +34,23 @@ function Survey() {
     };
 
     const handleSubmit = () => {
-        // Handle submission logic here later...
-        navigate('/matches');
+        const surveyData = {
+            petsPreference,
+            guestPreference,
+            minRent,
+            maxRent,
+            desiredRoommates,
+            bedtime
+        };
+
+        axios
+            .post('http://localhost:3001/survey', surveyData)
+            .then(response => {
+                navigate('/matches');
+            })
+            .catch(error => {
+                console.error('Error submitting survey:', error);
+            });
     };
 
     const handleBedtimeChange = (event) => {
