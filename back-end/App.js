@@ -191,4 +191,24 @@ app.post('/survey', (req, res) => {
   res.sendStatus(200); //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
 });
 
+app.get('/profile', (req, res) => {
+  //this is a mock profile
+  const body1 = {
+    bio: "Hello, here is some information about me. Please note, that this bio came from a mock profile hard coded into the backend. ",
+    imagePath: "/static/images/donkey.jpg",
+    user_id: "rkTV8JXlO1",
+    name: "Bobby Impatato",
+    pets: "no",
+    guests: "yes",
+    rent_max: 10000,
+    rent_min: 300,
+    bedtime: "irregular"
+  }
+
+  //send mock data to frontend
+  res.json(body1);
+
+
+});
+
 module.exports = app;
