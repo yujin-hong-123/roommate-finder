@@ -1,13 +1,14 @@
 const express = require("express");
-const cors = require('cors') // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
+const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
+const assert = require('assert');
+const chai = require('chai');
 
 const app = express();
-app.use(cors()) // allow cross-origin resource sharing
+app.use(cors()); // allow cross-origin resource sharing
 
-
-app.use(express.json()) // decode JSON-formatted incoming POST data
-app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
-console.log("created backend server!!!!!!!!!!!!!!!!")
+app.use(express.json()); // decode JSON-formatted incoming POST data
+app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
+console.log("created backend server!!!!!!!!!!!!!!!!");
 let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 
 //This is basically just the survey responses, for now we have just 1
@@ -96,6 +97,7 @@ app.get('/matches', async (req, res) => {
   }
 });
 
+//returns a bunch of json objects as an array
 app.get('/chatlist', async (req, res) => {
   try {
     //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
@@ -184,6 +186,8 @@ app.get('/chatlist', async (req, res) => {
   }
 });
 
+//expecting json object with handle sumbit attruputes -- in Survey.js
+//should push to surveyData arr
 app.post('/survey', (req, res) => {
   const surveyData = req.body;
   surveyDataArray.push(surveyData);
@@ -191,6 +195,7 @@ app.post('/survey', (req, res) => {
   res.sendStatus(200); //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
 });
 
+//expects one json to be returned with the following fields
 app.get('/profile', (req, res) => {
 
   const body1 = {
@@ -256,5 +261,18 @@ app.get('/profile', (req, res) => {
   res.json(body1);
 
 });
+
+describe("/GET profile info", () => {
+  it("it should GET profile information"), (done) => {
+    chai.request(app)
+    .get('/profile')
+    .end((err, res) => {
+      res.should.have.status(200);
+      res.body1.should.be.a('object');
+      res.body1.should.have.property('bio');
+      done();
+    });
+  }
+})
 
 module.exports = app;
