@@ -257,4 +257,24 @@ app.get('/profile', (req, res) => {
 
 });
 
+app.get('/mypreferences', (req, res) => {
+
+  const body1 = {
+    bio: "Hello, here is some information about me. Please note, that this bio came from a mock profile hard coded into the backend. ",
+    imagePath: "/static/images/donkey.jpg",
+    user_id: "rkTV8JXlO1",
+    name: "Bobby Impatato",
+    pets: "no",
+    guests: "yes",
+    rent_max: 10000,
+    rent_min: 300,
+    bedtime: "3AM",
+    roommates: 1
+  }
+
+  //send mock data to frontend
+  res.json(body1);
+
+});
+
 module.exports = app;
