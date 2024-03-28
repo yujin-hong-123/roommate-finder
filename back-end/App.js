@@ -1,7 +1,5 @@
 const express = require("express");
 const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
-const assert = require('assert');
-const chai = require('chai');
 
 const app = express();
 app.use(cors()); // allow cross-origin resource sharing
@@ -195,7 +193,6 @@ app.post('/survey', (req, res) => {
   res.sendStatus(200); //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
 });
 
-//expects one json to be returned with the following fields
 app.get('/profile', (req, res) => {
 
   const body1 = {
@@ -261,18 +258,4 @@ app.get('/profile', (req, res) => {
   res.json(body1);
 
 });
-
-describe("/GET profile info", () => {
-  it("it should GET profile information"), (done) => {
-    chai.request(app)
-    .get('/profile')
-    .end((err, res) => {
-      res.should.have.status(200);
-      res.body1.should.be.a('object');
-      res.body1.should.have.property('bio');
-      done();
-    });
-  }
-})
-
 module.exports = app;
