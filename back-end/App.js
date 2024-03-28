@@ -9,7 +9,7 @@ app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
 console.log("created backend server!!!!!!!!!!!!!!!!")
 let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
-
+let edit_profile_array = [];
 //This is basically just the survey responses, for now we have just 1
 //Once we are able to ge this to send properly
 //we will make this a list of several JSON objects
@@ -276,5 +276,36 @@ app.get('/mypreferences', (req, res) => {
   res.json(body1);
 
 });
+
+
+
+app.post('/editprofile', (req, res) => {
+  const body4 = {
+    database_old_password: "password7", //This is for test purpose, however
+    //you MUST use this password for now to properly update the password
+    //When connecting the database, we will search for the current users JSON file which stores their password
+  };
+
+  const surveyData2 = req.body;
+  console.log("Trying to edit profile, we will check if password matches our database")
+
+  if (body4.database_old_password == surveyData2.old_password) {
+    //Old password matches, proceed with updating profile!!!
+    console.log("Old password matches our record! Pushing new data")
+    edit_profile_array.push(surveyData2);
+
+    console.log('Backend has received updated profile data:', surveyData2);
+    res.sendStatus(200);
+    //that will allow frontend to proceed with navigating us back to profile
+  } else {
+    //Old password doesn't match, send an error :(
+    //and this will trigger error message to be shown on frontend
+    console.log('Error: Old password does not match.');
+    res.status(400).send('Old password does not match.');
+  }
+});
+
+
+
 
 module.exports = app;
