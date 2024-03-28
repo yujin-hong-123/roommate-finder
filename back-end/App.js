@@ -1,13 +1,12 @@
 const express = require("express");
-const cors = require('cors') // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
+const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
 
 const app = express();
-app.use(cors()) // allow cross-origin resource sharing
+app.use(cors()); // allow cross-origin resource sharing
 
-
-app.use(express.json()) // decode JSON-formatted incoming POST data
-app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
-console.log("created backend server!!!!!!!!!!!!!!!!")
+app.use(express.json()); // decode JSON-formatted incoming POST data
+app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
+console.log("created backend server!!!!!!!!!!!!!!!!");
 let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 let edit_profile_array = [];
 //This is basically just the survey responses, for now we have just 1
@@ -96,6 +95,7 @@ app.get('/matches', async (req, res) => {
   }
 });
 
+//returns a bunch of json objects as an array
 app.get('/chatlist', async (req, res) => {
   try {
     //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
@@ -184,6 +184,8 @@ app.get('/chatlist', async (req, res) => {
   }
 });
 
+//expecting json object with handle sumbit attruputes -- in Survey.js
+//should push to surveyData arr
 app.post('/survey', (req, res) => {
   const surveyData = req.body;
   surveyDataArray.push(surveyData);
