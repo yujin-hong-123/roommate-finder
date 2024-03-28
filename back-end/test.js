@@ -30,7 +30,22 @@ describe("/GET profile info", () => {
             res.body.should.have.property('rent_min');
             res.body.should.have.property('bedtime');
             done();
-        })
+        });
+    });
+    it("all fields in the profile json file should have the correct data types", (done) => {
+        chai.request(app)
+        .get('/profile')
+        .end((err, res) => {
+            res.body.bio.should.be.a('string');
+            res.body.user_id.should.be.a('string');
+            res.body.name.should.be.a('string');
+            res.body.pets.should.be.a('string');
+            res.body.guests.should.be.a('string');
+            res.body.rent_max.should.be.a('number');
+            res.body.rent_min.should.be.a('number');
+            res.body.bedtime.should.be.a('string');
+            done();
+        });
     });
 });
 
@@ -59,6 +74,23 @@ describe("/GET my Preferences info", () => {
             res.body.should.have.property('rent_min');
             res.body.should.have.property('bedtime');
             res.body.should.have.property('roommates');
+            done();
+        });
+    });
+    it("all fields in the preferences json file should have the correct data types", (done) => {
+        chai.request(app)
+        .get('/mypreferences')
+        .end((err, res) => {
+            res.body.bio.should.be.a('string');
+            res.body.imagePath.should.be.a('string');
+            res.body.user_id.should.be.a('string');
+            res.body.name.should.be.a('string');
+            res.body.pets.should.be.a('string');
+            res.body.guests.should.be.a('string');
+            res.body.rent_max.should.be.a('number');
+            res.body.rent_min.should.be.a('number');
+            res.body.bedtime.should.be.a('string');
+            res.body.roommates.should.be.a('number');
             done();
         });
     });
