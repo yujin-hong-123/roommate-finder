@@ -109,3 +109,22 @@ describe("/GET Matches info", () => {
         });
     });
 });
+
+//this will definitly need more unit tests in the future
+describe("/POST updates to user profile info", () => {
+    it("should acknowledge successful POST requests to edit profile", (done) => {
+        const testProfile = {
+            new_password: 'password10',
+            new_username: 'Computer',
+            old_password: 'password7',
+            new_bio: 'hello world :)'
+        }
+        chai.request(app)
+        .post('/editprofile')
+        .send(testProfile)
+        .end((err, res) => {
+            res.should.have.status(200);
+            done();
+        });
+    });
+});
