@@ -1,6 +1,7 @@
 const app = require('./App.js');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const { ChildProcess } = require('child_process');
 
 const expect = chai.expect;
 const should = chai.should();
@@ -140,6 +141,14 @@ describe("/GET Matches info", () => {
             done();
         });
     });
+    it("the matches array should not be empty", (done) => {
+        chai.request(app)
+        .get('/matches')
+        .end((err, res) => {
+            res.body.should.not.be.empty;
+            done();
+        })
+    })
 });
 
 //this will definitly need more unit tests in the future
