@@ -2,6 +2,10 @@ const express = require("express");
 const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
 
 const app = express();
+
+// Import user data
+const userData = require('./mockDatabase.json');
+
 app.use(cors()); // allow cross-origin resource sharing
 
 app.use(express.json()); // decode JSON-formatted incoming POST data
@@ -306,6 +310,28 @@ app.post('/editprofile', (req, res) => {
     res.status(400).send('Old password does not match.');
   }
 });
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  console.log('Received login attempt:', username, password); // Debug
+
+  let foundUser = false;
+  for (const key in userData) {
+    if (userData[key].login.username === username && userData[key].login.password === password) {
+      foundUser = true;
+      break; // Stop the loop once the user is found
+    }
+  }
+
+  if (foundUser) {
+    console.log('Login successful for:', username); // Debug
+    res.json({ message: "Login successful" });
+  } else {
+    console.log('Login failed for:', username); // Debug
+    res.status(401).json({ message: "Invalid username or password" });
+  }
+});
+
 
 
 
