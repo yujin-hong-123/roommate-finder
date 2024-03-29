@@ -7,21 +7,49 @@ function RegistrationForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // State for storing the error message
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert('Passwords do not match.');
+      setErrorMessage('Passwords do not match.');
       return;
     }
-    console.log('Register with:', username, password);
-    navigate('/survey');
+
+    // Prepare the data for sending
+    const userData = { username, password };
+
+    try {
+      // Attempt to register the user
+      const response = await fetch('http://localhost:3001/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // If the server responds with a non-OK HTTP status, display the error message
+        setErrorMessage(data.message || 'Failed to sign up.');
+      } else {
+        // On successful registration, navigate to the survey page
+        console.log('Registration successful:', data);
+        navigate('/survey');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      setErrorMessage('Failed to connect to the server.');
+    }
   };
 
   return (
     <div className="landingPage-container">
       <div className="landingPage-form-container">
         <h2 className="landingPage-title">Create Your Account</h2>
+        {errorMessage && <div className="login-error-message">{errorMessage}</div>} {/* Display error message */}
         <form className="landingPage-form" onSubmit={handleSubmit}>
           <input
             type="text"
