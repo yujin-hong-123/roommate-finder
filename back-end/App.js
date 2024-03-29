@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
-
+const fs = require("fs");
+const path = require("path");
 const app = express();
+const dbPath = path.join(__dirname, 'mockDatabase.json');
 
 // Import user data
 const userData = require('./mockDatabase.json');
@@ -13,6 +15,19 @@ app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming 
 console.log("created backend server!!!!!!!!!!!!!!!!");
 let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 let edit_profile_array = [];
+
+// Function to load the current database state
+function loadDatabase() {
+  const data = fs.readFileSync(dbPath, 'utf8');
+  return JSON.parse(data);
+}
+
+// Function to save the updated database state
+function saveDatabase(data) {
+  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf8');
+}
+
+
 //This is basically just the survey responses, for now we have just 1
 //Once we are able to ge this to send properly
 //we will make this a list of several JSON objects
@@ -332,8 +347,35 @@ app.post('/login', (req, res) => {
   }
 });
 
+// Signup route
+app.post('/register', (req, res) => {
+  const { username, password } = req.body;
+  // Password validation criteria
+  const passwordCriteria = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+  if (!passwordCriteria.test(password)) {
+      return res.status(400).json({ message: "Password does not meet criteria." });
+  }
 
+  const usersDb = loadDatabase();
 
+  // Check if username already exists
+  if (usersDb[username]) {
+      return res.status(400).json({ message: "Username already exists." });
+  }
+
+  // Add user to database
+  usersDb[username] = {
+      login: { username, password },
+      profile: {}, // Add additional signup information as needed
+      answers: {},
+      preferences: {}
+  };
+
+  // Save the updated database state
+  saveDatabase(usersDb);
+
+  res.json({ message: "Signup successful." });
+});
 
 
 module.exports = app;
