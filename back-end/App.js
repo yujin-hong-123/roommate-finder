@@ -4,6 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const app = express();
 const dbPath = path.join(__dirname, 'mockDatabase.json');
+
+// Import user data
+const userData = require('./mockDatabase.json');
+
 app.use(cors()); // allow cross-origin resource sharing
 
 app.use(express.json()); // decode JSON-formatted incoming POST data
@@ -322,10 +326,30 @@ app.post('/editprofile', (req, res) => {
   }
 });
 
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  console.log('Received login attempt:', username, password); // Debug
+
+  let foundUser = false;
+  for (const key in userData) {
+    if (userData[key].login.username === username && userData[key].login.password === password) {
+      foundUser = true;
+      break; // Stop the loop once the user is found
+    }
+  }
+
+  if (foundUser) {
+    console.log('Login successful for:', username); // Debug
+    res.json({ message: "Login successful" });
+  } else {
+    console.log('Login failed for:', username); // Debug
+    res.status(401).json({ message: "Invalid username or password" });
+  }
+});
+
 // Signup route
 app.post('/register', (req, res) => {
   const { username, password } = req.body;
-
   // Password validation criteria
   const passwordCriteria = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
   if (!passwordCriteria.test(password)) {
