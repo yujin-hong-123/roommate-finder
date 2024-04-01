@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
+const session = require('express-session')
 const fs = require("fs");
 const path = require("path");
+
 const app = express();
 const dbPath = path.join(__dirname, 'mockDatabase.json');
 
@@ -12,9 +14,25 @@ app.use(cors()); // allow cross-origin resource sharing
 
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
+
+//sessions middleware
+const sessionOptions = { 
+	secret: 'secret for signing session id', 
+	saveUninitialized: false, 
+	resave: false
+};
+app.use(session(sessionOptions));
+
+app.use(function(req, res, next){
+  req.session.user = req.session.user || "";
+  req.session.matches = req.session.matches || {};
+  next();
+});
+
 console.log("created backend server!!!!!!!!!!!!!!!!");
 let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 let edit_profile_array = [];
+let user = '';
 
 // Function to load the current database state
 function loadDatabase() {
@@ -36,8 +54,10 @@ function saveDatabase(data) {
 //Then we just send the whole SORTED list of JSON objects to the frontend 
 
 app.get("/", (req, res) => {
-  res.json("hello");
 });
+
+app.get('/login', (req, res) => {
+})
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -53,6 +73,9 @@ app.post('/login', (req, res) => {
 
   if (foundUser) {
     console.log('Login successful for:', username); // Debug
+    req.session.user = username;
+    user = username;
+    console.log('setting req.session.user to be', req.session.user); //debug
     res.json({ message: "Login successful" });
   } else {
     console.log('Login failed for:', username); // Debug
@@ -100,8 +123,55 @@ app.post('/survey', (req, res) => {
 });
 
 app.get('/matches', async (req, res) => {
+  console.log(req.session.user)
   try {
     //FIRST, DATA IS RETREIVED FROM THE DATABASE AND COMPILED INTO AN ARRAY
+    const BobbyImpasto = {
+      login: {
+          username: "BarackObama",
+          password: "obamaSecure456"
+      },
+  
+      profile: {
+          name: "Bobby Impasto",
+          year: "Senior",
+          bio: "Yolo!"
+      },
+  
+      answers: {
+          //info
+          gender: "male", //male, female, other
+          year: "freshman", //freshman, sophomore, junoir, senior, other
+          pets: "no", //yes, no
+          //living style
+          guests: "often", //often, sometimes, never
+          smoke: "never",
+          drink: "sometimes",
+          //rent range
+          rent_max: 4000,
+          rent_min: 1000, 
+          //living habits
+          bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
+          quietness : 2, //rank out of 1-5
+          cleanliness: 4 //rank out of 1-5
+      },
+  
+      preferences: {
+          //info
+          gender: "same", //same, okay(with anything)
+          year: "same", //same, okay
+          pets: "yes", //yes, no
+          //living style
+          guests: "yes", //yes, no
+          smoke: "no", //yes, no
+          drink: "yes", //yes, no
+          //living habits
+          bedtime: "similar", //similar, okay
+          quietness: "okay", //similar, okay
+          cleanliness: "clean" //similar, okay
+      }
+    };
+
     const BarackObama = {
       login: {
           username: "BarackObama",
@@ -132,7 +202,7 @@ app.get('/matches', async (req, res) => {
           cleanliness: 4 //rank out of 1-5
       },
   
-      "preferences": {
+      preferences: {
           //info
           gender: "same", //same, okay(with anything)
           year: "same", //same, okay
@@ -146,15 +216,21 @@ app.get('/matches', async (req, res) => {
           quietness: "okay", //similar, okay
           cleanliness: "clean" //similar, okay
       }
-
-      
   };
 
     const jsonArray = [BarackObama];
+    const jsonArrayTwo = [BobbyImpasto];
     //jsonArray will be a list of all the user jsons retrieved from the database 
     //WE WOULD NOW SORT THIS ARRAY BASED ON THE SCORE
 
-    res.json(jsonArray)//Now, send the array to the front end
+    if (user === 'john123') {
+      res.json(jsonArray)//Now, send the array to the front end
+    }
+    else {
+      console.log(req.session.user)
+      res.json(jsonArrayTwo)
+    }
+ 
 
   } catch (err) {
     console.log(err);
