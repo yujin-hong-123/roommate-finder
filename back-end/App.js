@@ -42,67 +42,55 @@ app.get("/", (req, res) => {
 app.get('/matches', async (req, res) => {
   try {
     //FIRST, DATA IS RETREIVED FROM THE DATABASE AND COMPILED INTO AN ARRAY
-    const body1 = {
-      bio: "Hello, I am the first user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
-      name: "Bobby Impastato",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
+    const BarackObama = {
+      login: {
+          username: "BarackObama",
+          password: "obamaSecure456"
+      },
+  
+      profile: {
+          name: "Barack Obama",
+          year: "Freshman",
+          bio: "Yes we can!"
+      },
+  
+      answers: {
+          //info
+          gender: "male", //male, female, other
+          year: "freshman", //freshman, sophomore, junoir, senior, other
+          pets: "no", //yes, no
+          //living style
+          guests: "often", //often, sometimes, never
+          smoke: "never",
+          drink: "sometimes",
+          //rent range
+          rent_max: 4000,
+          rent_min: 1000, 
+          //living habits
+          bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
+          quietness : 2, //rank out of 1-5
+          cleanliness: 4 //rank out of 1-5
+      },
+  
+      "preferences": {
+          //info
+          gender: "same", //same, okay(with anything)
+          year: "same", //same, okay
+          pets: "yes", //yes, no
+          //living style
+          guests: "yes", //yes, no
+          smoke: "no", //yes, no
+          drink: "yes", //yes, no
+          //living habits
+          bedtime: "similar", //similar, okay
+          quietness: "okay", //similar, okay
+          cleanliness: "clean" //similar, okay
+      }
 
-    const body2 = {
-      bio: "Hello, I am the second user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
-      name: "Barack Obama",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
+      
+  };
 
-    const body3 = {
-      bio: "Hello, I am the third user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
-      name: "Taylor Swift",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body4 = {
-      bio: "Hello, I am the fourth user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
-      name: "Steve Jobs",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body5 = {
-      bio: "Hello, I am the fifth user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "rkTV8JXlO1",
-      name: "Michael Jordan",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const jsonArray = [body1, body2, body3, body4, body5];
+    const jsonArray = [BarackObama];
     //jsonArray will be a list of all the user jsons retrieved from the database 
     //WE WOULD NOW SORT THIS ARRAY BASED ON THE SCORE
 

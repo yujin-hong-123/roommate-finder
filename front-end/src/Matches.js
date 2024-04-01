@@ -58,8 +58,8 @@ const Matches = props => {
             <button onClick={() => navigate('/otheruser')} className="rowbutton">
               <img src={profilepic} className="profilepic_match" alt="profilepic" />
               <ul className="matchentry">
-                <li className="username_match">{match.name}</li>
-                <li className="bio">{match.bio}</li>
+                <li className="username_match">{match.profile.name}</li>
+                <li className="bio">{match.profile.bio}</li>
               </ul>
             </button>
           </div>

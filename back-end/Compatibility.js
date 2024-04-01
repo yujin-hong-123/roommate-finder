@@ -1,92 +1,92 @@
 const BarackObama = {
-    "login": {
-        "username": "BarackObama",
-        "password": "obamaSecure456"
+    login: {
+        username: "BarackObama",
+        password: "obamaSecure456"
     },
 
-    "profile": {
-        "name": "Barack Obama",
-        "year": "Freshman",
-        "bio": "Yes we can!"
+    profile: {
+        name: "Barack Obama",
+        year: "Freshman",
+        bio: "Yes we can!"
     },
 
-    "answers": {
+    answers: {
         //info
-        "gender": "male", //male, female, other
-        "year": "freshman", //freshman, sophomore, junoir, senior, other
-        "pets": "no", //yes, no
+        gender: "male", //male, female, other
+        year: "freshman", //freshman, sophomore, junoir, senior, other
+        pets: "no", //yes, no
         //living style
-        "guests": "often", //often, sometimes, never
-        "smoke": "never",
-        "drink": "sometimes",
+        guests: "often", //often, sometimes, never
+        smoke: "never",
+        drink: "sometimes",
         //rent range
-        "rent_max": 4000,
-        "rent_min": 1000, 
+        rent_max: 4000,
+        rent_min: 1000, 
         //living habits
-        "bedtime": 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
-        "quietness" : 2, //rank out of 1-5
-        "cleanliness": 4, //rank out of 1-5
+        bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
+        quietness : 2, //rank out of 1-5
+        cleanliness: 4 //rank out of 1-5
     },
 
     "preferences": {
         //info
-        "gender": "okay", //same, okay(with anything)
-        "year": "okay", //same, okay
-        "pets": "yes", //yes, no
+        gender: "same", //same, okay(with anything)
+        year: "same", //same, okay
+        pets: "yes", //yes, no
         //living style
-        "guests": "yes", //yes, no
-        "smoke": "no", //yes, no
-        "drink": "yes", //yes, no
+        guests: "yes", //yes, no
+        smoke: "no", //yes, no
+        drink: "yes", //yes, no
         //living habits
-        "bedtime": "okay", //similar, okay
-        "quietness" : "similar", //similar, okay
-        "cleanliness": "similar", //similar, okay
+        bedtime: "similar", //similar, okay
+        quietness: "okay", //similar, okay
+        cleanliness: "clean" //similar, okay
     }
 };
 
 const TaylorSwift = {
-    "login": {
-        "username": "TaylorSwift",
-        "password": "qwerasdf"
+    login: {
+        username: "TaylorSwift",
+        password: "qwerasdf"
     },
 
-    "profile": {
-        "name": "Taylor Swift",
-        "year": "Junior",
-        "bio": "We're happy, free, confused and lonely at the same time!"
+    profile: {
+        name: "Taylor Swift",
+        year: "Junior",
+        bio: "We're happy, free, confused and lonely at the same time!"
     },
 
-    "answers": {
+    answers: {
         //info
-        "gender": "female", //male, female, other
-        "year": "junior", //freshman, sophomore, junoir, senior, other
-        "pets": "yes", //yes, no
+        gender: "female", //male, female, other
+        year: "junior", //freshman, sophomore, junoir, senior, other
+        pets: "no", //yes, no
         //living style
-        "guests": "sometimes", //often, sometimes, never
-        "smoke": "never",
-        "drink": "often",
+        guests: "often", //often, sometimes, never
+        smoke: "never",
+        drink: "sometimes",
         //rent range
-        "rent_max": 3000,
-        "rent_min": 2500, 
+        rent_max: 4000,
+        rent_min: 1000, 
         //living habits
-        "bedtime": 4, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), depends
-        "quietness" : 1, //rank out of 1-5
-        "cleanliness": 5, //rank out of 1-5
+        bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
+        quietness : 2, //rank out of 1-5
+        cleanliness: 4 //rank out of 1-5
     },
 
-    "preferences": {
+    preferences: {
         //info
-        "gender": "same", //same, okay(with anything)
-        "year": "same", //same, okay
-        "pets": "yes", //yes, no
+        gender: "same", //same, okay(with anything)
+        year: "same", //same, okay
+        pets: "yes", //yes, no
         //living style
-        "guests": "yes", //yes, no
-        "smoke": "no", //yes, no
-        "drink": "yes", //yes, no
+        guests: "yes", //yes, no
+        smoke: "no", //yes, no
+        drink: "yes", //yes, no
         //living habits
-        "bedtime": "similar", //similar, okay
-        "quietness" : "okay", //similar, okay
-        "cleanliness": "clean", //similar, okay
+        bedtime: "similar", //similar, okay
+        quietness: "okay", //similar, okay
+        cleanliness: "clean" //similar, okay
     }
 }
 
@@ -235,5 +235,3 @@ function match(arg1, arg2) {
         return score(arg1, arg2);
     }
 }
-
-console.log(match(BarackObama, TaylorSwift));
