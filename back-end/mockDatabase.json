@@ -1,7 +1,7 @@
 {
     "BobbyImpasto":{
         "login": {
-            "username": "john123",
+            "username": "BobbyImpasto",
             "password": "qwerasdf"
         },
 
@@ -21,6 +21,11 @@
             "gender": "male",
             "pets": "no",
             "guests": "yes"
+        },
+
+        "matches": {
+            "BarackObama": 15,
+            "TaylorSwift": 14
         }
     },
 
@@ -51,7 +56,7 @@
 
     "TaylorSwift": {
         "login": {
-            "username": "john123",
+            "username": "TaylorSwift",
             "password": "qwerasdf"
         },
 
