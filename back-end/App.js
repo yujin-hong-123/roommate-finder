@@ -39,6 +39,66 @@ app.get("/", (req, res) => {
   res.json("hello");
 });
 
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  console.log('Received login attempt:', username, password); // Debug
+
+  let foundUser = false;
+  for (const key in userData) {
+    if (userData[key].login.username === username && userData[key].login.password === password) {
+      foundUser = true;
+      break; // Stop the loop once the user is found
+    }
+  }
+
+  if (foundUser) {
+    console.log('Login successful for:', username); // Debug
+    res.json({ message: "Login successful" });
+  } else {
+    console.log('Login failed for:', username); // Debug
+    res.status(401).json({ message: "Invalid username or password" });
+  }
+});
+
+// Signup route
+app.post('/register', (req, res) => {
+  const { username, password } = req.body;
+  // Password validation criteria
+  const passwordCriteria = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+  if (!passwordCriteria.test(password)) {
+      return res.status(400).json({ message: "Password does not meet criteria." });
+  }
+
+  const usersDb = loadDatabase();
+
+  // Check if username already exists
+  if (usersDb[username]) {
+      return res.status(400).json({ message: "Username already exists." });
+  }
+
+  // Add user to database
+  usersDb[username] = {
+      login: { username, password },
+      profile: {}, // Add additional signup information as needed
+      answers: {},
+      preferences: {}
+  };
+
+  // Save the updated database state
+  saveDatabase(usersDb);
+
+  res.json({ message: "Signup successful." });
+});
+
+//expecting json object with handle sumbit attruputes -- in Survey.js
+//should push to surveyData arr
+app.post('/survey', (req, res) => {
+  const surveyData = req.body;
+  surveyDataArray.push(surveyData);
+  console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
+  res.sendStatus(200); //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
+});
+
 app.get('/matches', async (req, res) => {
   try {
     //FIRST, DATA IS RETREIVED FROM THE DATABASE AND COMPILED INTO AN ARRAY
@@ -95,7 +155,6 @@ app.get('/matches', async (req, res) => {
     //WE WOULD NOW SORT THIS ARRAY BASED ON THE SCORE
 
     res.json(jsonArray)//Now, send the array to the front end
-
 
   } catch (err) {
     console.log(err);
@@ -191,17 +250,9 @@ app.get('/chatlist', async (req, res) => {
   }
 });
 
-//expecting json object with handle sumbit attruputes -- in Survey.js
-//should push to surveyData arr
-app.post('/survey', (req, res) => {
-  const surveyData = req.body;
-  surveyDataArray.push(surveyData);
-  console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
-  res.sendStatus(200); //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
-});
+
 
 app.get('/profile', (req, res) => {
-
   const body1 = {
     bio: "Hello, here is some information about me. Please note, that this bio came from a mock profile hard coded into the backend. ",
     imagePath: "/static/images/donkey.jpg",
@@ -283,10 +334,7 @@ app.get('/mypreferences', (req, res) => {
 
   //send mock data to frontend
   res.json(body1);
-
 });
-
-
 
 app.post('/editprofile', (req, res) => {
   const body4 = {
@@ -312,57 +360,6 @@ app.post('/editprofile', (req, res) => {
     console.log('Error: Old password does not match.');
     res.status(400).send('Old password does not match.');
   }
-});
-
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  console.log('Received login attempt:', username, password); // Debug
-
-  let foundUser = false;
-  for (const key in userData) {
-    if (userData[key].login.username === username && userData[key].login.password === password) {
-      foundUser = true;
-      break; // Stop the loop once the user is found
-    }
-  }
-
-  if (foundUser) {
-    console.log('Login successful for:', username); // Debug
-    res.json({ message: "Login successful" });
-  } else {
-    console.log('Login failed for:', username); // Debug
-    res.status(401).json({ message: "Invalid username or password" });
-  }
-});
-
-// Signup route
-app.post('/register', (req, res) => {
-  const { username, password } = req.body;
-  // Password validation criteria
-  const passwordCriteria = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
-  if (!passwordCriteria.test(password)) {
-      return res.status(400).json({ message: "Password does not meet criteria." });
-  }
-
-  const usersDb = loadDatabase();
-
-  // Check if username already exists
-  if (usersDb[username]) {
-      return res.status(400).json({ message: "Username already exists." });
-  }
-
-  // Add user to database
-  usersDb[username] = {
-      login: { username, password },
-      profile: {}, // Add additional signup information as needed
-      answers: {},
-      preferences: {}
-  };
-
-  // Save the updated database state
-  saveDatabase(usersDb);
-
-  res.json({ message: "Signup successful." });
 });
 
 
