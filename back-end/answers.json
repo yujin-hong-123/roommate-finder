@@ -6,3 +6,33 @@
     "rent_min": 300,
     "bedtime": "late"
 }
+
+{
+    "Login": {
+    Username: john123,
+    Password: qwerasdf
+    }
+
+    Profile: {
+        Name: John Doe,
+        Year: Freshman,
+        Bio: YOLO!
+    }
+
+    Answers: {
+        Gender: male,
+Pets: yes
+Guests: no
+    }
+
+    Preferences {
+    Gender: male,
+    Pets: no,
+    Guests: yes
+}
+
+Chat: {
+    Message: “hi i’m john nice to meet you”
+}
+}
+}

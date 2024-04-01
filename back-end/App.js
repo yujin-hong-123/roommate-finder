@@ -1,14 +1,32 @@
 const express = require("express");
-const cors = require('cors') // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
-
+const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
+const fs = require("fs");
+const path = require("path");
 const app = express();
-app.use(cors()) // allow cross-origin resource sharing
+const dbPath = path.join(__dirname, 'mockDatabase.json');
 
+// Import user data
+const userData = require('./mockDatabase.json');
 
-app.use(express.json()) // decode JSON-formatted incoming POST data
-app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
-console.log("created backend server!!!!!!!!!!!!!!!!")
+app.use(cors()); // allow cross-origin resource sharing
+
+app.use(express.json()); // decode JSON-formatted incoming POST data
+app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
+console.log("created backend server!!!!!!!!!!!!!!!!");
 let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
+let edit_profile_array = [];
+
+// Function to load the current database state
+function loadDatabase() {
+  const data = fs.readFileSync(dbPath, 'utf8');
+  return JSON.parse(data);
+}
+
+// Function to save the updated database state
+function saveDatabase(data) {
+  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf8');
+}
+
 
 //This is basically just the survey responses, for now we have just 1
 //Once we are able to ge this to send properly
@@ -96,6 +114,7 @@ app.get('/matches', async (req, res) => {
   }
 });
 
+//returns a bunch of json objects as an array
 app.get('/chatlist', async (req, res) => {
   try {
     //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
@@ -184,6 +203,8 @@ app.get('/chatlist', async (req, res) => {
   }
 });
 
+//expecting json object with handle sumbit attruputes -- in Survey.js
+//should push to surveyData arr
 app.post('/survey', (req, res) => {
   const surveyData = req.body;
   surveyDataArray.push(surveyData);
@@ -256,5 +277,105 @@ app.get('/profile', (req, res) => {
   res.json(body1);
 
 });
+
+app.get('/mypreferences', (req, res) => {
+
+  const body1 = {
+    bio: "Hello, here is some information about me. Please note, that this bio came from a mock profile hard coded into the backend. ",
+    imagePath: "/static/images/donkey.jpg",
+    user_id: "rkTV8JXlO1",
+    name: "Bobby Impatato",
+    pets: "no",
+    guests: "yes",
+    rent_max: 10000,
+    rent_min: 300,
+    bedtime: "3AM",
+    roommates: 1
+  }
+
+  //send mock data to frontend
+  res.json(body1);
+
+});
+
+
+
+app.post('/editprofile', (req, res) => {
+  const body4 = {
+    database_old_password: "password7", //This is for test purpose, however
+    //you MUST use this password for now to properly update the password
+    //When connecting the database, we will search for the current users JSON file which stores their password
+  };
+
+  const surveyData2 = req.body;
+  console.log("Trying to edit profile, we will check if password matches our database")
+
+  if (body4.database_old_password == surveyData2.old_password) {
+    //Old password matches, proceed with updating profile!!!
+    console.log("Old password matches our record! Pushing new data")
+    edit_profile_array.push(surveyData2);
+
+    console.log('Backend has received updated profile data:', surveyData2);
+    res.sendStatus(200);
+    //that will allow frontend to proceed with navigating us back to profile
+  } else {
+    //Old password doesn't match, send an error :(
+    //and this will trigger error message to be shown on frontend
+    console.log('Error: Old password does not match.');
+    res.status(400).send('Old password does not match.');
+  }
+});
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  console.log('Received login attempt:', username, password); // Debug
+
+  let foundUser = false;
+  for (const key in userData) {
+    if (userData[key].login.username === username && userData[key].login.password === password) {
+      foundUser = true;
+      break; // Stop the loop once the user is found
+    }
+  }
+
+  if (foundUser) {
+    console.log('Login successful for:', username); // Debug
+    res.json({ message: "Login successful" });
+  } else {
+    console.log('Login failed for:', username); // Debug
+    res.status(401).json({ message: "Invalid username or password" });
+  }
+});
+
+// Signup route
+app.post('/register', (req, res) => {
+  const { username, password } = req.body;
+  // Password validation criteria
+  const passwordCriteria = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+  if (!passwordCriteria.test(password)) {
+      return res.status(400).json({ message: "Password does not meet criteria." });
+  }
+
+  const usersDb = loadDatabase();
+
+  // Check if username already exists
+  if (usersDb[username]) {
+      return res.status(400).json({ message: "Username already exists." });
+  }
+
+  // Add user to database
+  usersDb[username] = {
+      login: { username, password },
+      profile: {}, // Add additional signup information as needed
+      answers: {},
+      preferences: {}
+  };
+
+  // Save the updated database state
+  saveDatabase(usersDb);
+
+  res.json({ message: "Signup successful." });
+});
+
 
 module.exports = app;
