@@ -30,7 +30,7 @@ const BarackObama = {
 
     preferences: {
         //info
-        gender: "okay", //same, okay(with anything)
+        gender: "same", //same, okay(with anything)
         year: "okay", //same, okay
         pets: "yes", //yes, no
         //living style
@@ -40,7 +40,7 @@ const BarackObama = {
         //living habits
         bedtime: "similar", //similar, okay
         quietness: "okay", //similar, okay
-        cleanliness: "clean" //similar, okay
+        cleanliness: "okay" //similar, okay
     }
 };
 
@@ -86,9 +86,55 @@ const TaylorSwift = {
         //living habits
         bedtime: "similar", //similar, okay
         quietness: "okay", //similar, okay
-        cleanliness: "clean" //similar, okay
+        cleanliness: "okay" //similar, okay
     }
 }
+
+const BobbyImpasto = {
+    login: {
+        username: "BobbyImpasto",
+        password: "bobby123"
+    },
+
+    profile: {
+        name: "Bobby Impasto",
+        year: "Senior",
+        bio: "Yolo!"
+    },
+
+    answers: {
+        //info
+        gender: "male", //male, female, other
+        year: "senior", //freshman, sophomore, junoir, senior, other
+        pets: "no", //yes, no
+        //living style
+        guests: "never", //often, sometimes, never
+        smoke: "sometimes",
+        drink: "never",
+        //rent range
+        rent_max: 4000,
+        rent_min: 1000, 
+        //living habits
+        bedtime: 5, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
+        quietness : 1, //rank out of 1-5
+        cleanliness: 2 //rank out of 1-5
+    },
+
+    preferences: {
+        //info
+        gender: "okay", //same, okay(with anything)
+        year: "okay", //same, okay
+        pets: "yes", //yes, no
+        //living style
+        guests: "yes", //yes, no
+        smoke: "no", //yes, no
+        drink: "yes", //yes, no
+        //living habits
+        bedtime: "similar", //similar, okay
+        quietness: "okay", //similar, okay
+        cleanliness: "similar" //similar, okay
+    }
+  };
 
 //must must match
 function filter(arg1, arg2){
@@ -260,5 +306,12 @@ function createMatches(arg1, [...args]) {
     return sortMatches(matchList);
 }
 
+console.log(match(BarackObama, BobbyImpasto))
 
-module.exports = {createMatches}
+module.exports = {
+    filter,
+    score,
+    match,
+    sortMatches,
+    createMatches
+};
