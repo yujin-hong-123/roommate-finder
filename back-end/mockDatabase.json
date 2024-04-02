@@ -1,8 +1,8 @@
 {
     "BobbyImpasto": {
       "login": {
-        "username": "john123",
-        "password": "qwerasdf"
+        "username": "BobbyImpasto",
+        "password": "bobby123"
       },
       "profile": {
         "name": "Bobby Impasto",
@@ -23,7 +23,7 @@
     "BarackObama": {
       "login": {
         "username": "BarackObama",
-        "password": "obamaSecure456"
+        "password": "barack123"
       },
       "profile": {
         "name": "Barack Obama",
@@ -43,8 +43,8 @@
     },
     "TaylorSwift": {
       "login": {
-        "username": "john123",
-        "password": "qwerasdf"
+        "username": "TaylorSwift",
+        "password": "taylor123"
       },
       "profile": {
         "name": "Taylor Swift",
