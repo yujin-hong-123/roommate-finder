@@ -5,15 +5,16 @@ import './ChatPage.css';
 
 function ChatPage() {
   useEffect(() => {
-    const socket = io('http://localhost:3001')
+    const socket = io('http://localhost:3002')
 
-    socket.on('connnect', ()=>console.log(socket.id));
+    socket.on('connnect', () => console.log("Connected"));
+
     socket.on('connect_error', () => {
       console.log("Failed to connect, trying again...");
       setTimeout(()=>socket.connect(), 50000);
     });
 
-    socket.on('disconnect', ()=>console.log("disconnected"));
+    socket.on('disconnect', () => console.log("Disconnecting"));
   }, [])
 
   const [message, setMessage] = useState('');
