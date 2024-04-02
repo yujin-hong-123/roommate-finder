@@ -1,0 +1,50 @@
+{
+    "BarackObama": {
+        "login": {
+            "username": "BarackObama",
+            "password": "obamaSecure456"
+        },
+    
+        "profile": {
+            "name": "Barack Obama",
+            "picture": "someURL",
+            "year": "Freshman",
+            "bio": "Yes we can!"
+        },
+    
+        "answers": {
+            "gender": "male", 
+            "year": "freshman",
+            "pets": "no",
+
+            "guests": "often",
+            "smoke": "never",
+            "drink": "sometimes",
+
+            "rent_max": 4000,
+            "rent_min": 1000, 
+
+            "bedtime": 2, 
+            "quietness" : 2, 
+            "cleanliness": 4
+        },
+    
+        "preferences": {
+            "gender": "okay", 
+            "year": "okay", 
+            "pets": "yes", 
+
+            "guests": "yes", 
+            "smoke": "no", 
+            "drink": "yes", 
+     
+            "bedtime": "okay",
+            "quietness" : "similar", 
+            "cleanliness": "similar"
+        },
+        
+        "matches": {
+            "TaylorSwift": 22
+        }
+    }
+}

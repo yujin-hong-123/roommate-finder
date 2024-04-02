@@ -1,38 +1,54 @@
-import React, { useState } from 'react';
-import "./Profile.css"
-import Button from "./Button"
-import Header from "./Header"
 import LoginForm from "./LoginForm";
-import profilePicture from "./ProfilePic.png"
+import "./Profile.css"
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Header from './Header';
+import Button from './Button';
+import profilePicture from './ProfilePic.png';
 
 function Profile() {
+    const [profileData, setProfileData] = useState([]);
+    const [error, setError] = useState('');
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/profile');
+                setProfileData(response.data);
+            } catch (error) {
+                setError('Error fetching profile data: ' + error.message);
+            } finally {
+                setLoaded(true);
+            }
+        };
+
+        fetchProfileData();
+
+        return () => {
+        };
+    }, []);
+
     return (
         <>
             <Header />
             <div className="Heading">
-                <Button text="Edit Profile" location="/editprofile"></Button>
-                <Button text="Retake Survey" location="/survey"></Button>
+                <Button text="Edit Profile" location="/editprofile" />
+                <Button text="Retake Survey" location="/survey" />
             </div>
             <div className="Profile">
-                <img src={profilePicture}></img>
-                <h2>Username</h2>
+                <img src={profilePicture} alt="Profile" />
+                <h2>{profileData.name}</h2>
             </div>
             <div className="About">
-                <p className="AboutText"> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Etiam consequat ante vel vehicula vulputate. Aliquam maximus turpis ut
-                    porttitor imperdiet. Cras elementum orci id neque tincidunt finibus.
-                    Proin accumsan suscipit elit, at varius eros scelerisque id.
-                    Suspendisse maximus ultricies orci, ac convallis mauris accumsan non.
-                    Nullam vel lectus eget urna pulvinar sodales vitae nec neque.
-                    Maecenas ut erat eget turpis ultricies suscipit.
-                </p>
+                <p className="AboutText">{profileData.bio}</p>
             </div>
             <div className="Footer">
-                <Button text="Preferences" location="/mypreferences"></Button>
-                <Button text="Logout" location="/login"></Button>
+                <Button text="Preferences" location="/mypreferences" />
+                <Button text="Logout" location="/login" />
             </div>
         </>
     );
 }
 
-export default Profile
+export default Profile;

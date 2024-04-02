@@ -71,6 +71,14 @@
   text-decoration: underline;
 }
 
+
+.login-error-message {
+  color: red;
+  font-size: 1.2em;
+  margin-bottom: 15px;
+}
+
+
 /* iPhone 14 Pro Max specific styles */
 @media only screen and (max-width: 428px) {
   .landingPage-form-container {

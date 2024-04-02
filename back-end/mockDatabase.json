@@ -1,0 +1,75 @@
+{
+    "BobbyImpasto": {
+      "login": {
+        "username": "john123",
+        "password": "qwerasdf"
+      },
+      "profile": {
+        "name": "Bobby Impasto",
+        "year": "Senior",
+        "bio": "YOLO!"
+      },
+      "answers": {
+        "gender": "male",
+        "pets": "yes",
+        "guests": "yes"
+      },
+      "preferences": {
+        "gender": "male",
+        "pets": "no",
+        "guests": "yes"
+      }
+    },
+    "BarackObama": {
+      "login": {
+        "username": "BarackObama",
+        "password": "obamaSecure456"
+      },
+      "profile": {
+        "name": "Barack Obama",
+        "year": "Freshman",
+        "bio": "Yes we can!"
+      },
+      "answers": {
+        "gender": "male",
+        "pets": "yes",
+        "guests": "no"
+      },
+      "preferences": {
+        "gender": "male",
+        "pets": "yes",
+        "guests": "no"
+      }
+    },
+    "TaylorSwift": {
+      "login": {
+        "username": "john123",
+        "password": "qwerasdf"
+      },
+      "profile": {
+        "name": "Taylor Swift",
+        "year": "Junior",
+        "bio": "We're happy, free, confused and lonely at the same time!"
+      },
+      "answers": {
+        "gender": "female",
+        "pets": "no",
+        "guests": "no"
+      },
+      "preferences": {
+        "gender": "female",
+        "pets": "yes",
+        "guests": "yes"
+      }
+    },
+    "EthanDelgado": {
+      "login": {
+        "username": "EthanDelgado",
+        "password": "Ethanvelvet1!"
+      },
+      "profile": {},
+      "answers": {},
+      "preferences": {}
+    }
+  }
+  

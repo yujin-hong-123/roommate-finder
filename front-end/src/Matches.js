@@ -9,30 +9,26 @@ import profilepic from './ProfilePic.png';
 const Matches = props => {
   const navigate = useNavigate();
 
-  const [Message, setMessage] = useState([])
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState('')
   const [feedback, setFeedback] = useState('')
+  const [matches, setMatches] = useState([]);
 
   const fetchMatches = () => {
-    setMessage(["HELLO"])
-
     axios
-    .get('http://localhost:3001/matches')
-    .then(response => {
-      // axios bundles up all response data in response.data property
-      const Message = response.data.message
-      setMessage(response.data.message)
-    })
-    .catch(err => {
-      const errMsg = JSON.stringify(err, null, 2) // convert error object to a string so we can simply dump it to the screen
-      setError(errMsg)
-    })
-    .finally(() => {
-      // the response has been received, so remove the loading icon
-      setLoaded(true)
-    })
-  }
+      .get('http://localhost:3001/matches')
+      .then(response => {
+        const matchesData = response.data; //response is an array of JSON objects
+        setMatches(matchesData);
+      })
+      .catch(err => {
+        const errMsg = JSON.stringify(err, null, 2);
+        setError(errMsg);
+      })
+      .finally(() => {
+        setLoaded(true);
+      });
+  };
 
   useEffect(() => {
     // fetch messages this once
@@ -52,24 +48,26 @@ const Matches = props => {
 
   return (
     <>
-    <h1>{error}</h1>
-    <br></br>
-    <div className="MatchList">
+      <h1>{error}</h1>
+      <br />
+      <div className="MatchList">
         <Header />
-        <h1>{Message}</h1> <br></br>
-        <button onClick={() => navigate('/otheruser')} className="rowbutton">
-          <img src={profilepic} className="profilepic_match" alt="profilepic" />
-          <ul className="matchentry">
-            
-            <li className="username_match">Name1</li>
-            <li className="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit..</li>
-          </ul>
-        </button>
+        {matches.map((match, index) => (
+          <div key={index}>
+
+            <button onClick={() => navigate('/otheruser')} className="rowbutton">
+              <img src={profilepic} className="profilepic_match" alt="profilepic" />
+              <ul className="matchentry">
+                <li className="username_match">{match.profile.name}</li>
+                <li className="bio">{match.profile.bio}</li>
+              </ul>
+            </button>
+          </div>
+        ))}
       </div>
     </>
-    
-  )
-}
+  );
+};
 
 
 export default Matches
