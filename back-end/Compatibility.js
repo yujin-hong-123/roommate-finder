@@ -28,14 +28,14 @@ const BarackObama = {
         cleanliness: 4 //rank out of 1-5
     },
 
-    "preferences": {
+    preferences: {
         //info
-        gender: "same", //same, okay(with anything)
-        year: "same", //same, okay
+        gender: "okay", //same, okay(with anything)
+        year: "okay", //same, okay
         pets: "yes", //yes, no
         //living style
         guests: "yes", //yes, no
-        smoke: "no", //yes, no
+        smoke: "yes", //yes, no
         drink: "yes", //yes, no
         //living habits
         bedtime: "similar", //similar, okay
@@ -62,16 +62,16 @@ const TaylorSwift = {
         year: "junior", //freshman, sophomore, junoir, senior, other
         pets: "no", //yes, no
         //living style
-        guests: "often", //often, sometimes, never
-        smoke: "never",
+        guests: "never", //often, sometimes, never
+        smoke: "often",
         drink: "sometimes",
         //rent range
         rent_max: 4000,
         rent_min: 1000, 
         //living habits
         bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
-        quietness : 2, //rank out of 1-5
-        cleanliness: 4 //rank out of 1-5
+        quietness : 5, //rank out of 1-5
+        cleanliness: 1 //rank out of 1-5
     },
 
     preferences: {
@@ -235,3 +235,30 @@ function match(arg1, arg2) {
         return score(arg1, arg2);
     }
 }
+
+function sortMatches(dict) {
+    var items = Object.keys(dict).map(
+        (key) => { return [key, dict[key]] });
+
+      items.sort(function(a,b){return b[1] - a[1]});
+      
+      var sortedKeys = items.map(
+        (e) => { return e[0] });
+      
+      return sortedKeys;
+}
+
+function createMatches(arg1, [...args]) {
+    let matchList = {};
+
+    for (const arg of args) {
+        if (match(arg1, arg) !== -1) {
+            matchList[arg.login.username] = match(arg1, arg);
+        }
+    }
+
+    return sortMatches(matchList);
+}
+
+
+module.exports = {createMatches}

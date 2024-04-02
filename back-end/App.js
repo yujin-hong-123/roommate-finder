@@ -3,6 +3,8 @@ const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Reso
 const session = require('express-session')
 const fs = require("fs");
 const path = require("path");
+const compat = require("./Compatibility")
+
 
 const app = express();
 const dbPath = path.join(__dirname, 'mockDatabase.json');
@@ -32,7 +34,11 @@ app.use(function(req, res, next){
 console.log("created backend server!!!!!!!!!!!!!!!!");
 let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 let edit_profile_array = [];
+
 let user = '';
+let userList = [];
+let unsortedMatches = []
+let sortedMatches = [];
 
 // Function to load the current database state
 function loadDatabase() {
@@ -128,8 +134,8 @@ app.get('/matches', async (req, res) => {
     //FIRST, DATA IS RETREIVED FROM THE DATABASE AND COMPILED INTO AN ARRAY
     const BobbyImpasto = {
       login: {
-          username: "BarackObama",
-          password: "obamaSecure456"
+          username: "BobbyImpasto",
+          password: "bobby123"
       },
   
       profile: {
@@ -158,8 +164,8 @@ app.get('/matches', async (req, res) => {
   
       preferences: {
           //info
-          gender: "same", //same, okay(with anything)
-          year: "same", //same, okay
+          gender: "okay", //same, okay(with anything)
+          year: "okay", //same, okay
           pets: "yes", //yes, no
           //living style
           guests: "yes", //yes, no
@@ -175,7 +181,7 @@ app.get('/matches', async (req, res) => {
     const BarackObama = {
       login: {
           username: "BarackObama",
-          password: "obamaSecure456"
+          password: "barack123"
       },
   
       profile: {
@@ -204,8 +210,8 @@ app.get('/matches', async (req, res) => {
   
       preferences: {
           //info
-          gender: "same", //same, okay(with anything)
-          year: "same", //same, okay
+          gender: "okay", //same, okay(with anything)
+          year: "okay", //same, okay
           pets: "yes", //yes, no
           //living style
           guests: "yes", //yes, no
@@ -218,18 +224,75 @@ app.get('/matches', async (req, res) => {
       }
   };
 
-    const jsonArray = [BarackObama];
-    const jsonArrayTwo = [BobbyImpasto];
+    const TaylorSwift = {
+      login: {
+          username: "TaylorSwift",
+          password: "taylor123"
+      },
+
+      profile: {
+          name: "Taylor Swift",
+          year: "Junior",
+          bio: "We're happy, free, confused, and lonely at the same time"
+      },
+
+      answers: {
+          //info
+          gender: "female", //male, female, other
+          year: "junior", //freshman, sophomore, junoir, senior, other
+          pets: "no", //yes, no
+          //living style
+          guests: "often", //often, sometimes, never
+          smoke: "never",
+          drink: "sometimes",
+          //rent range
+          rent_max: 4000,
+          rent_min: 1000, 
+          //living habits
+          bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
+          quietness : 2, //rank out of 1-5
+          cleanliness: 4 //rank out of 1-5
+      },
+
+      preferences: {
+          //info
+          gender: "okay", //same, okay(with anything)
+          year: "okay", //same, okay
+          pets: "yes", //yes, no
+          //living style
+          guests: "yes", //yes, no
+          smoke: "no", //yes, no
+          drink: "yes", //yes, no
+          //living habits
+          bedtime: "similar", //similar, okay
+          quietness: "okay", //similar, okay
+          cleanliness: "clean" //similar, okay
+      }
+    };
     //jsonArray will be a list of all the user jsons retrieved from the database 
     //WE WOULD NOW SORT THIS ARRAY BASED ON THE SCORE
 
-    if (user === 'john123') {
-      res.json(jsonArray)//Now, send the array to the front end
+    let keys = []
+    let jsonArray = [];
+    const dict = {'BobbyImpasto': BobbyImpasto, 'BarackObama': BarackObama, 'TaylorSwift': TaylorSwift}
+
+    if (user === 'BobbyImpasto') {
+      userList = [BarackObama, TaylorSwift]
+      keys = compat.createMatches(BobbyImpasto, userList);
+      jsonArray = keys.map((key) => dict[key])
     }
-    else {
-      console.log(req.session.user)
-      res.json(jsonArrayTwo)
+    else if (user === 'BarackObama') {
+      userList = [BobbyImpasto, TaylorSwift]
+      keys = compat.createMatches(BarackObama, userList);
+      jsonArray = keys.map((key) => dict[key])
     }
+    else if (user === 'TaylorSwift') {
+      userList = [BobbyImpasto, BarackObama]
+      keys = compat.createMatches(TaylorSwift, userList);
+      jsonArray = keys.map((key) => dict[key])
+    }
+
+    res.json(jsonArray)//Now, send the array to the front end
  
 
   } catch (err) {
