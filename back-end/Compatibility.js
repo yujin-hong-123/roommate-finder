@@ -306,7 +306,6 @@ function createMatches(arg1, [...args]) {
     return sortMatches(matchList);
 }
 
-console.log(match(BarackObama, BobbyImpasto))
 
 module.exports = {
     filter,

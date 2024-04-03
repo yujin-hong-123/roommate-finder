@@ -1,11 +1,16 @@
 //const { Socket } = require("dgram");
+require('./config.js');
+require('./db.js');
+
 const express = require("express");
 const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
 const session = require('express-session')
+const mongoose = require('mongoose');
 const fs = require("fs");
 const path = require("path");
 const compat = require("./Compatibility")
 
+const User = mongoose.model('User');
 
 const app = express();
 const dbPath = path.join(__dirname, 'mockDatabase.json');
@@ -277,23 +282,34 @@ app.get('/matches', async (req, res) => {
     let jsonArray = [];
     const dict = {'BobbyImpasto': BobbyImpasto, 'BarackObama': BarackObama, 'TaylorSwift': TaylorSwift}
 
-    if (user === 'BobbyImpasto') {
-      userList = [BarackObama, TaylorSwift]
-      keys = compat.createMatches(BobbyImpasto, userList);
-      jsonArray = keys.map((key) => dict[key])
-    }
-    else if (user === 'BarackObama') {
-      userList = [BobbyImpasto, TaylorSwift]
-      keys = compat.createMatches(BarackObama, userList);
-      jsonArray = keys.map((key) => dict[key])
-    }
-    else if (user === 'TaylorSwift') {
-      userList = [BobbyImpasto, BarackObama]
-      keys = compat.createMatches(TaylorSwift, userList);
-      jsonArray = keys.map((key) => dict[key])
-    }
+    // if (user === 'BobbyImpasto') {
+    //   userList = [BarackObama, TaylorSwift]
+    //   keys = compat.createMatches(BobbyImpasto, userList);
+    //   jsonArray = keys.map((key) => dict[key])
+    // }
+    // else if (user === 'BarackObama') {
+    //   userList = [BobbyImpasto, TaylorSwift]
+    //   keys = compat.createMatches(BarackObama, userList);
+    //   jsonArray = keys.map((key) => dict[key])
+    // }
+    // else if (user === 'TaylorSwift') {
+    //   userList = [BobbyImpasto, BarackObama]
+    //   keys = compat.createMatches(TaylorSwift, userList);
+    //   jsonArray = keys.map((key) => dict[key])
+    // }
 
-    res.json(jsonArray)//Now, send the array to the front end
+    User.find()
+    .then(foundUser => {
+      //jsonArray.push(foundUser);
+      console.log("HERE!")
+      res.json(foundUser)
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send('server error');
+    });
+
+    //res.json(jsonArray)//Now, send the array to the front end
  
 
   } catch (err) {
