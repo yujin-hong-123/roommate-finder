@@ -37,9 +37,13 @@ const User = new mongoose.Schema({
     }
 })
 
+const Message = new mongoose.Schema({
+    message: String
+})
+
 
 mongoose.model('User', User);
+mongoose.model('Message', Message);
 
 
-// console.log(process.env.DSN)
 mongoose.connect(process.env.DSN);

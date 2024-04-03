@@ -11,6 +11,7 @@ const path = require("path");
 const compat = require("./Compatibility")
 
 const User = mongoose.model('User');
+const Message = mongoose.model('Message')
 
 const app = express();
 const dbPath = path.join(__dirname, 'mockDatabase.json');
