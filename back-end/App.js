@@ -20,6 +20,7 @@ const messageSchema = new mongoose.Schema({
   messagetext: String
 }, { collection: 'messages' });
 
+
 const MessageModel = mongoose.model('MessageModel', messageSchema);
 
 const app = express();
@@ -331,95 +332,13 @@ app.get('/matches', async (req, res) => {
 app.get('/chatlist', async (req, res) => {
   try {
     //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
-    const body1 = {
-      bio: "Eventually this will display the most recent message with Bobby",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "BobbyImpasto",
-      name: "Bobby Impastato",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
+    const jsonArray = await User.find();
 
-    const body2 = {
-      bio: "Eventually this will display the most recent message with Barack",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "BarackObama",
-      name: "Barack Obama",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body3 = {
-      bio: "Eventually this will display the most recent message with Taylor",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "TaylorSwift",
-      name: "Taylor Swift",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body4 = {
-      bio: "Hello, I am the fourth user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "MichaelBossi",
-      name: "Michael Bossi",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body5 = {
-      bio: "Hello, I am the fifth user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "BillClinton",
-      name: "Bill Clinton",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body6 = {
-      bio: "Hello, I am the sixth user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "LadyGaga",
-      name: "Lady Gaga",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-
-
-
-
-    const jsonArray = [body1, body2, body3, body4, body5, body6];
+    //const jsonArray = [body1, body2, body3, body4, body5, body6];
     //jsonArray will be a list of all the user jsons retrieved from the database
     //We could maybe sort this based on the most recent message first
     // Create a sample message instance
-    const sampleMessage = new MessageModel({
-      sender: 'vanroadkill',
-      recipient: 'person333',
-      timestamp: "3:00AM",
-      messagetext: 'Yo whats up.'
-    });
 
-    // Save the sample message to MongoDB
-    await sampleMessage.save();
 
     res.json(jsonArray)//Now, send the array to the front end
 
