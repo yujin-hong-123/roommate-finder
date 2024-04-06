@@ -334,16 +334,34 @@ app.get('/chatlist', async (req, res) => {
     //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
     const jsonArray = await User.find();
 
-    //const jsonArray = [body1, body2, body3, body4, body5, body6];
     //jsonArray will be a list of all the user jsons retrieved from the database
     //We could maybe sort this based on the most recent message first
-    // Create a sample message instance
 
 
     res.json(jsonArray)//Now, send the array to the front end
+    //NOTE: THERE IS CURRENTLY NO "MOST RECENT MESSAGE FIELD"
+    //...So the frontend just displays the bio for now under the username insted
 
 
 
+
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/chatpage', async (req, res) => {
+  try {
+    //Here, we will send a request to the database, searching for the relevant messages for this chat
+    //for now it will just display all messages in the database
+    const chatArray = await MessageModel.find();
+
+    //jsonArray will be a list of all the user jsons retrieved from the database
+    //We could maybe sort this based on the most recent message firs
+
+    res.json(chatArray)//Now, send the array to the front end
+    //NOTE: THERE IS CURRENTLY NO "MOST RECENT MESSAGE FIELD"
+    //...So the frontend just displays the bio for now under the username insted
 
   } catch (err) {
     console.log(err);
