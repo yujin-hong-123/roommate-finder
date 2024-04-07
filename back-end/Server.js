@@ -19,6 +19,10 @@ io.on('connection_error', (err) => {
 io.on('connection', (socket) => {
     console.log(`a user has connected, user id = ${socket.id}`);
 
+    socket.on('create-something', (msg) => {
+        console.log(msg);
+    });
+
     socket.on('disconnect', () => {
       console.log("a user has disconnected");
     });

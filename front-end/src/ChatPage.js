@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { io } from 'socket.io-client'
 import './ChatPage.css';
 import axios from 'axios'
 import Header from "./Header";
+import { socket } from './sockets/ReactSocket';
+import { ConnectionState } from './sockets/ConnectionState';
+import { SendMsgForm } from './sockets/SendMsgForm';
 
 function ChatPage() {
   const [messagesarray, setMessages2] = useState([]);
+  const [socketConnected, setIsConnected] = useState(socket.connected);
   useEffect(() => {
-    const socket = io('http://localhost:3002')
+    function onConnect() {
+      setIsConnected(true);
+    }
 
-    socket.on('connnect', () => console.log("Connected"));
+    function onDisconnect() {
+      setIsConnected(false);
+    }
 
-    socket.on('connect_error', () => {
-      console.log("Failed to connect, trying again...");
-      setTimeout(() => socket.connect(), 50000);
-    });
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
 
-    socket.on('disconnect', () => console.log("Disconnecting"));
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+    }
   }, [])
 
   useEffect(() => {
@@ -41,16 +49,14 @@ function ChatPage() {
 
   return (
     <div>
+      <ConnectionState isConnected={socketConnected}/>
       <Header />
       {messagesarray.map((msg, index) => (
         <div key={index}>
           <p><strong>{msg.sender} [{msg.timestamp}]:</strong> {msg.messagetext}</p>
         </div>
       ))}
-      <form onSubmit={sendMessage}>
-        <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
-        <button type="submit">Send</button>
-      </form>
+      <SendMsgForm/>
     </div>
   );
 }
