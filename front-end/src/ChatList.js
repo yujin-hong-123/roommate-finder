@@ -52,8 +52,8 @@ const Chatlist = props => {
         <button key={index} onClick={() => navigate('/chatpage')} className="rowbutton">
           <img src={profilepic} className="profilepic_chat" alt="profilepic" />
           <ul className="chatentry">
-            <li className="username_chat">{user.name}</li>
-            <li className="lastchat">{user.bio}</li>
+            <li className="username_chat">{user.profile.name}</li>
+            <li className="lastchat">{user.profile.bio}</li>
           </ul>
         </button>
       ))}

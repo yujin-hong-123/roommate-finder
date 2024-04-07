@@ -11,7 +11,17 @@ const path = require("path");
 const compat = require("./Compatibility")
 
 const User = mongoose.model('User');
-const Message = mongoose.model('Message')
+//const Message = mongoose.model('Message')
+
+const messageSchema = new mongoose.Schema({
+  sender: String,
+  recipient: String,
+  timestamp: String,
+  messagetext: String
+}, { collection: 'messages' });
+
+
+const MessageModel = mongoose.model('MessageModel', messageSchema);
 
 const app = express();
 const dbPath = path.join(__dirname, 'mockDatabase.json');
@@ -25,14 +35,14 @@ app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
 
 //sessions middleware
-const sessionOptions = { 
-	secret: 'secret for signing session id', 
-	saveUninitialized: false, 
-	resave: false
+const sessionOptions = {
+  secret: 'secret for signing session id',
+  saveUninitialized: false,
+  resave: false
 };
 app.use(session(sessionOptions));
 
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
   req.session.user = req.session.user || "";
   req.session.matches = req.session.matches || {};
   next();
@@ -102,22 +112,22 @@ app.post('/register', (req, res) => {
   // Password validation criteria
   const passwordCriteria = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
   if (!passwordCriteria.test(password)) {
-      return res.status(400).json({ message: "Password does not meet criteria." });
+    return res.status(400).json({ message: "Password does not meet criteria." });
   }
 
   const usersDb = loadDatabase();
 
   // Check if username already exists
   if (usersDb[username]) {
-      return res.status(400).json({ message: "Username already exists." });
+    return res.status(400).json({ message: "Username already exists." });
   }
 
   // Add user to database
   usersDb[username] = {
-      login: { username, password },
-      profile: {}, // Add additional signup information as needed
-      answers: {},
-      preferences: {}
+    login: { username, password },
+    profile: {}, // Add additional signup information as needed
+    answers: {},
+    preferences: {}
   };
 
   // Save the updated database state
@@ -141,139 +151,139 @@ app.get('/matches', async (req, res) => {
     //FIRST, DATA IS RETREIVED FROM THE DATABASE AND COMPILED INTO AN ARRAY
     const BobbyImpasto = {
       login: {
-          username: "BobbyImpasto",
-          password: "bobby123"
+        username: "BobbyImpasto",
+        password: "bobby123"
       },
-  
+
       profile: {
-          name: "Bobby Impasto",
-          year: "Senior",
-          bio: "Yolo!"
+        name: "Bobby Impasto",
+        year: "Senior",
+        bio: "Yolo!"
       },
-  
+
       answers: {
-          //info
-          gender: "male", //male, female, other
-          year: "freshman", //freshman, sophomore, junoir, senior, other
-          pets: "no", //yes, no
-          //living style
-          guests: "often", //often, sometimes, never
-          smoke: "never",
-          drink: "sometimes",
-          //rent range
-          rent_max: 4000,
-          rent_min: 1000, 
-          //living habits
-          bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
-          quietness : 2, //rank out of 1-5
-          cleanliness: 4 //rank out of 1-5
+        //info
+        gender: "male", //male, female, other
+        year: "freshman", //freshman, sophomore, junoir, senior, other
+        pets: "no", //yes, no
+        //living style
+        guests: "often", //often, sometimes, never
+        smoke: "never",
+        drink: "sometimes",
+        //rent range
+        rent_max: 4000,
+        rent_min: 1000,
+        //living habits
+        bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
+        quietness: 2, //rank out of 1-5
+        cleanliness: 4 //rank out of 1-5
       },
-  
+
       preferences: {
-          //info
-          gender: "okay", //same, okay(with anything)
-          year: "okay", //same, okay
-          pets: "yes", //yes, no
-          //living style
-          guests: "yes", //yes, no
-          smoke: "no", //yes, no
-          drink: "yes", //yes, no
-          //living habits
-          bedtime: "similar", //similar, okay
-          quietness: "okay", //similar, okay
-          cleanliness: "clean" //similar, okay
+        //info
+        gender: "okay", //same, okay(with anything)
+        year: "okay", //same, okay
+        pets: "yes", //yes, no
+        //living style
+        guests: "yes", //yes, no
+        smoke: "no", //yes, no
+        drink: "yes", //yes, no
+        //living habits
+        bedtime: "similar", //similar, okay
+        quietness: "okay", //similar, okay
+        cleanliness: "clean" //similar, okay
       }
     };
 
     const BarackObama = {
       login: {
-          username: "BarackObama",
-          password: "barack123"
+        username: "BarackObama",
+        password: "barack123"
       },
-  
+
       profile: {
-          name: "Barack Obama",
-          year: "Freshman",
-          bio: "Yes we can!"
+        name: "Barack Obama",
+        year: "Freshman",
+        bio: "Yes we can!"
       },
-  
+
       answers: {
-          //info
-          gender: "male", //male, female, other
-          year: "freshman", //freshman, sophomore, junoir, senior, other
-          pets: "no", //yes, no
-          //living style
-          guests: "often", //often, sometimes, never
-          smoke: "never",
-          drink: "sometimes",
-          //rent range
-          rent_max: 4000,
-          rent_min: 1000, 
-          //living habits
-          bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
-          quietness : 2, //rank out of 1-5
-          cleanliness: 4 //rank out of 1-5
+        //info
+        gender: "male", //male, female, other
+        year: "freshman", //freshman, sophomore, junoir, senior, other
+        pets: "no", //yes, no
+        //living style
+        guests: "often", //often, sometimes, never
+        smoke: "never",
+        drink: "sometimes",
+        //rent range
+        rent_max: 4000,
+        rent_min: 1000,
+        //living habits
+        bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
+        quietness: 2, //rank out of 1-5
+        cleanliness: 4 //rank out of 1-5
       },
-  
+
       preferences: {
-          //info
-          gender: "okay", //same, okay(with anything)
-          year: "okay", //same, okay
-          pets: "yes", //yes, no
-          //living style
-          guests: "yes", //yes, no
-          smoke: "no", //yes, no
-          drink: "yes", //yes, no
-          //living habits
-          bedtime: "similar", //similar, okay
-          quietness: "okay", //similar, okay
-          cleanliness: "clean" //similar, okay
+        //info
+        gender: "okay", //same, okay(with anything)
+        year: "okay", //same, okay
+        pets: "yes", //yes, no
+        //living style
+        guests: "yes", //yes, no
+        smoke: "no", //yes, no
+        drink: "yes", //yes, no
+        //living habits
+        bedtime: "similar", //similar, okay
+        quietness: "okay", //similar, okay
+        cleanliness: "clean" //similar, okay
       }
-  };
+    };
 
     const TaylorSwift = {
       login: {
-          username: "TaylorSwift",
-          password: "taylor123"
+        username: "TaylorSwift",
+        password: "taylor123"
       },
 
       profile: {
-          name: "Taylor Swift",
-          year: "Junior",
-          bio: "We're happy, free, confused, and lonely at the same time"
+        name: "Taylor Swift",
+        year: "Junior",
+        bio: "We're happy, free, confused, and lonely at the same time"
       },
 
       answers: {
-          //info
-          gender: "female", //male, female, other
-          year: "junior", //freshman, sophomore, junoir, senior, other
-          pets: "no", //yes, no
-          //living style
-          guests: "often", //often, sometimes, never
-          smoke: "never",
-          drink: "sometimes",
-          //rent range
-          rent_max: 4000,
-          rent_min: 1000, 
-          //living habits
-          bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
-          quietness : 2, //rank out of 1-5
-          cleanliness: 4 //rank out of 1-5
+        //info
+        gender: "female", //male, female, other
+        year: "junior", //freshman, sophomore, junoir, senior, other
+        pets: "no", //yes, no
+        //living style
+        guests: "often", //often, sometimes, never
+        smoke: "never",
+        drink: "sometimes",
+        //rent range
+        rent_max: 4000,
+        rent_min: 1000,
+        //living habits
+        bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
+        quietness: 2, //rank out of 1-5
+        cleanliness: 4 //rank out of 1-5
       },
 
       preferences: {
-          //info
-          gender: "okay", //same, okay(with anything)
-          year: "okay", //same, okay
-          pets: "yes", //yes, no
-          //living style
-          guests: "yes", //yes, no
-          smoke: "no", //yes, no
-          drink: "yes", //yes, no
-          //living habits
-          bedtime: "similar", //similar, okay
-          quietness: "okay", //similar, okay
-          cleanliness: "clean" //similar, okay
+        //info
+        gender: "okay", //same, okay(with anything)
+        year: "okay", //same, okay
+        pets: "yes", //yes, no
+        //living style
+        guests: "yes", //yes, no
+        smoke: "no", //yes, no
+        drink: "yes", //yes, no
+        //living habits
+        bedtime: "similar", //similar, okay
+        quietness: "okay", //similar, okay
+        cleanliness: "clean" //similar, okay
       }
     };
     //jsonArray will be a list of all the user jsons retrieved from the database 
@@ -281,7 +291,7 @@ app.get('/matches', async (req, res) => {
 
     let keys = []
     let jsonArray = [];
-    const dict = {'BobbyImpasto': BobbyImpasto, 'BarackObama': BarackObama, 'TaylorSwift': TaylorSwift}
+    const dict = { 'BobbyImpasto': BobbyImpasto, 'BarackObama': BarackObama, 'TaylorSwift': TaylorSwift }
 
     // if (user === 'BobbyImpasto') {
     //   userList = [BarackObama, TaylorSwift]
@@ -300,18 +310,18 @@ app.get('/matches', async (req, res) => {
     // }
 
     User.find()
-    .then(foundUser => {
-      //jsonArray.push(foundUser);
-      console.log("HERE!")
-      res.json(foundUser)
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).send('server error');
-    });
+      .then(foundUser => {
+        //jsonArray.push(foundUser);
+        console.log("HERE!")
+        res.json(foundUser)
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).send('server error');
+      });
 
     //res.json(jsonArray)//Now, send the array to the front end
- 
+
 
   } catch (err) {
     console.log(err);
@@ -322,85 +332,36 @@ app.get('/matches', async (req, res) => {
 app.get('/chatlist', async (req, res) => {
   try {
     //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
-    const body1 = {
-      bio: "Eventually this will display the most recent message with Bobby",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "BobbyImpasto",
-      name: "Bobby Impastato",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
+    const jsonArray = await User.find();
 
-    const body2 = {
-      bio: "Eventually this will display the most recent message with Barack",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "BarackObama",
-      name: "Barack Obama",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body3 = {
-      bio: "Eventually this will display the most recent message with Taylor",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "TaylorSwift",
-      name: "Taylor Swift",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body4 = {
-      bio: "Hello, I am the fourth user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "MichaelBossi",
-      name: "Michael Bossi",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body5 = {
-      bio: "Hello, I am the fifth user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "BillClinton",
-      name: "Bill Clinton",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-    const body6 = {
-      bio: "Hello, I am the sixth user.",
-      imagePath: "/static/images/donkey.jpg",
-      user_id: "LadyGaga",
-      name: "Lady Gaga",
-      pets: "no",
-      guests: "yes",
-      rent_max: 10000,
-      rent_min: 300,
-      bedtime: "irregular"
-    }
-
-
-    const jsonArray = [body1, body2, body3, body4, body5, body6];
     //jsonArray will be a list of all the user jsons retrieved from the database
     //We could maybe sort this based on the most recent message first
 
-    res.json(jsonArray)//Now, send the array to the front end
 
+    res.json(jsonArray)//Now, send the array to the front end
+    //NOTE: THERE IS CURRENTLY NO "MOST RECENT MESSAGE FIELD"
+    //...So the frontend just displays the bio for now under the username insted
+
+
+
+
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/chatpage', async (req, res) => {
+  try {
+    //Here, we will send a request to the database, searching for the relevant messages for this chat
+    //for now it will just display all messages in the database
+    const chatArray = await MessageModel.find();
+
+    //jsonArray will be a list of all the user jsons retrieved from the database
+    //We could maybe sort this based on the most recent message firs
+
+    res.json(chatArray)//Now, send the array to the front end
+    //NOTE: THERE IS CURRENTLY NO "MOST RECENT MESSAGE FIELD"
+    //...So the frontend just displays the bio for now under the username insted
 
   } catch (err) {
     console.log(err);
