@@ -10,6 +10,10 @@ import { SendMsgForm } from './sockets/SendMsgForm';
 function ChatPage() {
   const [messagesarray, setMessages2] = useState([]);
   const [socketConnected, setIsConnected] = useState(socket.connected);
+  
+  const [value, setValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     function onConnect() {
       setIsConnected(true);
@@ -28,6 +32,12 @@ function ChatPage() {
     }
   }, [])
 
+  useEffect( () => {
+    socket.on('receive-message', (data) =>{
+      console.log(data.message);
+    })
+  }, [socket])
+
   useEffect(() => {
     axios.get('http://localhost:3001/chatpage')
       .then(response => {
@@ -39,6 +49,15 @@ function ChatPage() {
   }, []);
 
   const [message, setMessage] = useState('');
+
+  function onSubmit(event) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    socket.timeout(5000).emit('create-something', value, () => {
+        setIsLoading(false);
+    });
+  }
 
   // This will handle the sending of the message
   const sendMessage = (e) => {
@@ -56,7 +75,10 @@ function ChatPage() {
           <p><strong>{msg.sender} [{msg.timestamp}]:</strong> {msg.messagetext}</p>
         </div>
       ))}
-      <SendMsgForm/>
+      <form onSubmit={sendMessage}>
+        <input type="text" value={message} onChange={(e) => onSubmit(e.target.value)} />
+        <button type="submit">Send</button>
+      </form>
     </div>
   );
 }
