@@ -11,10 +11,8 @@ import InputTxt from './sockets/InputTxt';
 function ChatPage() {
   const [messagesarray, setMessages2] = useState([]);
   const [socketConnected, setIsConnected] = useState(socket.connected);
-  
-  const [value, setValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState([]);
+
+  const [chats, setChats] = useState([]);
 
   useEffect(() => {
     function onConnect() {
@@ -34,11 +32,32 @@ function ChatPage() {
     }
   }, [])
 
+  //listen for chat_message event from the socket
   useEffect( () => {
-    socket.on('receive-message', (data) =>{
-      console.log(data.message);
+    socket.on('chat_message', (senderMsg) => {
+      setChats(senderMsg);
     })
-  }, [socket])
+  });
+
+  //sends the message to the backend
+  function sendToSocket(msg) {
+    socket.emit('chat_message', msg);
+  }
+
+  //called everytime message is sent/received
+  function sendMessage(msg) {
+    const newMsg = {...msg};
+    setChats([...chats, newMsg]);
+    sendToSocket([...chats, newMsg]);
+  }
+
+  //displays the chat messages to the user
+  //this will ultimately need to be updated when we get login working
+  function ChatExchange() {
+    return chats.map((chat, index) => {
+      return <ChatBoxSender message={chat.message}/>
+    });
+  }
 
   useEffect(() => {
     axios.get('http://localhost:3001/chatpage')
@@ -49,16 +68,16 @@ function ChatPage() {
         console.error('Error fetching messages:', error);
       });
   }, []);
-
-  function onSubmit(event) {
-    event.preventDefault();
-    setIsLoading(true);
-
-    socket.timeout(5000).emit('chat_message', value, () => {
-      setIsLoading(false);
-    });
-  }
   
+  return (
+    <div>
+      <Header />
+      <ChatExchange />
+      <InputTxt sendMessage={sendMessage}/>
+    </div>
+  );
+
+  /*
   return (
     <div>
       <ConnectionState isConnected={socketConnected}/>
@@ -68,15 +87,13 @@ function ChatPage() {
           <p><strong>{msg.sender} [{msg.timestamp}]:</strong> {msg.messagetext}</p>
         </div>
       ))}
-      <ChatBoxSender/>
-      <ChatBoxReceiver/>
-      <InputTxt sendMessage={(message)=> {console.log(message)}}/>
       <form onSubmit={onSubmit}>
             <input onChange={ e => setValue(e.target.value)} />
             <button type='submit' disabled={isLoading}> Submit </button>
         </form>
     </div>
   );
+  */
 }
 
 export default ChatPage;
