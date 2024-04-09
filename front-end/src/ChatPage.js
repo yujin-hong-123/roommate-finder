@@ -6,6 +6,7 @@ import Header from "./Header";
 import { socket } from './sockets/ReactSocket';
 import { ConnectionState } from './sockets/ConnectionState';
 import {ChatBoxSender, ChatBoxReceiver} from './sockets/ChatBox';
+import InputTxt from './sockets/InputTxt';
 
 function ChatPage() {
   const [messagesarray, setMessages2] = useState([]);
@@ -69,6 +70,7 @@ function ChatPage() {
       ))}
       <ChatBoxSender/>
       <ChatBoxReceiver/>
+      <InputTxt sendMessage={(message)=> {console.log(message)}}/>
       <form onSubmit={onSubmit}>
             <input onChange={ e => setValue(e.target.value)} />
             <button type='submit' disabled={isLoading}> Submit </button>
