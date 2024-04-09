@@ -45,8 +45,11 @@ function ChatPage() {
   }
 
   //called everytime message is sent/received
+  //the post request to the backend with the new message should probably go here
   function sendMessage(msg) {
-    const newMsg = {...msg};
+    //get the current time here
+    const newMsg = {...msg}; //this will eventually also have info about the user that send the message
+    console.log(newMsg.message); //this is how you extract the message out of newMsg
     setChats([...chats, newMsg]);
     sendToSocket([...chats, newMsg]);
   }
