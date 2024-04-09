@@ -5,7 +5,7 @@ import axios from 'axios'
 import Header from "./Header";
 import { socket } from './sockets/ReactSocket';
 import { ConnectionState } from './sockets/ConnectionState';
-import { SendMsgForm } from './sockets/SendMsgForm';
+import {ChatBoxSender, ChatBoxReceiver} from './sockets/ChatBox';
 
 function ChatPage() {
   const [messagesarray, setMessages2] = useState([]);
@@ -13,6 +13,7 @@ function ChatPage() {
   
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState([]);
 
   useEffect(() => {
     function onConnect() {
@@ -48,24 +49,15 @@ function ChatPage() {
       });
   }, []);
 
-  const [message, setMessage] = useState('');
-
   function onSubmit(event) {
     event.preventDefault();
     setIsLoading(true);
 
-    socket.timeout(5000).emit('create-something', value, () => {
-        setIsLoading(false);
+    socket.timeout(5000).emit('chat_message', value, () => {
+      setIsLoading(false);
     });
   }
-
-  // This will handle the sending of the message
-  const sendMessage = (e) => {
-    e.preventDefault();
-    console.log('Message sent:', message);
-    setMessage('');
-  };
-
+  
   return (
     <div>
       <ConnectionState isConnected={socketConnected}/>
@@ -75,10 +67,12 @@ function ChatPage() {
           <p><strong>{msg.sender} [{msg.timestamp}]:</strong> {msg.messagetext}</p>
         </div>
       ))}
-      <form onSubmit={sendMessage}>
-        <input type="text" value={message} onChange={(e) => onSubmit(e.target.value)} />
-        <button type="submit">Send</button>
-      </form>
+      <ChatBoxSender/>
+      <ChatBoxReceiver/>
+      <form onSubmit={onSubmit}>
+            <input onChange={ e => setValue(e.target.value)} />
+            <button type='submit' disabled={isLoading}> Submit </button>
+        </form>
     </div>
   );
 }

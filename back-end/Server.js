@@ -19,8 +19,9 @@ io.on('connection_error', (err) => {
 io.on('connection', (socket) => {
     console.log(`a user has connected, user id = ${socket.id}`);
 
-    socket.on('create-something', (msg) => {
-        console.log(msg);
+    socket.on('chat_message', (msg) => {
+        console.log(msg)
+        io.emit('chat_message', msg);
     });
 
     socket.on('disconnect', () => {
