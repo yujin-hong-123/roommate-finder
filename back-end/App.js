@@ -368,6 +368,35 @@ app.get('/chatpage', async (req, res) => {
   }
 });
 
+app.post('/chatpage2', async (req, res) => {
+  try {
+    const sender = req.body.sender;
+    const recipient = req.body.recipient;
+    const timestamp = req.body.timestamp;
+    const messagetext = req.body.messagetext;
+
+    //create msg object
+    const newMessage = new MessageModel({
+      sender: sender,
+      recipient: recipient,
+      timestamp: timestamp,
+      messagetext: messagetext
+    });
+
+    //send to database
+    await newMessage.save();
+
+    console.log('Message saved successfully:', newMessage);
+
+    //success
+    res.status(201).json({ message: 'Message saved successfully' });
+  } catch (error) {
+    console.error('Error saving message:', error);
+    //ERROR
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 
 app.get('/profile', (req, res) => {

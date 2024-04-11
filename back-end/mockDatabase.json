@@ -79,5 +79,14 @@
     "profile": {},
     "answers": {},
     "preferences": {}
+  },
+  "Test1234": {
+    "login": {
+      "username": "Test1234",
+      "password": "Test1234*"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
   }
 }
