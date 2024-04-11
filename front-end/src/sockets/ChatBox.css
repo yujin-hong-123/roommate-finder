@@ -1,0 +1,27 @@
+.ChatUsername {
+    font-size: 15px;
+}
+
+.SenderBox {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ReceiverBox {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.SenderChat {
+    padding: 10px;
+    background-color:rgb(194, 194, 194);
+    border-radius: 10px;
+    max-width: 60%;
+}
+
+.ReceiverChat {
+    padding: 10px;
+    background-color:#cf8afd;
+    border-radius: 10px;
+    max-width: 60%;
+}

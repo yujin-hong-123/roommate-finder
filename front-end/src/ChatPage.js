@@ -1,24 +1,66 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { io } from 'socket.io-client'
 import './ChatPage.css';
 import axios from 'axios'
 import Header from "./Header";
+import { socket } from './sockets/ReactSocket';
+import { ConnectionState } from './sockets/ConnectionState';
+import {ChatBoxSender, ChatBoxReceiver} from './sockets/ChatBox';
+import InputTxt from './sockets/InputTxt';
 
 function ChatPage() {
   const [messagesarray, setMessages2] = useState([]);
+  const [socketConnected, setIsConnected] = useState(socket.connected);
+
+  const [chats, setChats] = useState([]);
+
   useEffect(() => {
-    const socket = io('http://localhost:3002')
+    function onConnect() {
+      setIsConnected(true);
+    }
 
-    socket.on('connnect', () => console.log("Connected"));
+    function onDisconnect() {
+      setIsConnected(false);
+    }
 
-    socket.on('connect_error', () => {
-      console.log("Failed to connect, trying again...");
-      setTimeout(() => socket.connect(), 50000);
-    });
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
 
-    socket.on('disconnect', () => console.log("Disconnecting"));
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+    }
   }, [])
+
+  //listen for chat_message event from the socket
+  useEffect( () => {
+    socket.on('chat_message', (senderMsg) => {
+      setChats(senderMsg);
+    })
+  });
+
+  //sends the message to the backend
+  function sendToSocket(msg) {
+    socket.emit('chat_message', msg);
+  }
+
+  //called everytime message is sent/received
+  //the post request to the backend with the new message should probably go here
+  function sendMessage(msg) {
+    //get the current time here
+    const newMsg = {...msg}; //this will eventually also have info about the user that send the message
+    console.log(newMsg.message); //this is how you extract the message out of newMsg
+    setChats([...chats, newMsg]);
+    sendToSocket([...chats, newMsg]);
+  }
+
+  //displays the chat messages to the user
+  //this will ultimately need to be updated when we get login working
+  function ChatExchange() {
+    return chats.map((chat, index) => {
+      return <ChatBoxSender message={chat.message}/>
+    });
+  }
 
   useEffect(() => {
     axios.get('http://localhost:3001/chatpage')
@@ -29,30 +71,32 @@ function ChatPage() {
         console.error('Error fetching messages:', error);
       });
   }, []);
-
-  const [message, setMessage] = useState('');
-
-  // This will handle the sending of the message
-  const sendMessage = (e) => {
-    e.preventDefault();
-    console.log('Message sent:', message);
-    setMessage('');
-  };
-
+  
   return (
     <div>
+      <Header />
+      <ChatExchange />
+      <InputTxt sendMessage={sendMessage}/>
+    </div>
+  );
+
+  /*
+  return (
+    <div>
+      <ConnectionState isConnected={socketConnected}/>
       <Header />
       {messagesarray.map((msg, index) => (
         <div key={index}>
           <p><strong>{msg.sender} [{msg.timestamp}]:</strong> {msg.messagetext}</p>
         </div>
       ))}
-      <form onSubmit={sendMessage}>
-        <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
-        <button type="submit">Send</button>
-      </form>
+      <form onSubmit={onSubmit}>
+            <input onChange={ e => setValue(e.target.value)} />
+            <button type='submit' disabled={isLoading}> Submit </button>
+        </form>
     </div>
   );
+  */
 }
 
 export default ChatPage;
