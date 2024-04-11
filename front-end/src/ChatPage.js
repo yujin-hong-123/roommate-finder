@@ -5,7 +5,7 @@ import axios from 'axios'
 import Header from "./Header";
 import { socket } from './sockets/ReactSocket';
 import { ConnectionState } from './sockets/ConnectionState';
-import {ChatBoxSender, ChatBoxReceiver} from './sockets/ChatBox';
+import { ChatBoxSender, ChatBoxReceiver } from './sockets/ChatBox';
 import InputTxt from './sockets/InputTxt';
 
 function ChatPage() {
@@ -33,7 +33,7 @@ function ChatPage() {
   }, [])
 
   //listen for chat_message event from the socket
-  useEffect( () => {
+  useEffect(() => {
     socket.on('chat_message', (senderMsg) => {
       setChats(senderMsg);
     })
@@ -48,17 +48,40 @@ function ChatPage() {
   //the post request to the backend with the new message should probably go here
   function sendMessage(msg) {
     //get the current time here
-    const newMsg = {...msg}; //this will eventually also have info about the user that send the message
+    const newMsg = { ...msg }; //this will eventually also have info about the user that send the message
     console.log(newMsg.message); //this is how you extract the message out of newMsg
     setChats([...chats, newMsg]);
     sendToSocket([...chats, newMsg]);
+
+    let messagestring = newMsg.message;
+    const currentTime = new Date().toISOString(); //This should be formatted eventually (go see what it looks like in the database messages collection)
+    const msg_post = {
+      sender: "current_user_test", //CHNAGE THIS LATER TO ACTUAL CURRENT USERNAME!!!!
+      recipient: "recipient_test", //CHANGE THIS LATER TO ACTUAL RECIPIENT!!!
+      timestamp: currentTime,
+      messagetext: messagestring
+    };
+
+    //Send the message to the backend
+    axios.post('http://localhost:3001/chatpage2', msg_post)
+      .then(response => {
+        console.log('Message sent successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error sending message:', error);
+      });
+
+    console.log("sent post request for the message :)");
+
+
+
   }
 
   //displays the chat messages to the user
   //this will ultimately need to be updated when we get login working
   function ChatExchange() {
     return chats.map((chat, index) => {
-      return <ChatBoxSender message={chat.message}/>
+      return <ChatBoxSender message={chat.message} />
     });
   }
 
@@ -71,12 +94,12 @@ function ChatPage() {
         console.error('Error fetching messages:', error);
       });
   }, []);
-  
+
   return (
     <div>
       <Header />
       <ChatExchange />
-      <InputTxt sendMessage={sendMessage}/>
+      <InputTxt sendMessage={sendMessage} />
     </div>
   );
 
