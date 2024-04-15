@@ -107,38 +107,67 @@ function Survey() {
     }
 
     const handleSubmit = () => {
-        const surveyData = {
-            name,
-            year,
-            genderAns,
-            petsAns,
-            guestsAns,
-            smokeAns,
-            drinkAns,
-            maxRent,
-            minRent,
-            bedAns,
-            quietAns,
-            cleanAns,
-            genderPref,
-            yearPref,
-            petsPref,
-            guestsPref,
-            smokePref,
-            drinkPref,
-            bedPref,
-            quietPref,
-            cleanPref
-        };
-
-        axios
-            .post('http://localhost:3001/survey', surveyData)
-            .then(response => {
-                navigate('/matches');
-            })
-            .catch(error => {
-                console.error('Error submitting survey:', error);
-            });
+        // Check if any required questions are unanswered
+        if (
+            !name ||
+            !year ||
+            !genderAns ||
+            !petsAns ||
+            !guestsAns ||
+            !smokeAns ||
+            !drinkAns ||
+            !maxRent ||
+            !minRent ||
+            !bedAns ||
+            !quietAns ||
+            !cleanAns ||
+            !genderPref ||
+            !yearPref ||
+            !petsPref ||
+            !guestsPref ||
+            !smokePref ||
+            !drinkPref ||
+            !bedPref ||
+            !quietPref ||
+            !cleanPref
+        ) {
+            // If any required questions are unanswered, display an alert
+            alert("Please answer all questions before submitting the survey.");
+        } else {
+            // If all questions are answered, proceed with submitting the survey
+            const surveyData = {
+                name,
+                year,
+                genderAns,
+                petsAns,
+                guestsAns,
+                smokeAns,
+                drinkAns,
+                maxRent,
+                minRent,
+                bedAns,
+                quietAns,
+                cleanAns,
+                genderPref,
+                yearPref,
+                petsPref,
+                guestsPref,
+                smokePref,
+                drinkPref,
+                bedPref,
+                quietPref,
+                cleanPref
+            };
+    
+            axios
+                .post('http://localhost:3001/survey', surveyData)
+                .then(response => {
+                    navigate('/matches');
+                })
+                .catch(error => {
+                    console.error('Error submitting survey:', error);
+                });
+        }
     };
 
 
