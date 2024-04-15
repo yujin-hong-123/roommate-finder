@@ -51,7 +51,9 @@ console.log("created backend server!!!!!!!!!!!!!!!!");
 let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 let edit_profile_array = [];
 
-let user = '';
+//placeholder variables until authentication code is complete
+let user;
+let pw;
 let userList = [];
 let unsortedMatches = []
 let sortedMatches = [];
@@ -95,9 +97,13 @@ app.post('/login', (req, res) => {
 
   if (foundUser) {
     console.log('Login successful for:', username); // Debug
+
+    //this part is a placeholder code until authentication is complete 
     req.session.user = username;
     user = username;
+    pw = password;
     console.log('setting req.session.user to be', req.session.user); //debug
+
     res.json({ message: "Login successful" });
   } else {
     console.log('Login failed for:', username); // Debug
@@ -131,6 +137,10 @@ app.post('/register', (req, res) => {
 
   // Save the updated database state
   saveDatabase(usersDb);
+
+   //this part is a placeholder code until authentication code is complete 
+   user = username;
+   pw = password;
 
   res.json({ message: "Signup successful." });
 });
