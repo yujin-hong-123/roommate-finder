@@ -227,7 +227,7 @@ function score(arg1, arg2) {
         if (arg1.answers.bedtime === arg2.answers.bedtime) {
             score += 5;
         }
-        else if (arg1.answers.bedtime === 0 || arg2.answers.bedtime === 0) {
+        else if (arg1.answers.bedtime === 6 || arg2.answers.bedtime === 6) {
             score += 3;
         }
         else {

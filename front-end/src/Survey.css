@@ -2,8 +2,7 @@
 .Survey {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background-color: #F5F5FA;
+  background-color: #e8e8e8;
 }
 
 .survey-question {
@@ -11,6 +10,12 @@
   background-color: white;
   margin-bottom: 1rem;
   border-radius: 4px;
+}
+
+.section {
+  padding: 0rem 0rem 0rem 1rem;
+  background-color: #BEBEBE;
+  margin-bottom: 1rem;
 }
 
 label {

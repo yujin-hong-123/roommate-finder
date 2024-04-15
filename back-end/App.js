@@ -10,8 +10,7 @@ const fs = require("fs");
 const path = require("path");
 const compat = require("./Compatibility")
 
-const User = mongoose.model('User');
-//const Message = mongoose.model('Message')
+const newUser = mongoose.model('User');
 
 const messageSchema = new mongoose.Schema({
   sender: String,
@@ -52,7 +51,9 @@ console.log("created backend server!!!!!!!!!!!!!!!!");
 let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 let edit_profile_array = [];
 
-let user = '';
+//placeholder variables until authentication code is complete
+let user;
+let pw;
 let userList = [];
 let unsortedMatches = []
 let sortedMatches = [];
@@ -96,9 +97,13 @@ app.post('/login', (req, res) => {
 
   if (foundUser) {
     console.log('Login successful for:', username); // Debug
+
+    //this part is a placeholder code until authentication is complete 
     req.session.user = username;
     user = username;
+    pw = password;
     console.log('setting req.session.user to be', req.session.user); //debug
+
     res.json({ message: "Login successful" });
   } else {
     console.log('Login failed for:', username); // Debug
@@ -133,6 +138,10 @@ app.post('/register', (req, res) => {
   // Save the updated database state
   saveDatabase(usersDb);
 
+   //this part is a placeholder code until authentication code is complete 
+   user = username;
+   pw = password;
+
   res.json({ message: "Signup successful." });
 });
 
@@ -148,168 +157,8 @@ app.post('/survey', (req, res) => {
 app.get('/matches', async (req, res) => {
   console.log(req.session.user)
   try {
-    //FIRST, DATA IS RETREIVED FROM THE DATABASE AND COMPILED INTO AN ARRAY
-    const BobbyImpasto = {
-      login: {
-        username: "BobbyImpasto",
-        password: "bobby123"
-      },
 
-      profile: {
-        name: "Bobby Impasto",
-        year: "Senior",
-        bio: "Yolo!"
-      },
-
-      answers: {
-        //info
-        gender: "male", //male, female, other
-        year: "freshman", //freshman, sophomore, junoir, senior, other
-        pets: "no", //yes, no
-        //living style
-        guests: "often", //often, sometimes, never
-        smoke: "never",
-        drink: "sometimes",
-        //rent range
-        rent_max: 4000,
-        rent_min: 1000,
-        //living habits
-        bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
-        quietness: 2, //rank out of 1-5
-        cleanliness: 4 //rank out of 1-5
-      },
-
-      preferences: {
-        //info
-        gender: "okay", //same, okay(with anything)
-        year: "okay", //same, okay
-        pets: "yes", //yes, no
-        //living style
-        guests: "yes", //yes, no
-        smoke: "no", //yes, no
-        drink: "yes", //yes, no
-        //living habits
-        bedtime: "similar", //similar, okay
-        quietness: "okay", //similar, okay
-        cleanliness: "clean" //similar, okay
-      }
-    };
-
-    const BarackObama = {
-      login: {
-        username: "BarackObama",
-        password: "barack123"
-      },
-
-      profile: {
-        name: "Barack Obama",
-        year: "Freshman",
-        bio: "Yes we can!"
-      },
-
-      answers: {
-        //info
-        gender: "male", //male, female, other
-        year: "freshman", //freshman, sophomore, junoir, senior, other
-        pets: "no", //yes, no
-        //living style
-        guests: "often", //often, sometimes, never
-        smoke: "never",
-        drink: "sometimes",
-        //rent range
-        rent_max: 4000,
-        rent_min: 1000,
-        //living habits
-        bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
-        quietness: 2, //rank out of 1-5
-        cleanliness: 4 //rank out of 1-5
-      },
-
-      preferences: {
-        //info
-        gender: "okay", //same, okay(with anything)
-        year: "okay", //same, okay
-        pets: "yes", //yes, no
-        //living style
-        guests: "yes", //yes, no
-        smoke: "no", //yes, no
-        drink: "yes", //yes, no
-        //living habits
-        bedtime: "similar", //similar, okay
-        quietness: "okay", //similar, okay
-        cleanliness: "clean" //similar, okay
-      }
-    };
-
-    const TaylorSwift = {
-      login: {
-        username: "TaylorSwift",
-        password: "taylor123"
-      },
-
-      profile: {
-        name: "Taylor Swift",
-        year: "Junior",
-        bio: "We're happy, free, confused, and lonely at the same time"
-      },
-
-      answers: {
-        //info
-        gender: "female", //male, female, other
-        year: "junior", //freshman, sophomore, junoir, senior, other
-        pets: "no", //yes, no
-        //living style
-        guests: "often", //often, sometimes, never
-        smoke: "never",
-        drink: "sometimes",
-        //rent range
-        rent_max: 4000,
-        rent_min: 1000,
-        //living habits
-        bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
-        quietness: 2, //rank out of 1-5
-        cleanliness: 4 //rank out of 1-5
-      },
-
-      preferences: {
-        //info
-        gender: "okay", //same, okay(with anything)
-        year: "okay", //same, okay
-        pets: "yes", //yes, no
-        //living style
-        guests: "yes", //yes, no
-        smoke: "no", //yes, no
-        drink: "yes", //yes, no
-        //living habits
-        bedtime: "similar", //similar, okay
-        quietness: "okay", //similar, okay
-        cleanliness: "clean" //similar, okay
-      }
-    };
-    //jsonArray will be a list of all the user jsons retrieved from the database 
-    //WE WOULD NOW SORT THIS ARRAY BASED ON THE SCORE
-
-    let keys = []
-    let jsonArray = [];
-    const dict = { 'BobbyImpasto': BobbyImpasto, 'BarackObama': BarackObama, 'TaylorSwift': TaylorSwift }
-
-    // if (user === 'BobbyImpasto') {
-    //   userList = [BarackObama, TaylorSwift]
-    //   keys = compat.createMatches(BobbyImpasto, userList);
-    //   jsonArray = keys.map((key) => dict[key])
-    // }
-    // else if (user === 'BarackObama') {
-    //   userList = [BobbyImpasto, TaylorSwift]
-    //   keys = compat.createMatches(BarackObama, userList);
-    //   jsonArray = keys.map((key) => dict[key])
-    // }
-    // else if (user === 'TaylorSwift') {
-    //   userList = [BobbyImpasto, BarackObama]
-    //   keys = compat.createMatches(TaylorSwift, userList);
-    //   jsonArray = keys.map((key) => dict[key])
-    // }
-
-    User.find()
+    newUser.find()
       .then(foundUser => {
         //jsonArray.push(foundUser);
         console.log("HERE!")
@@ -332,7 +181,7 @@ app.get('/matches', async (req, res) => {
 app.get('/chatlist', async (req, res) => {
   try {
     //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
-    const jsonArray = await User.find();
+    const jsonArray = await newUser.find();
 
     //jsonArray will be a list of all the user jsons retrieved from the database
     //We could maybe sort this based on the most recent message first
