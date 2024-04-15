@@ -124,5 +124,41 @@
     "profile": {},
     "answers": {},
     "preferences": {}
+  },
+  "userr": {
+    "login": {
+      "username": "userr",
+      "password": "User123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "Userr": {
+    "login": {
+      "username": "Userr",
+      "password": "User123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "userrr": {
+    "login": {
+      "username": "userrr",
+      "password": "User123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "haha": {
+    "login": {
+      "username": "haha",
+      "password": "Qwer123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
   }
 }

@@ -16,8 +16,8 @@ function Survey() {
     const [guestsAns, setGuestsAns] = useState(null);
     const [smokeAns, setSmokeAns] = useState(null);
     const [drinkAns, setDrinkAns] = useState(null);
-    const [maxRent, setMaxRent] = useState(10000);
-    const [minRent, setMinRent] = useState(300);
+    const [maxRent, setMaxRent] = useState(null);
+    const [minRent, setMinRent] = useState(null);
     const [bedAns, setBedAns] = useState(null);
     const [quietAns, setQuietAns] = useState(null);
     const [cleanAns, setCleanAns] = useState(null);
@@ -58,21 +58,21 @@ function Survey() {
         setDrinkAns(value);
     }
 
-    const handleMaxRentChange = (event) => {
-        setMaxRent(parseInt(event.target.value, 10));
+    const handleMaxRentChange = (value) => {
+        setMaxRent(value);
     };
-    const handleMinRentChange = (event) => {
-        setMinRent(parseInt(event.target.value, 10));
+    const handleMinRentChange = (value) => {
+        setMinRent(value);
     };
 
-    const handleBedAnsChange = (event) => {
-        setBedAns(parseInt(event.target.value, 10))
+    const handleBedAnsChange = (value) => {
+        setBedAns(value)
     }
-    const handleQuietAnsChange = (event) => {
-        setQuietAns(parseInt(event.target.value, 10))
+    const handleQuietAnsChange = (value) => {
+        setQuietAns(value)
     }
-    const handleCleanAnsChange = (event) => {
-        setCleanAns(parseInt(event.target.value, 10))
+    const handleCleanAnsChange = (value) => {
+        setCleanAns(value)
     }
 
     //Preferences
@@ -96,14 +96,14 @@ function Survey() {
         setDrinkPref(value);
     }
 
-    const handleBedPrefChange = (event) => {
-        setBedPref(parseInt(event.target.value, 10))
+    const handleBedPrefChange = (value) => {
+        setBedPref(value)
     }
-    const handleQuietPrefChange = (event) => {
-        setQuietPref(parseInt(event.target.value, 10))
+    const handleQuietPrefChange = (value) => {
+        setQuietPref(value)
     }
-    const handleCleanPrefChange = (event) => {
-        setCleanPref(parseInt(event.target.value, 10))
+    const handleCleanPrefChange = (value) => {
+        setCleanPref(value)
     }
 
     const handleSubmit = () => {
@@ -180,15 +180,13 @@ function Survey() {
             
             <div className="survey-question">
                 <p>What is your first and last name? (i.e. Barack Obama)</p>
-                <label for='name'>
-                    <input
-                        id='name'
-                        type='text'
-                        name='name'
-                        value={name}
-                        onChange={handleNameChange}
-                    />
-                </label>
+                <input
+                    id='name'
+                    type='text'
+                    name='name'
+                    value={name}
+                    onChange={(e) => handleNameChange(e.target.value)}
+                />
             </div>
 
             <div className='survey-question'>
@@ -306,33 +304,28 @@ function Survey() {
             </div>
 
             <div className="survey-question">
-                <p>Specify your desired rent per person:</p>
-                <div className="rent-inputs">
-                    <label>
-                        Minimum Rent Share:
-                        <input
-                            type="number"
-                            min="300"
-                            max="10000"
-                            step="100"
-                            value={minRent}
-                            onChange={handleMinRentChange}
-                            inputMode="numeric"
-                        />
-                    </label><br />
-                    <label>
-                        Maximum Rent Share:
-                        <input
-                            type="number"
-                            min="300"
-                            max="10000"
-                            step="100"
-                            value={maxRent}
-                            onChange={handleMaxRentChange}
-                            inputMode="numeric"
-                        />
-                    </label>
-                </div>
+            <p>Specify your desired rent per person in dollars:</p>
+            <div className="rent-inputs">
+                <p></p>
+                <label>
+                    Minimum Rent Share:
+                    <input
+                        type='number'
+                        name='minRent'
+                        value={minRent}
+                        onChange={(e) => handleMinRentChange(parseInt(e.target.value))}
+                    />
+                </label><br />
+                <label>
+                    Maximum Rent Share:
+                    <input
+                        type='number'
+                        name='maxRent'
+                        value={maxRent}
+                        onChange={(e) => handleMaxRentChange(parseInt(e.target.value))}
+                    />
+                </label>
+            </div>
             </div>
 
             <div className='survey-question'>
@@ -443,29 +436,29 @@ function Survey() {
                     <input
                         type='radio'
                         name='bedAns'
-                        value='1'
-                        checked={bedAns === '1'}
-                        onChange={() => handleBedAnsChange('1')}
+                        value={1}
+                        checked={bedAns === 1}
+                        onChange={() => handleBedAnsChange(1)}
                     />
                     Before 10
                 </label>
                 <label>
-                    <input
+                <input
                         type='radio'
                         name='bedAns'
-                        value='2'
-                        checked={bedAns === '2'}
-                        onChange={() => handleBedAnsChange('2')}
+                        value={2}
+                        checked={bedAns === 2}
+                        onChange={() => handleBedAnsChange(2)}
                     />
                     Between 10 pm and 12 am
                 </label>
                 <label>
-                    <input
+                <input
                         type='radio'
                         name='bedAns'
-                        value='3'
-                        checked={bedAns === '3'}
-                        onChange={() => handleBedAnsChange('3')}
+                        value={3}
+                        checked={bedAns === 3}
+                        onChange={() => handleBedAnsChange(3)}
                     />
                     Between 12 am and 2 am
                 </label>
@@ -473,9 +466,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='bedAns'
-                        value='4'
-                        checked={bedAns === '4'}
-                        onChange={() => handleBedAnsChange('4')}
+                        value={4}
+                        checked={bedAns === 4}
+                        onChange={() => handleBedAnsChange(4)}
                     />
                     Between 2 am and 4 am
                 </label>
@@ -483,9 +476,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='bedAns'
-                        value='5'
-                        checked={bedAns === '5'}
-                        onChange={() => handleBedAnsChange('5')}
+                        value={5}
+                        checked={bedAns === 5}
+                        onChange={() => handleBedAnsChange(5)}
                     />
                     After 4 am
                 </label>
@@ -493,9 +486,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='bedAns'
-                        value='0'
-                        checked={bedAns === '0'}
-                        onChange={() => handleBedAnsChange('0')}
+                        value={6}
+                        checked={bedAns === 6}
+                        onChange={() => handleBedAnsChange(6)}
                     />
                     Irregular
                 </label>
@@ -507,9 +500,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='quietAns'
-                        value='1'
-                        checked={quietAns === '1'}
-                        onChange={() => handleQuietAnsChange('1')}
+                        value={1}
+                        checked={quietAns === 1}
+                        onChange={() => handleQuietAnsChange(1)}
                     />
                     1
                 </label>
@@ -517,9 +510,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='quietAns'
-                        value='2'
-                        checked={quietAns === '2'}
-                        onChange={() => handleQuietAnsChange('2')}
+                        value={2}
+                        checked={quietAns === 2}
+                        onChange={() => handleQuietAnsChange(2)}
                     />
                     2
                 </label>
@@ -527,9 +520,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='quietAns'
-                        value='3'
-                        checked={quietAns === '3'}
-                        onChange={() => handleQuietAnsChange('3')}
+                        value={3}
+                        checked={quietAns === 3}
+                        onChange={() => handleQuietAnsChange(3)}
                     />
                     3
                 </label>
@@ -537,9 +530,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='quietAns'
-                        value='4'
-                        checked={quietAns === '4'}
-                        onChange={() => handleQuietAnsChange('4')}
+                        value={4}
+                        checked={quietAns === 4}
+                        onChange={() => handleQuietAnsChange(4)}
                     />
                     4
                 </label>
@@ -547,9 +540,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='quietAns'
-                        value='5'
-                        checked={quietAns === '5'}
-                        onChange={() => handleQuietAnsChange('5')}
+                        value={5}
+                        checked={quietAns === 5}
+                        onChange={() => handleQuietAnsChange(5)}
                     />
                     5
                 </label>
@@ -561,9 +554,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='cleanAns'
-                        value='1'
-                        checked={cleanAns === '1'}
-                        onChange={() => handleCleanAnsChange('1')}
+                        value={1}
+                        checked={cleanAns === 1}
+                        onChange={() => handleCleanAnsChange(1)}
                     />
                     1
                 </label>
@@ -571,9 +564,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='cleanAns'
-                        value='2'
-                        checked={cleanAns === '2'}
-                        onChange={() => handleCleanAnsChange('2')}
+                        value={2}
+                        checked={cleanAns === 2}
+                        onChange={() => handleCleanAnsChange(2)}
                     />
                     2
                 </label>
@@ -581,9 +574,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='cleanAns'
-                        value='3'
-                        checked={cleanAns === '3'}
-                        onChange={() => handleCleanAnsChange('3')}
+                        value={3}
+                        checked={cleanAns === 3}
+                        onChange={() => handleCleanAnsChange(3)}
                     />
                     3
                 </label>
@@ -591,9 +584,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='cleanAns'
-                        value='4'
-                        checked={cleanAns === '4'}
-                        onChange={() => handleCleanAnsChange('4')}
+                        value={4}
+                        checked={cleanAns === 4}
+                        onChange={() => handleCleanAnsChange(4)}
                     />
                     4
                 </label>
@@ -601,9 +594,9 @@ function Survey() {
                     <input
                         type='radio'
                         name='cleanAns'
-                        value='5'
-                        checked={cleanAns === '5'}
-                        onChange={() => handleCleanAnsChange('5')}
+                        value={5}
+                        checked={cleanAns === 5}
+                        onChange={() => handleCleanAnsChange(5)}
                     />
                     5
                 </label>
