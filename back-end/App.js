@@ -171,7 +171,7 @@ app.get('/matches', async (req, res) => {
 app.get('/chatlist', async (req, res) => {
   try {
     //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
-    const jsonArray = await User.find();
+    const jsonArray = await newUser.find();
 
     //jsonArray will be a list of all the user jsons retrieved from the database
     //We could maybe sort this based on the most recent message first
