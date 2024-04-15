@@ -88,5 +88,41 @@
     "profile": {},
     "answers": {},
     "preferences": {}
+  },
+  "user": {
+    "login": {
+      "username": "user",
+      "password": "User123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "User": {
+    "login": {
+      "username": "User",
+      "password": "User123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "user1": {
+    "login": {
+      "username": "user1",
+      "password": "User123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "userq": {
+    "login": {
+      "username": "userq",
+      "password": "User123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
   }
 }
