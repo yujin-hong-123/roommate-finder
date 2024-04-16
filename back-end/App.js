@@ -10,7 +10,8 @@ const fs = require("fs");
 const path = require("path");
 const compat = require("./Compatibility")
 
-const newUser = mongoose.model('User');
+const User = mongoose.model('User');
+const newUser = new User({});
 
 const messageSchema = new mongoose.Schema({
   sender: String,
@@ -27,6 +28,7 @@ const dbPath = path.join(__dirname, 'mockDatabase.json');
 
 // Import user data
 const userData = require('./mockDatabase.json');
+const { profile } = require('console');
 
 app.use(cors()); // allow cross-origin resource sharing
 
@@ -48,15 +50,8 @@ app.use(function (req, res, next) {
 });
 
 console.log("created backend server!!!!!!!!!!!!!!!!");
-let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 let edit_profile_array = [];
 
-//placeholder variables until authentication code is complete
-let user;
-let pw;
-let userList = [];
-let unsortedMatches = []
-let sortedMatches = [];
 
 // Function to load the current database state
 function loadDatabase() {
@@ -98,11 +93,9 @@ app.post('/login', (req, res) => {
   if (foundUser) {
     console.log('Login successful for:', username); // Debug
 
-    //this part is a placeholder code until authentication is complete 
-    req.session.user = username;
-    user = username;
-    pw = password;
-    console.log('setting req.session.user to be', req.session.user); //debug
+    //placeholder code until authentication is complete
+    logindict = {username: username, password: password};
+    newUser.login = logindict;
 
     res.json({ message: "Login successful" });
   } else {
@@ -119,6 +112,7 @@ app.post('/register', (req, res) => {
   if (!passwordCriteria.test(password)) {
     return res.status(400).json({ message: "Password does not meet criteria." });
   }
+
 
   const usersDb = loadDatabase();
 
@@ -138,9 +132,9 @@ app.post('/register', (req, res) => {
   // Save the updated database state
   saveDatabase(usersDb);
 
-   //this part is a placeholder code until authentication code is complete 
-   user = username;
-   pw = password;
+  //placeholder code
+  logindict = {username: username, password: password};
+  newUser.login = logindict;
 
   res.json({ message: "Signup successful." });
 });
@@ -149,16 +143,65 @@ app.post('/register', (req, res) => {
 //should push to surveyData arr
 app.post('/survey', (req, res) => {
   const surveyData = req.body;
-  surveyDataArray.push(surveyData);
-  console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
-  res.sendStatus(200); //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
+  //console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
+
+  profiledict = {name: surveyData.name, year: surveyData.year, bio:""}
+  answersdict = {
+    gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns, 
+    guests: surveyData.guestsAns, smoke: surveyData.smokeAns, drink: surveyData.drinkAns, 
+    rent_max: surveyData.maxRent, rent_min: surveyData.minRent,
+    bedtime: surveyData.bedAns, quietness: surveyData.quietAns, cleanliness: surveyData.cleanAns
+  }
+  preferencesdict = {
+    gender: surveyData.genderPref, year: surveyData.yearPref, pets: surveyData.petsPref, 
+    guests: surveyData.guestsPref, smoke: surveyData.smokePref, drink: surveyData.drinkPref, 
+    bedtime: surveyData.bedPref, quietness: surveyData.quietPref, cleanliness: surveyData.cleanPref
+}
+
+  newUser.profile = profiledict;
+  newUser.answers = answersdict;
+  newUser.preferences = preferencesdict
+
+  // newUser.answers.gender = surveyData.genderAns;
+  // newUser.answers.year = surveyData.year;
+  // newUser.answers.pets = surveyData.petsAns;
+  // newUser.answers.guests = surveyData.guestsAns;
+  // newUser.answers.smoke = surveyData.smokeAns;
+  // newUser.answers.drink = surveyData.drinkAns;
+  // newUser.answers.rent_max = surveyData.maxRent;
+  // newUser.answers.rent_min = surveyData.minRent;
+  // newUser.answers.bedtime = surveyData.bedAns;
+  // newUser.answers.quietness = surveyData.quietAns;
+  // newUser.answers.cleanliness = surveyData.cleanAns;
+
+  // newUser.preferences.gender = surveyData.genderPref;
+  // newUser.preferences.year = surveyData.yearPref;
+  // newUser.preferences.pets = surveyData.petsPref;
+  // newUser.preferences.guests = surveyData.guestsPref;
+  // newUser.preferences.smoke = surveyData.smokePref;
+  // newUser.preferences.drink = surveyData.drinkPref;
+  // newUser.preferences.bedtime = surveyData.bedPref;
+  // newUser.preferences.quietness = surveyData.quietPref;
+  // newUser.preferences.cleanliness = surveyData.cleanPref;
+
+  newUser.save()
+  .then(() => {
+    console.log("saved user info into database");
+    res.sendStatus(200);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).send('server error');
+  });
+
+  //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
 });
 
 app.get('/matches', async (req, res) => {
   console.log(req.session.user)
   try {
 
-    newUser.find()
+    User.find()
       .then(foundUser => {
         //jsonArray.push(foundUser);
         console.log("HERE!")
