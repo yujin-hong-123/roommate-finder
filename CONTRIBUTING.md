@@ -16,7 +16,7 @@ Sprint 2
 2. Product Owner: Bobby Impastato
 
 Sprint 3
-1. Scrum Master: Yujin Hong
+1. Scrum Master: Ethan Delgado
 2. Product Owner: Leena Vieltojarvi
 
 Team Norms:
