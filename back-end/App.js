@@ -1,6 +1,7 @@
 //const { Socket } = require("dgram");
 require('./config.js');
 require('./db.js');
+require('dotenv').config();
 
 const express = require("express");
 const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
@@ -10,6 +11,9 @@ const fs = require("fs");
 const path = require("path");
 const compat = require("./Compatibility")
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
 
 const User = mongoose.model('User');
 const newUser = new User({});
@@ -72,6 +76,23 @@ function saveDatabase(data) {
   fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf8');
 }
 
+const generateToken = (user) => {
+  return jwt.sign({ id: user.username }, process.env.JWT_SECRET, { expiresIn: '24h' });
+};
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
 
 //This is basically just the survey responses, for now we have just 1
 //Once we are able to ge this to send properly
@@ -86,69 +107,50 @@ app.get("/", (req, res) => {
 app.get('/login', (req, res) => {
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log('Received login attempt:', username, password); // Debug
 
-  let foundUser = false;
-  for (const key in userData) {
-    if (userData[key].login.username === username && userData[key].login.password === password) {
-      foundUser = true;
-      break; // Stop the loop once the user is found
-    }
+  const usersDb = loadDatabase();
+
+  if (!usersDb[username] || !await bcrypt.compare(password, usersDb[username].login.password)) {
+    return res.status(401).json({ message: "Invalid username or password" });
   }
 
-  if (foundUser) {
-    console.log('Login successful for:', username); // Debug
-
-    //placeholder code until authentication is complete
-    logindict = {username: username, password: password};
-    newUser.login = logindict;
-    req.session.user = username;
-    req.session.save();
-    console.log('login: ', req.session.user);
-
-    res.json({ message: "Login successful" });
-  } else {
-    console.log('Login failed for:', username); // Debug
-    res.status(401).json({ message: "Invalid username or password" });
-  }
+  const token = generateToken({ username: username });
+  res.json({ message: "Login successful", token: token });
 });
 
+
 // Signup route
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
   const { username, password } = req.body;
-  // Password validation criteria
+
   const passwordCriteria = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
   if (!passwordCriteria.test(password)) {
     return res.status(400).json({ message: "Password does not meet criteria." });
   }
 
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   const usersDb = loadDatabase();
 
-  // Check if username already exists
   if (usersDb[username]) {
     return res.status(400).json({ message: "Username already exists." });
   }
 
-  // Add user to database
   usersDb[username] = {
-    login: { username, password },
-    profile: {}, // Add additional signup information as needed
+    login: { username, password: hashedPassword },
+    profile: {},
     answers: {},
     preferences: {}
   };
 
-  // Save the updated database state
   saveDatabase(usersDb);
 
-  //placeholder code
-  logindict = {username: username, password: password};
-  newUser.login = logindict;
-
-  res.json({ message: "Signup successful." });
+  const token = generateToken({ username: username });
+  res.json({ message: "Signup successful.", token: token });
 });
+
 
 //expecting json object with handle sumbit attruputes -- in Survey.js
 //should push to surveyData arr
