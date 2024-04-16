@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const fs = require("fs");
 const path = require("path");
 const compat = require("./Compatibility")
+const cookieParser = require('cookie-parser');
 
 const User = mongoose.model('User');
 const newUser = new User({});
@@ -30,22 +31,29 @@ const dbPath = path.join(__dirname, 'mockDatabase.json');
 const userData = require('./mockDatabase.json');
 const { profile } = require('console');
 
-app.use(cors()); // allow cross-origin resource sharing
+app.use(cookieParser()); 
+app.use(cors({credentials: true, origin: 'http://localhost:3000'})); // allow cross-origin resource sharing
 
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
 
 //sessions middleware
 const sessionOptions = {
-  secret: 'secret for signing session id',
-  saveUninitialized: false,
-  resave: false
+  secret: 'secret-for-signing-session-id',
+  saveUninitialized: true,
+  resave: false,
+  cookie: {
+    httpOnly: true,
+    maxAge: 3600000
+  }
 };
 app.use(session(sessionOptions));
 
 app.use(function (req, res, next) {
-  req.session.user = req.session.user || "";
-  req.session.matches = req.session.matches || {};
+  console.log(req.session.user);
+  req.session.user = req.session.user || "a";
+  req.session.matches = req.session.matches || [];
+  console.log(req.session)
   next();
 });
 
@@ -96,6 +104,9 @@ app.post('/login', (req, res) => {
     //placeholder code until authentication is complete
     logindict = {username: username, password: password};
     newUser.login = logindict;
+    req.session.user = username;
+    req.session.save();
+    console.log('login: ', req.session.user);
 
     res.json({ message: "Login successful" });
   } else {
@@ -160,29 +171,7 @@ app.post('/survey', (req, res) => {
 
   newUser.profile = profiledict;
   newUser.answers = answersdict;
-  newUser.preferences = preferencesdict
-
-  // newUser.answers.gender = surveyData.genderAns;
-  // newUser.answers.year = surveyData.year;
-  // newUser.answers.pets = surveyData.petsAns;
-  // newUser.answers.guests = surveyData.guestsAns;
-  // newUser.answers.smoke = surveyData.smokeAns;
-  // newUser.answers.drink = surveyData.drinkAns;
-  // newUser.answers.rent_max = surveyData.maxRent;
-  // newUser.answers.rent_min = surveyData.minRent;
-  // newUser.answers.bedtime = surveyData.bedAns;
-  // newUser.answers.quietness = surveyData.quietAns;
-  // newUser.answers.cleanliness = surveyData.cleanAns;
-
-  // newUser.preferences.gender = surveyData.genderPref;
-  // newUser.preferences.year = surveyData.yearPref;
-  // newUser.preferences.pets = surveyData.petsPref;
-  // newUser.preferences.guests = surveyData.guestsPref;
-  // newUser.preferences.smoke = surveyData.smokePref;
-  // newUser.preferences.drink = surveyData.drinkPref;
-  // newUser.preferences.bedtime = surveyData.bedPref;
-  // newUser.preferences.quietness = surveyData.quietPref;
-  // newUser.preferences.cleanliness = surveyData.cleanPref;
+  newUser.preferences = preferencesdict;
 
   newUser.save()
   .then(() => {
@@ -193,18 +182,15 @@ app.post('/survey', (req, res) => {
     console.log(err);
     res.status(500).send('server error');
   });
-
-  //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
 });
 
 app.get('/matches', async (req, res) => {
-  console.log(req.session.user)
+  console.log('matches:', req.session.user)
+  req.session.user = req.session.user || "randomname";
   try {
-
     User.find()
       .then(foundUser => {
         //jsonArray.push(foundUser);
-        console.log("HERE!")
         res.json(foundUser)
       })
       .catch(err => {
@@ -224,7 +210,7 @@ app.get('/matches', async (req, res) => {
 app.get('/chatlist', async (req, res) => {
   try {
     //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
-    const jsonArray = await newUser.find();
+    const jsonArray = await User.find();
 
     //jsonArray will be a list of all the user jsons retrieved from the database
     //We could maybe sort this based on the most recent message first
