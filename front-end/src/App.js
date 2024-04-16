@@ -10,6 +10,9 @@ import Profile from './Profile'
 import EditProfile from './EditProfile';
 import MyPreferences from './MyPreferences'
 import OtherProfile from './OtherProfile';
+import axios from 'axios'
+
+axios.defaults.withCredentials = true;
 
 function App() {
   return (

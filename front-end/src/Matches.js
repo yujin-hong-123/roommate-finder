@@ -16,7 +16,7 @@ const Matches = props => {
 
   const fetchMatches = () => {
     axios
-      .get('http://localhost:3001/matches')
+      .get('http://localhost:3001/matches')//, { withCredentials: true})
       .then(response => {
         const matchesData = response.data; //response is an array of JSON objects
         setMatches(matchesData);
