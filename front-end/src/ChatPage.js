@@ -12,9 +12,16 @@ function ChatPage() {
   const [messagesarray, setMessages2] = useState([]);
   const [socketConnected, setIsConnected] = useState(socket.connected);
 
+  const [user, setUser] = useState('')
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
+    axios.get('http://localhost:3001/chatUser')
+      .then(respose => {setUser(respose.data);})
+      .catch(error => {
+        console.error('Error fetching user:', error);
+      });
+
     function onConnect() {
       setIsConnected(true);
     }
@@ -49,9 +56,9 @@ function ChatPage() {
   function sendMessage(msg) {
     //get the current time here
     const newMsg = { ...msg }; //this will eventually also have info about the user that send the message
-    console.log(newMsg.message); //this is how you extract the message out of newMsg
-    setChats([...chats, newMsg]);
-    sendToSocket([...chats, newMsg]);
+    //console.log(newMsg.message); //this is how you extract the message out of newMsg
+    setChats([...chats, user, newMsg]);
+    sendToSocket([...chats, user, newMsg]);
 
     let messagestring = newMsg.message;
     const currentTime = new Date().toISOString(); //This should be formatted eventually (go see what it looks like in the database messages collection)
@@ -72,9 +79,6 @@ function ChatPage() {
       });
 
     console.log("sent post request for the message :)");
-
-
-
   }
 
   //displays the chat messages to the user

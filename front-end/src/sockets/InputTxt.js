@@ -14,7 +14,7 @@ export default function InputTxt({sendMessage}) {
             <textarea 
             className="InputTxtArea" 
             rows={6} 
-            placeholder="Write here..." 
+            placeholder="Text Message..." 
             value={message}
             onChange={e => setMessage(e.target.value)}>
             </textarea>

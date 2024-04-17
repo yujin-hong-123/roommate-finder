@@ -275,7 +275,9 @@ app.post('/chatpage2', async (req, res) => {
   }
 });
 
-
+app.get('/chatUser', (req, res) => {
+  return req.session.user;
+});
 
 app.get('/profile', (req, res) => {
   const body1 = {
