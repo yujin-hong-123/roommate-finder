@@ -3,45 +3,36 @@ const BarackObama = {
         username: "BarackObama",
         password: "obamaSecure456"
     },
-
     profile: {
-        name: "Barack Obama",
-        year: "Freshman",
-        bio: "Yes we can!"
-    },
-
-    answers: {
-        //info
-        gender: "male", //male, female, other
-        year: "freshman", //freshman, sophomore, junoir, senior, other
-        pets: "no", //yes, no
-        //living style
-        guests: "often", //often, sometimes, never
-        smoke: "never",
-        drink: "sometimes",
-        //rent range
-        rent_max: 4000,
-        rent_min: 1000, 
-        //living habits
-        bedtime: 2, //1(before 10), 2(10pm-12am), 3(12am-2am), 4(2am-4am), 5(after 4am), 0(depends)
-        quietness : 2, //rank out of 1-5
-        cleanliness: 4 //rank out of 1-5
-    },
-
-    preferences: {
-        //info
-        gender: "same", //same, okay(with anything)
-        year: "okay", //same, okay
-        pets: "yes", //yes, no
-        //living style
-        guests: "yes", //yes, no
-        smoke: "yes", //yes, no
-        drink: "yes", //yes, no
-        //living habits
-        bedtime: "similar", //similar, okay
-        quietness: "okay", //similar, okay
-        cleanliness: "okay" //similar, okay
-    }
+        name: "",
+        year: "",
+        bio: ""
+      },
+      answers: {
+          gender: "",
+          year: "",
+          pets: "",
+          guests: "",
+          smoke: "",
+          drink: "",
+          rent_max: 0,
+          rent_min: 0, 
+          bedtime: 0,
+          quietness : 0,
+          cleanliness: 0
+      },
+      preferences: {
+          gender: "",
+          year: "", 
+          pets: "", 
+          guests: "",
+          smoke: "",
+          drink: "",
+          bedtime: "",
+          quietness: "",
+          cleanliness: ""
+      }
+  
 };
 
 const TaylorSwift = {
