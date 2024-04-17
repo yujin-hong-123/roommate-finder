@@ -55,7 +55,7 @@ function Profile() {
                 <p className="AboutText">{profileData.bio || 'No bio available.'}</p>
             </div>
             <div className="Footer">
-                <Button text="Preferences" location="/mypreferences" />
+                {/* <Button text="Preferences" location="/mypreferences" /> */}
                 <Button text="Logout" location="/login" onClick={() => localStorage.clear()} />
             </div>
         </>

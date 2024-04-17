@@ -183,7 +183,7 @@ app.post('/survey', (req, res) => {
   const surveyData = req.body;
   //console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
 
-  profiledict = {name: surveyData.name, year: surveyData.year, bio:""}
+  profiledict = {name: surveyData.name, year: surveyData.year, bio: ""}
   answersdict = {
     gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns, 
     guests: surveyData.guestsAns, smoke: surveyData.smokeAns, drink: surveyData.drinkAns, 
@@ -318,22 +318,6 @@ app.get('/profile', authenticateToken, (req, res) => {
 
 
 app.get('/mypreferences', (req, res) => {
-
-  const body1 = {
-    bio: "Hello, here is some information about me. Please note, that this bio came from a mock profile hard coded into the backend. ",
-    imagePath: "/static/images/donkey.jpg",
-    user_id: "rkTV8JXlO1",
-    name: "Bobby Impatato",
-    pets: "no",
-    guests: "yes",
-    rent_max: 10000,
-    rent_min: 300,
-    bedtime: "3AM",
-    roommates: 1
-  }
-
-  //send mock data to frontend
-  res.json(body1);
 });
 
 app.post('/editprofile', authenticateToken, async (req, res) => {
