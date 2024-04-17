@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
 
+// Define the User schema
+const UserSchema = new mongoose.Schema({
+    username: String,
+    password: String,
 
-const User = new mongoose.Schema({
-    login: {
-        username: String,
-        password: String
-    },
     profile: {
         name: String,
         year: String,
-        bio: String
+        bio: String,
     },
     answers: {
         gender: String, 
@@ -35,15 +34,29 @@ const User = new mongoose.Schema({
         quietness: String,
         cleanliness: String 
     }
-})
+});
 
-const Message = new mongoose.Schema({
+// Define the Message schema
+const MessageSchema = new mongoose.Schema({
     message: String
-})
+});
 
+// Register the models
+mongoose.model('User', UserSchema);
+mongoose.model('Message', MessageSchema);
 
-mongoose.model('User', User);
-mongoose.model('Message', Message);
+// MongoDB connection using async function
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.DSN, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        console.log('MongoDB connected...');
+    } catch (err) {
+        console.error('Failed to connect to MongoDB', err);
+        process.exit(1); // Exit process with failure in case of database connection error
+    }
+}
 
-
-mongoose.connect(process.env.DSN);
+module.exports = connectDB;
