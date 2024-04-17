@@ -1,5 +1,7 @@
 const { create } = require("domain");
 const server = require("./App");
+const connectDB = require('./db');
+connectDB();
 
 const {createServer} = require('http')
 const { Server } = require('socket.io');

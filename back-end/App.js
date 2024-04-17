@@ -1,7 +1,10 @@
 //const { Socket } = require("dgram");
 require('./config.js');
 require('./db.js');
+require('dotenv').config();
 
+const connectDB = require('./db');
+connectDB();
 const express = require("express");
 const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
 const session = require('express-session')
@@ -10,6 +13,9 @@ const fs = require("fs");
 const path = require("path");
 const compat = require("./Compatibility")
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
 
 const User = mongoose.model('User');
 const newUser = new User({});
@@ -72,6 +78,23 @@ function saveDatabase(data) {
   fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf8');
 }
 
+function generateToken(user) {
+  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+}
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
 
 //This is basically just the survey responses, for now we have just 1
 //Once we are able to ge this to send properly
@@ -86,69 +109,70 @@ app.get("/", (req, res) => {
 app.get('/login', (req, res) => {
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log('Received login attempt:', username, password); // Debug
+  console.log('Received login attempt:', username);
 
-  let foundUser = false;
-  for (const key in userData) {
-    if (userData[key].login.username === username && userData[key].login.password === password) {
-      foundUser = true;
-      break; // Stop the loop once the user is found
-    }
-  }
+  try {
+      const user = await User.findOne({ username: username.trim() });
+      if (!user) {
+          console.log(`User not found for username: ${username}`);
+          return res.status(401).json({ message: "Invalid username or password" });
+      }
 
-  if (foundUser) {
-    console.log('Login successful for:', username); // Debug
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+          console.log(`Password mismatch for user: ${username}`);
+          return res.status(401).json({ message: "Invalid username or password" });
+      }
 
-    //placeholder code until authentication is complete
-    logindict = {username: username, password: password};
-    newUser.login = logindict;
-    req.session.user = username;
-    req.session.save();
-    console.log('login: ', req.session.user);
-
-    res.json({ message: "Login successful" });
-  } else {
-    console.log('Login failed for:', username); // Debug
-    res.status(401).json({ message: "Invalid username or password" });
+      const token = generateToken(user);
+      console.log(`Login successful for user: ${username}, token: ${token}`);
+      res.json({ message: "Login successful", token: token });
+  } catch (err) {
+      console.error("Error during login for username: " + username, err);
+      res.status(500).json({ message: "Internal server error", error: err.toString() });
   }
 });
+
+
+
+
+
+app.get('/register', (req, res) => {
+})
 
 // Signup route
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
   const { username, password } = req.body;
-  // Password validation criteria
-  const passwordCriteria = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
-  if (!passwordCriteria.test(password)) {
-    return res.status(400).json({ message: "Password does not meet criteria." });
+  try {
+      console.log(`Trying to register user: ${username}`);
+
+      const existingUser = await User.findOne({ username: username.trim() });
+      if (existingUser) {
+          console.log('User already exists');
+          return res.status(400).json({ message: "Username already exists." });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = new User({
+          username,
+          password: hashedPassword
+      });
+
+      await newUser.save();
+      console.log('User registered successfully');
+      res.status(201).json({ message: "User registered successfully." });
+  } catch (err) {
+      console.error('Registration error:', err);
+      res.status(500).json({ message: "Internal server error", error: err.message });
   }
-
-
-  const usersDb = loadDatabase();
-
-  // Check if username already exists
-  if (usersDb[username]) {
-    return res.status(400).json({ message: "Username already exists." });
-  }
-
-  // Add user to database
-  usersDb[username] = {
-    login: { username, password },
-    profile: {}, // Add additional signup information as needed
-    answers: {},
-    preferences: {}
-  };
-
-  // Save the updated database state
-  saveDatabase(usersDb);
-
-  //placeholder code
-  logindict = {username: username, password: password};
-  newUser.login = logindict;
-
-  res.json({ message: "Signup successful." });
 });
+
+
+
+
+
 
 //expecting json object with handle sumbit attruputes -- in Survey.js
 //should push to surveyData arr
@@ -277,70 +301,18 @@ app.post('/chatpage2', async (req, res) => {
 
 
 
-app.get('/profile', (req, res) => {
-  const body1 = {
-    bio: "Hello, here is some information about me. Please note, that this bio came from a mock profile hard coded into the backend. ",
-    imagePath: "/static/images/donkey.jpg",
-    user_id: "rkTV8JXlO1",
-    name: "Bobby Impatato",
-    pets: "no",
-    guests: "yes",
-    rent_max: 10000,
-    rent_min: 300,
-    bedtime: "irregular"
-  }
-
-  const body2 = {
-    bio: "I'm an avid book reader and love to discuss literature. My ideal weekend involves a good book and a cup of coffee.",
-    imagePath: "/static/images/cat.png",
-    user_id: "u2LZxG3kA2",
-    name: "Samantha Doe",
-    pets: "yes",
-    guests: "no",
-    rent_max: 800,
-    rent_min: 400,
-    bedtime: "early"
-  };
-
-  const body3 = {
-    bio: "Outdoor enthusiast and tech startup founder. I enjoy hiking and discussing new technology trends.",
-    imagePath: "/static/images/dog.png",
-    user_id: "b3Jk9F4mA3",
-    name: "Alex Smith",
-    pets: "no",
-    guests: "sometimes",
-    rent_max: 1200,
-    rent_min: 600,
-    bedtime: "late"
-  };
-
-  const body4 = {
-    bio: "Music producer and DJ. Love to host small gatherings and share new music. Looking for someone who appreciates music.",
-    imagePath: "/static/images/parrot.png",
-    user_id: "d4PkS7ZnB4",
-    name: "Jordan Miles",
-    pets: "yes",
-    guests: "often",
-    rent_max: 1500,
-    rent_min: 700,
-    bedtime: "very late"
-  };
-
-  const body5 = {
-    bio: "Professional chef and food blogger. I spend most of my time experimenting with recipes. Prefer a clean and quiet living space.",
-    imagePath: "/static/images/rabbit.png",
-    user_id: "e5QtV8FoC5",
-    name: "Casey Rivera",
-    pets: "no",
-    guests: "rarely",
-    rent_max: 1000,
-    rent_min: 500,
-    bedtime: "irregular"
-  };
-  //send mock data to frontend
-  res.json(body1);
-
+app.get('/profile', authenticateToken, (req, res) => {
+  User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')
+      .then(user => {
+          if (!user) return res.status(404).json({ message: "User not found" });
+          res.json(user);
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).json({ message: "Internal server error" });
+      });
 });
+
 
 app.get('/mypreferences', (req, res) => {
 
@@ -361,31 +333,46 @@ app.get('/mypreferences', (req, res) => {
   res.json(body1);
 });
 
-app.post('/editprofile', (req, res) => {
-  const body4 = {
-    database_old_password: "password7", //This is for test purpose, however
-    //you MUST use this password for now to properly update the password
-    //When connecting the database, we will search for the current users JSON file which stores their password
-  };
+app.post('/editprofile', authenticateToken, async (req, res) => {
+    console.log("Received update request for user:", req.user.id);
+    console.log("Request data:", req.body);
 
-  const surveyData2 = req.body;
-  console.log("Trying to edit profile, we will check if password matches our database")
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).send('User not found.');
 
-  if (body4.database_old_password == surveyData2.old_password) {
-    //Old password matches, proceed with updating profile!!!
-    console.log("Old password matches our record! Pushing new data")
-    edit_profile_array.push(surveyData2);
+        // Log the current username and bio before changes
+        console.log(`Current username: ${user.username}, bio: ${user.bio}`);
 
-    console.log('Backend has received updated profile data:', surveyData2);
-    res.sendStatus(200);
-    //that will allow frontend to proceed with navigating us back to profile
-  } else {
-    //Old password doesn't match, send an error :(
-    //and this will trigger error message to be shown on frontend
-    console.log('Error: Old password does not match.');
-    res.status(400).send('Old password does not match.');
-  }
+        // If old_password is provided, verify it
+        if (req.body.old_password && !(await bcrypt.compare(req.body.old_password, user.password))) {
+            return res.status(400).json({ message: "Old password does not match." });
+        }
+
+        // If new_password is provided, hash it
+        if (req.body.new_password) {
+            const hashedPassword = await bcrypt.hash(req.body.new_password, 10);
+            user.password = hashedPassword;
+        }
+
+        // Update fields
+        user.username = req.body.username || user.username;
+        user.bio = req.body.bio || user.bio;
+
+        await user.save();
+
+        // Log the updated username and bio
+        console.log(`Updated username: ${user.username}, bio: ${user.bio}`);
+
+        res.json({ message: 'Profile updated successfully.' });
+    } catch (err) {
+        console.error("Error during profile update:", err);
+        res.status(500).json({ message: 'Internal server error', error: err.toString() });
+    }
 });
+
+
+
 
 
 module.exports = app;
