@@ -37,8 +37,8 @@ const dbPath = path.join(__dirname, 'mockDatabase.json');
 const userData = require('./mockDatabase.json');
 const { profile } = require('console');
 
-app.use(cookieParser()); 
-app.use(cors({credentials: true, origin: 'http://localhost:3000'})); // allow cross-origin resource sharing
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' })); // allow cross-origin resource sharing
 
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
@@ -59,7 +59,7 @@ app.use(function (req, res, next) {
   console.log(req.session.user);
   req.session.user = req.session.user || "a";
   req.session.matches = req.session.matches || [];
-  console.log(req.session)
+  //console.log(req.session)
   next();
 });
 
@@ -79,7 +79,8 @@ function saveDatabase(data) {
 }
 
 function generateToken(user) {
-  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+  return jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '24h' });
+  console.log("signed token with username ", user.username);
 }
 
 const authenticateToken = (req, res, next) => {
@@ -114,24 +115,24 @@ app.post('/login', async (req, res) => {
   console.log('Received login attempt:', username);
 
   try {
-      const user = await User.findOne({ username: username.trim() });
-      if (!user) {
-          console.log(`User not found for username: ${username}`);
-          return res.status(401).json({ message: "Invalid username or password" });
-      }
+    const user = await User.findOne({ username: username.trim() });
+    if (!user) {
+      console.log(`User not found for username: ${username}`);
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
 
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-          console.log(`Password mismatch for user: ${username}`);
-          return res.status(401).json({ message: "Invalid username or password" });
-      }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      console.log(`Password mismatch for user: ${username}`);
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
 
-      const token = generateToken(user);
-      console.log(`Login successful for user: ${username}, token: ${token}`);
-      res.json({ message: "Login successful", token: token });
+    const token = generateToken(user);
+    console.log(`Login successful for user: ${username}, token: ${token}`);
+    res.json({ message: "Login successful", token: token });
   } catch (err) {
-      console.error("Error during login for username: " + username, err);
-      res.status(500).json({ message: "Internal server error", error: err.toString() });
+    console.error("Error during login for username: " + username, err);
+    res.status(500).json({ message: "Internal server error", error: err.toString() });
   }
 });
 
@@ -146,33 +147,31 @@ app.get('/register', (req, res) => {
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
   try {
-      console.log(`Trying to register user: ${username}`);
+    console.log(`Trying to register user: ${username}`);
 
-      const existingUser = await User.findOne({ username: username.trim() });
-      if (existingUser) {
-          console.log('User already exists');
-          return res.status(400).json({ message: "Username already exists." });
-      }
+    const existingUser = await User.findOne({ username: username.trim() });
+    if (existingUser) {
+      console.log('User already exists');
+      return res.status(400).json({ message: "Username already exists." });
+    }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
-      // const newUser = new User({
-      //     username,
-      //     password: hashedPassword
-      // });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // const newUser = new User({
+    //     username,
+    //     password: hashedPassword
+    // });
 
-      newUser.username = username;
-      newUser.password = hashedPassword;
-      
-      //await newUser.save();
-      console.log('User registered successfully');
-      res.status(201).json({ message: "User registered successfully." });
+    newUser.username = username;
+    newUser.password = hashedPassword;
+
+    //await newUser.save();
+    console.log('User registered successfully');
+    res.status(201).json({ message: "User registered successfully." });
   } catch (err) {
-      console.error('Registration error:', err);
-      res.status(500).json({ message: "Internal server error", error: err.message });
+    console.error('Registration error:', err);
+    res.status(500).json({ message: "Internal server error", error: err.message });
   }
 });
-
-
 
 
 
@@ -183,32 +182,32 @@ app.post('/survey', (req, res) => {
   const surveyData = req.body;
   //console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
 
-  profiledict = {name: surveyData.name, year: surveyData.year, bio:""}
+  profiledict = { name: surveyData.name, year: surveyData.year, bio: "" }
   answersdict = {
-    gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns, 
-    guests: surveyData.guestsAns, smoke: surveyData.smokeAns, drink: surveyData.drinkAns, 
+    gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns,
+    guests: surveyData.guestsAns, smoke: surveyData.smokeAns, drink: surveyData.drinkAns,
     rent_max: surveyData.maxRent, rent_min: surveyData.minRent,
     bedtime: surveyData.bedAns, quietness: surveyData.quietAns, cleanliness: surveyData.cleanAns
   }
   preferencesdict = {
-    gender: surveyData.genderPref, year: surveyData.yearPref, pets: surveyData.petsPref, 
-    guests: surveyData.guestsPref, smoke: surveyData.smokePref, drink: surveyData.drinkPref, 
+    gender: surveyData.genderPref, year: surveyData.yearPref, pets: surveyData.petsPref,
+    guests: surveyData.guestsPref, smoke: surveyData.smokePref, drink: surveyData.drinkPref,
     bedtime: surveyData.bedPref, quietness: surveyData.quietPref, cleanliness: surveyData.cleanPref
-}
+  }
 
   newUser.profile = profiledict;
   newUser.answers = answersdict;
   newUser.preferences = preferencesdict;
 
   newUser.save()
-  .then(() => {
-    console.log("saved user info into database");
-    res.sendStatus(200);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(500).send('server error');
-  });
+    .then(() => {
+      console.log("saved user info into database");
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send('server error');
+    });
 });
 
 app.get('/matches', async (req, res) => {
@@ -234,24 +233,64 @@ app.get('/matches', async (req, res) => {
 });
 
 //returns a bunch of json objects as an array
-app.get('/chatlist', async (req, res) => {
+app.get('/chatlist', authenticateToken, async (req, res) => {
   try {
-    //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
-    const jsonArray = await User.find();
+    const user = await User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime');
 
-    //jsonArray will be a list of all the user jsons retrieved from the database
-    //We could maybe sort this based on the most recent message first
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const username = req.user.username;
+    console.log('Username extracted from JWT token:', username);
+
+    //This will query the database for all messages where either sender or recipient is the current user 
+    try {
+      const userMessages = await MessageModel.find({
+        $or: [
+          { sender: username },
+          { recipient: username }
+        ]
+      }).lean().exec();
+
+      //console.log('Messages associated with the current user:', userMessages);
+
+      //This SET will hold unique sender and recipients username associated with the current user
+      const uniqueUsersSet = new Set();
+
+      //populate the set with all the senders and recipeints (will be no duplicates)
+      userMessages.forEach(message => {
+        uniqueUsersSet.add(message.sender);
+        uniqueUsersSet.add(message.recipient);
+      });
+
+      //convert to array
+      let uniqueUsersArray = Array.from(uniqueUsersSet);
+
+      //remove the current users username from that array (so we cant see a convo with ourselves)
+      uniqueUsersArray = uniqueUsersArray.filter(name => name !== username);
+
+      console.log('Unique senders and recipients associated with:', username, uniqueUsersArray);
 
 
-    res.json(jsonArray)//Now, send the array to the front end
-    //NOTE: THERE IS CURRENTLY NO "MOST RECENT MESSAGE FIELD"
-    //...So the frontend just displays the bio for now under the username insted
+
+      const jsonArray = await User.find();//this gets an array of ALL user jsons
+
+      //Now this FILTERS that array
+      //...to only include the user JSONs mataching the unique usernames array
+      const filteredJsonArray = jsonArray.filter(user => uniqueUsersArray.includes(user.username));
 
 
+      //Now we send the filtered JSON array to the frontend to be displayed
+      //The filtered JSON array should contain users JSONs of any user who has interedacted (sender/recipient)
+      //...with the current user
+      console.log('Sending all user JSONs associated with these usernames to the frontend.');
+      res.json(filteredJsonArray);
 
-
+    } catch (err) {
+      console.error('Error fetching messages:', err);
+    }
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -306,14 +345,14 @@ app.post('/chatpage2', async (req, res) => {
 
 app.get('/profile', authenticateToken, (req, res) => {
   User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')
-      .then(user => {
-          if (!user) return res.status(404).json({ message: "User not found" });
-          res.json(user);
-      })
-      .catch(err => {
-          console.error(err);
-          res.status(500).json({ message: "Internal server error" });
-      });
+    .then(user => {
+      if (!user) return res.status(404).json({ message: "User not found" });
+      res.json(user);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    });
 });
 
 
@@ -337,41 +376,41 @@ app.get('/mypreferences', (req, res) => {
 });
 
 app.post('/editprofile', authenticateToken, async (req, res) => {
-    console.log("Received update request for user:", req.user.id);
-    console.log("Request data:", req.body);
+  console.log("Received update request for user:", req.user.id);
+  console.log("Request data:", req.body);
 
-    try {
-        const user = await User.findById(req.user.id);
-        if (!user) return res.status(404).send('User not found.');
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).send('User not found.');
 
-        // Log the current username and bio before changes
-        console.log(`Current username: ${user.username}, bio: ${user.bio}`);
+    // Log the current username and bio before changes
+    console.log(`Current username: ${user.username}, bio: ${user.bio}`);
 
-        // If old_password is provided, verify it
-        if (req.body.old_password && !(await bcrypt.compare(req.body.old_password, user.password))) {
-            return res.status(400).json({ message: "Old password does not match." });
-        }
-
-        // If new_password is provided, hash it
-        if (req.body.new_password) {
-            const hashedPassword = await bcrypt.hash(req.body.new_password, 10);
-            user.password = hashedPassword;
-        }
-
-        // Update fields
-        user.username = req.body.username || user.username;
-        user.bio = req.body.bio || user.bio;
-
-        await user.save();
-
-        // Log the updated username and bio
-        console.log(`Updated username: ${user.username}, bio: ${user.bio}`);
-
-        res.json({ message: 'Profile updated successfully.' });
-    } catch (err) {
-        console.error("Error during profile update:", err);
-        res.status(500).json({ message: 'Internal server error', error: err.toString() });
+    // If old_password is provided, verify it
+    if (req.body.old_password && !(await bcrypt.compare(req.body.old_password, user.password))) {
+      return res.status(400).json({ message: "Old password does not match." });
     }
+
+    // If new_password is provided, hash it
+    if (req.body.new_password) {
+      const hashedPassword = await bcrypt.hash(req.body.new_password, 10);
+      user.password = hashedPassword;
+    }
+
+    // Update fields
+    user.username = req.body.username || user.username;
+    user.bio = req.body.bio || user.bio;
+
+    await user.save();
+
+    // Log the updated username and bio
+    console.log(`Updated username: ${user.username}, bio: ${user.bio}`);
+
+    res.json({ message: 'Profile updated successfully.' });
+  } catch (err) {
+    console.error("Error during profile update:", err);
+    res.status(500).json({ message: 'Internal server error', error: err.toString() });
+  }
 });
 
 
