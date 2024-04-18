@@ -16,12 +16,6 @@ function ChatPage() {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/chatUser')
-      .then(respose => {setUser(respose.data);})
-      .catch(error => {
-        console.error('Error fetching user:', error);
-      });
-
     function onConnect() {
       setIsConnected(true);
     }
@@ -51,14 +45,28 @@ function ChatPage() {
     socket.emit('chat_message', msg);
   }
 
+  const getUser = async() => {
+      try {
+        const response = await axios.get('http://localhost:3001/chatUser', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        // Fetching logic
+        setUser(response.data);
+    } catch (error) {
+        console.error('Error fetching user:', error);
+    }
+  }
+
   //called everytime message is sent/received
   //the post request to the backend with the new message should probably go here
   function sendMessage(msg) {
     //get the current time here
-    const newMsg = { ...msg }; //this will eventually also have info about the user that send the message
-    //console.log(newMsg.message); //this is how you extract the message out of newMsg
-    setChats([...chats, user, newMsg]);
-    sendToSocket([...chats, user, newMsg]);
+    const newMsg = { ...msg, user}; //this will eventually also have info about the user that send the message
+    console.log(`Sending message as ${user}`); //this is how you extract the message out of newMsg
+    setChats([...chats, newMsg]);
+    sendToSocket([...chats, newMsg]);
 
     let messagestring = newMsg.message;
     const currentTime = new Date().toISOString(); //This should be formatted eventually (go see what it looks like in the database messages collection)
@@ -85,11 +93,14 @@ function ChatPage() {
   //this will ultimately need to be updated when we get login working
   function ChatExchange() {
     return chats.map((chat, index) => {
-      return <ChatBoxSender message={chat.message} />
+      if(chat.user === user) return <ChatBoxSender key={index} message={chat.message} user={chat.user} />
+      return <ChatBoxReceiver key={index} message={chat.message} user={chat.user} />
     });
   }
 
   useEffect(() => {
+    getUser();
+
     axios.get('http://localhost:3001/chatpage')
       .then(response => {
         setMessages2(response.data);
