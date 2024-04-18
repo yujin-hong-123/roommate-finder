@@ -44,8 +44,8 @@ function Profile() {
         <>
             <Header />
             <div className="Heading">
-                <Button text="Edit Profile" location="/editprofile" />
-                <Button text="Retake Survey" location="/survey" />
+                {/* <Button text="Edit Profile" location="/editprofile" /> */}
+                {/* <Button text="Retake Survey" location="/survey" /> */}
             </div>
             <div className="Profile">
                 <img src={profileData.imagePath || profilePicture} alt="Profile" />
@@ -55,7 +55,8 @@ function Profile() {
                 <p className="AboutText">{profileData.bio || 'No bio available.'}</p>
             </div>
             <div className="Footer">
-                <Button text="Preferences" location="/mypreferences" />
+                {/* <Button text="Preferences" location="/mypreferences" /> */}
+                <Button text="Edit Profile" location="/editprofile" />
                 <Button text="Logout" location="/login" onClick={() => localStorage.clear()} />
             </div>
         </>
