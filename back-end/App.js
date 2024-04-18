@@ -302,7 +302,17 @@ app.post('/chatpage2', async (req, res) => {
   }
 });
 
-
+app.get('/chatUser', authenticateToken, (req, res) => {
+  User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')
+      .then(user => {
+          if (!user) return res.status(404).json({ message: "User not found" });
+          res.json(user.username);
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).json({ message: "Internal server error" });
+      });
+});
 
 app.get('/profile', authenticateToken, (req, res) => {
   User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')

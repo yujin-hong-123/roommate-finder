@@ -12,6 +12,7 @@ function ChatPage() {
   const [messagesarray, setMessages2] = useState([]);
   const [socketConnected, setIsConnected] = useState(socket.connected);
 
+  const [user, setUser] = useState('')
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
@@ -44,12 +45,26 @@ function ChatPage() {
     socket.emit('chat_message', msg);
   }
 
+  const getUser = async() => {
+      try {
+        const response = await axios.get('http://localhost:3001/chatUser', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        // Fetching logic
+        setUser(response.data);
+    } catch (error) {
+        console.error('Error fetching user:', error);
+    }
+  }
+
   //called everytime message is sent/received
   //the post request to the backend with the new message should probably go here
   function sendMessage(msg) {
     //get the current time here
-    const newMsg = { ...msg }; //this will eventually also have info about the user that send the message
-    console.log(newMsg.message); //this is how you extract the message out of newMsg
+    const newMsg = { ...msg, user}; //this will eventually also have info about the user that send the message
+    console.log(`Sending message as ${user}`); //this is how you extract the message out of newMsg
     setChats([...chats, newMsg]);
     sendToSocket([...chats, newMsg]);
 
@@ -72,20 +87,20 @@ function ChatPage() {
       });
 
     console.log("sent post request for the message :)");
-
-
-
   }
 
   //displays the chat messages to the user
   //this will ultimately need to be updated when we get login working
   function ChatExchange() {
     return chats.map((chat, index) => {
-      return <ChatBoxSender message={chat.message} />
+      if(chat.user === user) return <ChatBoxSender key={index} message={chat.message} user={chat.user} />
+      return <ChatBoxReceiver key={index} message={chat.message} user={chat.user} />
     });
   }
 
   useEffect(() => {
+    getUser();
+
     axios.get('http://localhost:3001/chatpage')
       .then(response => {
         setMessages2(response.data);

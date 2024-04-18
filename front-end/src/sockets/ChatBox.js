@@ -1,12 +1,12 @@
 import React from "react";
 import './ChatBox.css'
 
-export function ChatBoxSender({message}) {
+export function ChatBoxSender({user, message}) {
     return (
         <div className="SenderBox">
             <p className="SenderChat">
                 <strong className="ChatUsername">
-                    Username [10:00AM]
+                    {user} [10:00 AM]
                 </strong>
                 <br/>
                 {message}
@@ -15,12 +15,12 @@ export function ChatBoxSender({message}) {
     );
 }
 
-export function ChatBoxReceiver({message}) {
+export function ChatBoxReceiver({user, message}) {
     return (
         <div className="ReceiverBox">
             <p className="ReceiverChat">
                 <strong className="ChatUsername">
-                    Username [10:01AM]
+                    {user} [10:00 AM]
                 </strong>
                 <br/>
                 {message}
