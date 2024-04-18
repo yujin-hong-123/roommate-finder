@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import axios from "axios";
-import Button from "./Button";
 import { useNavigate } from 'react-router-dom';
-import "./EditProfile.css"
 import Header from './Header';
+import "./EditProfile.css";
 
 function EditProfile() {
-
     const navigate = useNavigate();
     const [userName, setUserName] = useState("");
     const [bio, setBio] = useState("");
@@ -14,29 +12,34 @@ function EditProfile() {
     const [newPassword, setNewPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    const handleUpdate = () => {
-        console.log("Sending update to database")
+    const handleUpdate = async () => {
         const profileData = {
             new_password: newPassword,
-            new_username: userName,
             old_password: oldPassword,
-            new_bio: bio,
+            bio: bio,
+            username: userName, // Adjusted to match the backend expected field
         };
 
-        axios
-            .post('http://localhost:3001/editprofile', profileData)
-            .then(response => {
-                navigate('/profile');
-            })
-            .catch(error => {
+        console.log("Updating profile with data:", profileData);
 
-                if (error.response && error.response.data && error.response.data.error) {
-                    setErrorMessage(error.response.data.error);
-                } else {
-                    setErrorMessage("ERROR: The old password you provided may be incorrect.");
+        try {
+            const response = await axios.post('http://localhost:3001/editprofile', profileData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}` // Include the JWT token in the request
                 }
             });
+            console.log("Update response:", response.data);
+            if (response.status === 200) {
+                console.log("Profile updated successfully");
+                navigate('/profile', { state: { updated: true } }); // Pass state to indicate an update
+            }
+        } catch (error) {
+            console.error("Update error:", error);
+            const message = error.response?.data?.message || "An error occurred while updating the profile.";
+            setErrorMessage(message);
+        }
     };
+    
 
     return (
         <>

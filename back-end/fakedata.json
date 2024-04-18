@@ -1,9 +1,7 @@
 {
     "BarackObama": {
-        "login": {
-            "username": "BarackObama",
-            "password": "obamaSecure456"
-        },
+        "username": "BarackObama",
+        "password": "obamaSecure456",
     
         "profile": {
             "name": "Barack Obama",
@@ -41,10 +39,6 @@
             "bedtime": "okay",
             "quietness" : "similar", 
             "cleanliness": "similar"
-        },
-        
-        "matches": {
-            "TaylorSwift": 22
         }
     }
 }

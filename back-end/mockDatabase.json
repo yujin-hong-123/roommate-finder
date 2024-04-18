@@ -214,5 +214,14 @@
     "profile": {},
     "answers": {},
     "preferences": {}
+  },
+  "ethanDelgado": {
+    "login": {
+      "username": "ethanDelgado",
+      "password": "$2a$10$AqOWaldkgkGIN0YhnqDtju0GM/JRBsfwBdM2KCC77hjabTbd1IwfG"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
   }
 }
