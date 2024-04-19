@@ -274,8 +274,6 @@ app.get('/chatlist', authenticateToken, async (req, res) => {
 
       console.log('Unique senders and recipients associated with:', username, uniqueUsersArray);
 
-
-
       const jsonArray = await User.find();//this gets an array of ALL user jsons
 
       //Now this FILTERS that array
@@ -298,20 +296,21 @@ app.get('/chatlist', authenticateToken, async (req, res) => {
   }
 });
 
-//this is the route used to display fetch old messages between 2 users
+//this is the route used to display fetch old messages between 2 users (this does NOT include new/live socket messages with sockets that were just sent)
 app.get('/chatpage/:username', authenticateToken, async (req, res) => {
   console.log("got to here..............");
   try {
-    const { username } = req.params;
-    console.log("target username from backend is:", username)//username is the other user who current user want to see conversation with
+    const { username } = req.params;//"username" is the other(target) user who current user want to see conversation with
 
+    //this gets the username who requsted the chat history
     const user = await User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime');
-
     if (!user) return res.status(404).json({ message: "User not found" });
+
 
     const requester_username = req.user.username; //requester_username is the account who is requesting the messages
     console.log('Username extracted from JWT token:', requester_username);
 
+    console.log(requester_username, "has requsted to see their chat history with", username)
 
     //This will query the database for all messages where sender is username and recipient is requester_username and vice versa
     try {
@@ -320,36 +319,33 @@ app.get('/chatpage/:username', authenticateToken, async (req, res) => {
           { sender: username, recipient: requester_username },
           { sender: requester_username, recipient: username }
         ]
-      }).lean().exec();
+      }).lean().exec();//execute the query
 
-      console.log("got some messages for their convo, here they are.....")
-      console.log(userMessages)
-      //console.log("RECEIVED USERNAME PARAMETER", username);
-      //Here, we will send a request to the database, searching for the relevant messages for this chat
-      //for now it will just display all messages in the database
-      //const chatArray = await MessageModel.find();
+      console.log("Their message history from the database:")
 
-      //jsonArray will be a list of all the user jsons retrieved from the database
-      //We could maybe sort this based on the most recent message first
-      // Sort userMessages array by timestamp in ascending order (oldest messages first)
+
+      //Now sort the messages by timestamp (oldest messages first)
       userMessages.sort((a, b) => {
         return new Date(a.timestamp) - new Date(b.timestamp);
       });
+      console.log(userMessages)
+      console.log("Sending message history to frontend.")
 
-      res.json(userMessages); //Now, send the array to the front end
+      res.json(userMessages);//Send the array of messages to frontend
+
+
     } catch (err) {
       console.error('Error fetching messages:', err);
     }
-    //NOTE: THERE IS CURRENTLY NO "MOST RECENT MESSAGE FIELD"
-    //...So the frontend just displays the bio for now under the username instead
-    console.log("GOT TO THE END!!!")
+
+    //console.log("GOT TO THE END!!!")
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
-//used when a new message is sent so it can be saved to the database
+//used when a new message is sent so it can be saved to the database (POST)
 app.post('/chatpage2', async (req, res) => {
   try {
     const sender = req.body.sender;
