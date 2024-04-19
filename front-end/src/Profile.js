@@ -32,11 +32,17 @@ function Profile() {
     }, [location.state]); // Depend on location.state to refetch when it indicates an update
 
     if (Object.keys(profileData).length === 0) {
-        return <p>Loading...</p>;
+        return (
+            <>
+                <Header />
+                <p>Loading...</p>
+            </>
+        )
     }
 
+
     if (error) {
-        return <p>{error}</p>;
+        return <p>{error}</p>
     }
 
     // Render user information or placeholders
