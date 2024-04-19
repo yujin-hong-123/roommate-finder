@@ -11,10 +11,10 @@ import { useLocation } from 'react-router-dom';
 function ChatPage() {
   const location = useLocation(); //for extracting username
   const otherperson_username = location.pathname.split('/').pop(); //for extracting username
-  const [messagesarray, setMessages2] = useState([]);
 
   const [user, setUser] = useState('')
   const [chats, setChats] = useState([]);
+  const [old_messages, setOldMessages] = useState([]); // New state for storing old messages
 
   useEffect(() => {
     function onConnect() {
@@ -38,14 +38,18 @@ function ChatPage() {
 
     getUser();
 
-
+    console.log("Fetching chat history...")
     axios.get(`http://localhost:3001/chatpage/${otherperson_username}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
       .then(response => {
-        setMessages2(response.data);
+        console.log('response is ...', response);
+        console.log('chat data is ...', response.data);
+        //save old messages to the state variable old_messages
+        setOldMessages(response.data);
+
       })
       .catch(error => {
         console.error('Error fetching messages:', error);
@@ -58,6 +62,11 @@ function ChatPage() {
       setChats(senderMsg);
     })
   });
+
+  //This hook is so you can view the old_messages array once it is populated
+  useEffect(() => {
+    console.log("Old messages array updated:", old_messages);
+  }, [old_messages]);
 
   //sends the message to the backend
   function sendToSocket(msg) {
@@ -91,7 +100,7 @@ function ChatPage() {
     const currentTime = new Date().toISOString(); //This should be formatted eventually (go see what it looks like in the database messages collection)
     const msg_post = {
       sender: newMsg.user, //CHNAGE THIS LATER TO ACTUAL CURRENT USERNAME!!!!
-      recipient: "recipient_test", //CHANGE THIS LATER TO ACTUAL RECIPIENT!!!
+      recipient: otherperson_username, //CHANGE THIS LATER TO ACTUAL RECIPIENT!!!
       timestamp: currentTime,
       messagetext: messagestring
     };
@@ -120,7 +129,24 @@ function ChatPage() {
     <div>
       <Header />
       <h3>Your conversation with {otherperson_username}</h3>
+      {/* Render old messages (LEENA YOU CAN MODIFY/DELETE THIS, ONLY FOR TESTING PURPOSES)*/}
+      {old_messages.map((message, index) => {
+        //for parsing the timestamp
+        const timestamp = new Date(message.timestamp);
+        //format timestamp for month, day, hour, and minute
+        const formattedTimestamp = `${(timestamp.getMonth() + 1)}/${timestamp.getDate()} ${timestamp.getHours()}:${(timestamp.getMinutes() < 10 ? '0' : '') + timestamp.getMinutes()}`;
+
+        //combine everything
+        const displayMessage = `[<strong>${message.sender}</strong>] [${formattedTimestamp}] ${message.messagetext}`;
+
+        return (
+          <div key={index}>
+            <p dangerouslySetInnerHTML={{ __html: displayMessage }}></p>
+          </div>
+        );
+      })}
       <ChatExchange />
+
       <InputTxt sendMessage={sendMessage} />
     </div>
   );
