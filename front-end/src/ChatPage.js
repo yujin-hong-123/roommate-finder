@@ -39,13 +39,17 @@ function ChatPage() {
     getUser();
 
 
-    axios.get('http://localhost:3001/chatpage')
+    axios.get(`http://localhost:3001/chatpage/${otherperson_username}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
       .then(response => {
         setMessages2(response.data);
       })
       .catch(error => {
         console.error('Error fetching messages:', error);
-      });
+      })
   }, []);
 
   //listen for chat_message event from the socket
