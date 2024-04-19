@@ -3,8 +3,11 @@
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .Header-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Adjust as needed */
     background-color: #57068C;
     padding: 1rem;
     margin-bottom: 1rem;

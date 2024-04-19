@@ -48,10 +48,9 @@ const Matches = props => {
 
   return (
     <>
-      <h1>{error}</h1>
-      <br />
       <div className="MatchList">
         <Header />
+        <h1>{error}</h1>
         {matches.map((match, index) => (
           <div key={index}>
 
