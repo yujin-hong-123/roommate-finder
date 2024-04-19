@@ -6,8 +6,11 @@ import Header from "./Header";
 import { socket } from './sockets/ReactSocket';
 import { ChatBoxSender, ChatBoxReceiver } from './sockets/ChatBox';
 import InputTxt from './sockets/InputTxt';
+import { useLocation } from 'react-router-dom';
 
 function ChatPage() {
+  const location = useLocation(); //for extracting username
+  const otherperson_username = location.pathname.split('/').pop(); //for extracting username
   const [messagesarray, setMessages2] = useState([]);
 
   const [user, setUser] = useState('')
@@ -32,7 +35,9 @@ function ChatPage() {
   }, []);
 
   useEffect(() => {
+
     getUser();
+
 
     axios.get('http://localhost:3001/chatpage')
       .then(response => {
@@ -55,17 +60,17 @@ function ChatPage() {
     socket.emit('chat_message', msg);
   }
 
-  const getUser = async() => {
-      try {
-        const response = await axios.get('http://localhost:3001/chatUser', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-        // Fetching logic
-        setUser(response.data);
+  const getUser = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/chatUser', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      // Fetching logic
+      setUser(response.data);
     } catch (error) {
-        console.error('Error fetching user:', error);
+      console.error('Error fetching user:', error);
     }
   }
 
@@ -73,8 +78,8 @@ function ChatPage() {
   //the post request to the backend with the new message should probably go here
   function sendMessage(msg) {
     const msgTime = new Date().toLocaleTimeString();
-    const newMsg = { ...msg, user, msgTime};
-    console.log(`Sending message as ${user}`); 
+    const newMsg = { ...msg, user, msgTime };
+    console.log(`Sending message as ${user}`);
     setChats([...chats, newMsg]);
     sendToSocket([...chats, newMsg]);
 
@@ -102,7 +107,7 @@ function ChatPage() {
   //displays the chat messages to the user
   function ChatExchange() {
     return chats.map((chat, index) => {
-      if(chat.user === user) return <ChatBoxSender key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
+      if (chat.user === user) return <ChatBoxSender key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
       return <ChatBoxReceiver key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
     });
   }
@@ -110,6 +115,7 @@ function ChatPage() {
   return (
     <div>
       <Header />
+      <h3>Your conversation with {otherperson_username}</h3>
       <ChatExchange />
       <InputTxt sendMessage={sendMessage} />
     </div>
