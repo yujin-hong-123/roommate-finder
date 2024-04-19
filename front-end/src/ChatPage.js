@@ -39,17 +39,18 @@ function ChatPage() {
     getUser();
 
     console.log("Fetching chat history...")
+    //request chat history between yourself and target user (otherperson_username) that you just clicked on
     axios.get(`http://localhost:3001/chatpage/${otherperson_username}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
       .then(response => {
-        console.log('response is ...', response);
-        console.log('chat data is ...', response.data);
+        //console.log('response is ...', response);
+        //console.log('Received chat data with other user ...', response.data);
+
         //save old messages to the state variable old_messages
         setOldMessages(response.data);
-
       })
       .catch(error => {
         console.error('Error fetching messages:', error);
