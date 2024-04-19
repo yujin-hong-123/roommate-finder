@@ -50,7 +50,7 @@ const Matches = props => {
     <>
       <div className="MatchList">
         <Header />
-        <h1>{error}</h1>
+        {error && <h1>{error}</h1>} {/* To fix allignment I made error only show up if it is defined*/}
         {matches.map((match, index) => (
           <div key={index}>
 
