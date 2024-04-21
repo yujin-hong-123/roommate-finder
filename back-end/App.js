@@ -346,6 +346,7 @@ app.get('/chatUser', authenticateToken, (req, res) => {
   User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')
       .then(user => {
           if (!user) return res.status(404).json({ message: "User not found" });
+          console.log('User data to send:', user);  // Log the user data
           res.json(user.username);
       })
       .catch(err => {
@@ -355,7 +356,8 @@ app.get('/chatUser', authenticateToken, (req, res) => {
 });
 
 app.get('/profile', authenticateToken, (req, res) => {
-  User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')
+  // Add 'year' to the list of fields to return
+  User.findById(req.user.id, 'username profile.year profile.bio imagePath')
     .then(user => {
       if (!user) return res.status(404).json({ message: "User not found" });
       res.json(user);
@@ -376,37 +378,48 @@ app.post('/editprofile', authenticateToken, async (req, res) => {
 
   try {
     const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).send('User not found.');
-
-    // Log the current username and bio before changes
-    console.log(`Current username: ${user.username}, bio: ${user.bio}`);
-
-    // If old_password is provided, verify it
-    if (req.body.old_password && !(await bcrypt.compare(req.body.old_password, user.password))) {
-      return res.status(400).json({ message: "Old password does not match." });
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ message: 'User not found.' });
     }
 
-    // If new_password is provided, hash it
+    // If old_password is provided, verify it
+    if (req.body.old_password) {
+      const passwordIsValid = await bcrypt.compare(req.body.old_password, user.password);
+      if (!passwordIsValid) {
+        console.error('Old password does not match');
+        return res.status(400).json({ message: "Old password does not match." });
+      }
+    }
+
+    // If new_password is provided, hash it and update
     if (req.body.new_password) {
       const hashedPassword = await bcrypt.hash(req.body.new_password, 10);
       user.password = hashedPassword;
     }
 
-    // Update fields
+    // Update profile fields if provided
+    user.profile = {
+      ...user.profile,
+      bio: req.body.bio || user.profile.bio,
+      year: req.body.year || user.profile.year,
+    };
+
+    // Update username if provided
     user.username = req.body.username || user.username;
-    user.bio = req.body.bio || user.bio;
 
     await user.save();
-
-    // Log the updated username and bio
-    console.log(`Updated username: ${user.username}, bio: ${user.bio}`);
-
+    console.log('User updated:', user);
+    
     res.json({ message: 'Profile updated successfully.' });
   } catch (err) {
     console.error("Error during profile update:", err);
-    res.status(500).json({ message: 'Internal server error', error: err.toString() });
+    res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 });
+
+
+
 
 
 

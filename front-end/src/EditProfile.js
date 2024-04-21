@@ -8,6 +8,7 @@ function EditProfile() {
     const navigate = useNavigate();
     const [userName, setUserName] = useState("");
     const [bio, setBio] = useState("");
+    const [year, setYear] = useState(""); // Added year state
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -17,7 +18,8 @@ function EditProfile() {
             new_password: newPassword,
             old_password: oldPassword,
             bio: bio,
-            username: userName, // Adjusted to match the backend expected field
+            year: year, 
+            username: userName,
         };
 
         console.log("Updating profile with data:", profileData);
@@ -31,7 +33,7 @@ function EditProfile() {
             console.log("Update response:", response.data);
             if (response.status === 200) {
                 console.log("Profile updated successfully");
-                navigate('/profile', { state: { updated: true } }); // Pass state to indicate an update
+                navigate('/profile', { state: { updated: true } }); // Pass state to trigger re-fetch
             }
         } catch (error) {
             console.error("Update error:", error);
@@ -39,7 +41,6 @@ function EditProfile() {
             setErrorMessage(message);
         }
     };
-    
 
     return (
         <>
@@ -61,8 +62,11 @@ function EditProfile() {
                 <label>
                     <textarea rows={7} cols={45} value={bio} onChange={e => setBio(e.target.value)} />
                 </label>
-                <h3 className="UpdateHeader">Old Password (for now assume the current users old password is "password7" to get a valid response)</h3>
-
+                <h3 className="UpdateHeader">Update Year</h3>
+                <label>
+                    <input type="text" value={year} onChange={e => setYear(e.target.value)} />
+                </label>
+                <h3 className="UpdateHeader">Old Password (if changing password)</h3>
                 <label>
                     <input type="password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} />
                 </label>
@@ -70,12 +74,8 @@ function EditProfile() {
                 <label>
                     <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
                 </label>
-                <div>
-
-                </div>
                 <button onClick={handleUpdate}>Update</button>
             </div>
-
         </>
     );
 }
