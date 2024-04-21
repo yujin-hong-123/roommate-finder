@@ -5,6 +5,8 @@ connectDB();
 
 const {createServer} = require('http')
 const { Server } = require('socket.io');
+const { socket } = require("../front-end/src/sockets/ReactSocket");
+const { error } = require("console");
 const httpServer = createServer();
 const io = new Server(httpServer, {cors: {
     origin: ['http://localhost:3000'],
@@ -17,6 +19,15 @@ const port = 3001;
 io.on('connection_error', (err) => {
     console.log(err);
 });
+
+io.use((socket, next) => {
+    const sockUsername = socket.handshake.auth.username;
+    if(!sockUsername) {
+        return next(new Error("Invalid Username"));
+    }
+    socket.username = username;
+    next();
+})
 
 io.on('connection', (socket) => {
     console.log(`a user has connected, user id = ${socket.id}`);
