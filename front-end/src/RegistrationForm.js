@@ -36,9 +36,6 @@ function RegistrationForm() {
         // If the server responds with a non-OK HTTP status, display the error message
         setErrorMessage(data.message || 'Failed to sign up.');
       } else {
-        //Set up sockets with new username on successful registration
-        socket.auth = username; 
-        socket.connect();
         // On successful registration, navigate to the survey page
         console.log('Registration successful:', data);
         navigate('/survey');

@@ -5,7 +5,6 @@ connectDB();
 
 const {createServer} = require('http')
 const { Server } = require('socket.io');
-const { socket } = require("../front-end/src/sockets/ReactSocket");
 const { error } = require("console");
 const httpServer = createServer();
 const io = new Server(httpServer, {cors: {
@@ -20,15 +19,6 @@ io.on('connection_error', (err) => {
     console.log(err);
 });
 
-io.use((socket, next) => {
-    const sockUsername = socket.handshake.auth.username;
-    if(!sockUsername) {
-        return next(new Error("Invalid Username"));
-    }
-    socket.username = username;
-    next();
-})
-
 io.on('connection', (socket) => {
     console.log(`a user has connected, user id = ${socket.id}`);
 
@@ -36,6 +26,11 @@ io.on('connection', (socket) => {
         console.log(msg)
         io.emit('chat_message', msg);
     });
+
+    socket.on('set_username', (user) => {
+        socket.username = user;
+        console.log(`Socket user: ${socket.username}`);
+    })
 
     socket.on('disconnect', () => {
       console.log("a user has disconnected");
