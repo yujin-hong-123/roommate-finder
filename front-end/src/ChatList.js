@@ -52,11 +52,16 @@ const Chatlist = props => {
     }
   }, [])
 
+  const handleProfileClick = async (username) => {
+    console.log("right before navigate")
+    navigate(`/chatpage/${username}`);
+  };
+
   return (
     <div className="ChatList">
       <Header />
       {Array.isArray(chats) && chats.map((user, index) => (
-        <button key={index} onClick={() => navigate('/chatpage')} className="rowbutton">
+        <button key={index} onClick={() => handleProfileClick(user.username)} className="rowbutton">
           <img src={profilepic} className="profilepic_chat" alt="profilepic" />
           <ul className="chatentry">
             <li className="username_chat">{user.profile.name}</li>

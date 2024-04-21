@@ -15,6 +15,7 @@ const compat = require("./Compatibility")
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const bodyParser = require('body-parser');
 
 
 const User = mongoose.model('User');
@@ -84,6 +85,7 @@ function generateToken(user) {
 }
 
 const authenticateToken = (req, res, next) => {
+  console.log("attempting to authenticate token")
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -92,6 +94,7 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;
+    console.log("token was authenticated successfully")
     next();
   });
 };
@@ -271,8 +274,6 @@ app.get('/chatlist', authenticateToken, async (req, res) => {
 
       console.log('Unique senders and recipients associated with:', username, uniqueUsersArray);
 
-
-
       const jsonArray = await User.find();//this gets an array of ALL user jsons
 
       //Now this FILTERS that array
@@ -295,24 +296,56 @@ app.get('/chatlist', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/chatpage', async (req, res) => {
+//this is the route used to display fetch old messages between 2 users (this does NOT include new/live socket messages with sockets that were just sent)
+app.get('/chatpage/:username', authenticateToken, async (req, res) => {
+  console.log("got to here..............");
   try {
-    //Here, we will send a request to the database, searching for the relevant messages for this chat
-    //for now it will just display all messages in the database
-    const chatArray = await MessageModel.find();
+    const { username } = req.params;//"username" is the other(target) user who current user want to see conversation with
 
-    //jsonArray will be a list of all the user jsons retrieved from the database
-    //We could maybe sort this based on the most recent message firs
+    //this gets the username who requsted the chat history
+    const user = await User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime');
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.json(chatArray)//Now, send the array to the front end
-    //NOTE: THERE IS CURRENTLY NO "MOST RECENT MESSAGE FIELD"
-    //...So the frontend just displays the bio for now under the username insted
 
+    const requester_username = req.user.username; //requester_username is the account who is requesting the messages
+    console.log('Username extracted from JWT token:', requester_username);
+
+    console.log(requester_username, "has requsted to see their chat history with", username)
+
+    //This will query the database for all messages where sender is username and recipient is requester_username and vice versa
+    try {
+      const userMessages = await MessageModel.find({
+        $or: [
+          { sender: username, recipient: requester_username },
+          { sender: requester_username, recipient: username }
+        ]
+      }).lean().exec();//execute the query
+
+      console.log("Their message history from the database:")
+
+
+      //Now sort the messages by timestamp (oldest messages first)
+      userMessages.sort((a, b) => {
+        return new Date(a.timestamp) - new Date(b.timestamp);
+      });
+      console.log(userMessages)
+      console.log("Sending message history to frontend.")
+
+      res.json(userMessages);//Send the array of messages to frontend
+
+
+    } catch (err) {
+      console.error('Error fetching messages:', err);
+    }
+
+    //console.log("GOT TO THE END!!!")
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
+//used when a new message is sent so it can be saved to the database (POST)
 app.post('/chatpage2', async (req, res) => {
   try {
     const sender = req.body.sender;
@@ -344,14 +377,14 @@ app.post('/chatpage2', async (req, res) => {
 
 app.get('/chatUser', authenticateToken, (req, res) => {
   User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')
-      .then(user => {
-          if (!user) return res.status(404).json({ message: "User not found" });
-          res.json(user.username);
-      })
-      .catch(err => {
-          console.error(err);
-          res.status(500).json({ message: "Internal server error" });
-      });
+    .then(user => {
+      if (!user) return res.status(404).json({ message: "User not found" });
+      res.json(user.username);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    });
 });
 
 app.get('/profile', authenticateToken, (req, res) => {

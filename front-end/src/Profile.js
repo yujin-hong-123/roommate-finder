@@ -42,11 +42,17 @@ function Profile() {
     };
 
     if (Object.keys(profileData).length === 0) {
-        return <p>Loading...</p>;
+        return (
+            <>
+                <Header />
+                <p>Loading...</p>
+            </>
+        )
     }
 
+
     if (error) {
-        return <p>{error}</p>;
+        return <p>{error}</p>
     }
 
     return (
