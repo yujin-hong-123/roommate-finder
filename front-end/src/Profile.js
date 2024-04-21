@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom'; // Import useLocation
+import { useNavigate } from 'react-router-dom'; // Ensure this is imported
 import Header from './Header';
 import Button from './Button';
 import profilePicture from './ProfilePic.png';
@@ -9,7 +9,7 @@ import "./Profile.css";
 function Profile() {
     const [profileData, setProfileData] = useState({});
     const [error, setError] = useState('');
-    const location = useLocation(); // Get the location object
+    const navigate = useNavigate(); // For programmatic navigation
 
     const fetchProfileData = async () => {
         try {
@@ -18,7 +18,6 @@ function Profile() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            // Fetching logic
             console.log('Fetching profile data');
             setProfileData(response.data);
         } catch (error) {
@@ -28,8 +27,19 @@ function Profile() {
     };
 
     useEffect(() => {
-        fetchProfileData();
-    }, [location.state]); // Depend on location.state to refetch when it indicates an update
+        if (!localStorage.getItem('token')) {
+            console.log("No token found, redirecting to login...");
+            navigate('/login'); // Redirect to login if no token
+        } else {
+            fetchProfileData();
+        }
+    }, []); // Added check for token existence
+
+    const handleLogout = () => {
+        console.log("Logging out...");
+        localStorage.removeItem('token'); // Clear the token
+        navigate('/login', { replace: true }); // Redirect to login
+    };
 
     if (Object.keys(profileData).length === 0) {
         return <p>Loading...</p>;
@@ -39,13 +49,11 @@ function Profile() {
         return <p>{error}</p>;
     }
 
-    // Render user information or placeholders
     return (
         <>
             <Header />
             <div className="Heading">
-                {/* <Button text="Edit Profile" location="/editprofile" /> */}
-                {/* <Button text="Retake Survey" location="/survey" /> */}
+                <Button text="Edit Profile" location="/editprofile" />
             </div>
             <div className="Profile">
                 <img src={profileData.imagePath || profilePicture} alt="Profile" />
@@ -55,13 +63,11 @@ function Profile() {
                 <p className="AboutText">{profileData.bio || 'No bio available.'}</p>
             </div>
             <div className="Footer">
-                {/* <Button text="Preferences" location="/mypreferences" /> */}
                 <Button text="Edit Profile" location="/editprofile" />
-                <Button text="Logout" location="/login" onClick={() => localStorage.clear()} />
+                <button onClick={handleLogout} className="logout-button">Logout</button> {/* Use button for logout */}
             </div>
         </>
     );
 }
 
 export default Profile;
-
