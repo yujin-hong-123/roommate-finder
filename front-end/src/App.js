@@ -10,6 +10,7 @@ import Profile from './Profile'
 import EditProfile from './EditProfile';
 import MyPreferences from './MyPreferences'
 import OtherProfile from './OtherProfile';
+import ProtectedRoute from './ProtectedRoute';
 import axios from 'axios'
 
 axios.defaults.withCredentials = true;
@@ -20,14 +21,14 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegistrationForm />} />
-        <Route path="/chatpage/:username" element={<ChatPage />} />
-        <Route path="/chatlist" element={<ChatList />} />
-        <Route path="/matches" element={<Matches />} />
-        <Route path="/survey" element={<Survey />} /> {/*PLEASE ADD A BUTTON TO THIS ON PROFILE SCREEN*/}
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/editprofile" element={<EditProfile />} />
-        <Route path="/mypreferences" element={<MyPreferences />} />
-        <Route path="/otheruser" element={<OtherProfile />} />
+        <Route path="/chatpage" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+        <Route path="/chatlist" element={<ProtectedRoute><ChatList /></ProtectedRoute>} />
+        <Route path="/matches" element={<ProtectedRoute><Matches /></ProtectedRoute>} />
+        <Route path="/survey" element={<ProtectedRoute><Survey /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/editprofile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+        <Route path="/mypreferences" element={<ProtectedRoute><MyPreferences /></ProtectedRoute>} />
+        <Route path="/otheruser" element={<ProtectedRoute><OtherProfile /></ProtectedRoute>} />
         {/* Redirect all other paths to "/login" */}
         <Route path="*" element={<Navigate replace to="/login" />} />
       </Routes>
