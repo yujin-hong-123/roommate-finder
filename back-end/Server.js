@@ -24,8 +24,8 @@ io.use((socket) => {
     if(!sockUsername) {
         console.log("No username received");
     }
-    console.log(`Socket username: ${sockUsername}`);
     socket.username = sockUsername;
+    console.log(`Socket username: ${socket.username}`);
 });
 
 io.on('connection', (socket) => {
