@@ -215,7 +215,7 @@ app.post('/survey', (req, res) => {
 });
 
 app.get('/matches', async (req, res) => {
-  console.log('matches:', req.session.user)
+  //console.log('matches:', req.session.user)
   req.session.user = req.session.user || "randomname";
   try {
     User.find()

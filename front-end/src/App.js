@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegistrationForm />} />
-        <Route path="/chatpage" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+        <Route path="/chatpage/:username" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
         <Route path="/chatlist" element={<ProtectedRoute><ChatList /></ProtectedRoute>} />
         <Route path="/matches" element={<ProtectedRoute><Matches /></ProtectedRoute>} />
         <Route path="/survey" element={<ProtectedRoute><Survey /></ProtectedRoute>} />

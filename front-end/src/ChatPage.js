@@ -35,7 +35,6 @@ function ChatPage() {
   }, []);
 
   useEffect(() => {
-
     getUser();
 
     console.log("Fetching chat history...")

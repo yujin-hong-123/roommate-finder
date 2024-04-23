@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { socket } from './sockets/ReactSocket';
 import './landingPages.css';
 
 
@@ -27,6 +28,11 @@ function LoginForm() {
 
             if (response.ok) {
                 console.log('Login successful:', data);
+                
+                //connect the chat socket and register its username
+                socket.auth = { username };
+                socket.connect();
+
                 localStorage.setItem('token', data.token);  // Save the token to localStorage
                 navigate('/matches');  // Navigate to the 'matches' route on successful login
             } else {
