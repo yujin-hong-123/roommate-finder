@@ -19,6 +19,15 @@ io.on('connection_error', (err) => {
     console.log(err);
 });
 
+io.use((socket) => {
+    const sockUsername = socket.handshake.auth.username;
+    if(!sockUsername) {
+        console.log("No username received");
+    }
+    console.log(`Socket username: ${sockUsername}`);
+    socket.username = sockUsername;
+});
+
 io.on('connection', (socket) => {
     console.log(`a user has connected, user id = ${socket.id}`);
 
@@ -27,13 +36,12 @@ io.on('connection', (socket) => {
         io.emit('chat_message', msg);
     });
 
-    socket.on('set_username', (user) => {
-        socket.username = user;
-        console.log(`Socket user: ${socket.username}`);
-    })
-
     socket.on('disconnect', () => {
       console.log("a user has disconnected");
+    });
+
+    socket.off('disconnect', () => {
+        console.log("socket is off");
     });
 });
 

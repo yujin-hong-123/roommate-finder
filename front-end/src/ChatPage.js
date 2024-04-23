@@ -82,7 +82,6 @@ function ChatPage() {
       });
       // Fetching logic
       setUser(response.data);
-      socket.emit('set_username', response.data);
     } catch (error) {
       console.error('Error fetching user:', error);
     }

@@ -5,6 +5,7 @@ import Header from './Header';
 import Button from './Button';
 import profilePicture from './ProfilePic.png';
 import "./Profile.css";
+import { socket } from './sockets/ReactSocket';
 
 function Profile() {
     const [profileData, setProfileData] = useState({});
@@ -39,6 +40,7 @@ function Profile() {
     const handleLogout = () => {
         console.log("Logging out...");
         localStorage.removeItem('token');
+        socket.disconnect(); //disconnect the socket that was in use
         navigate('/login', { replace: true });
     };
 
