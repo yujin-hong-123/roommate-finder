@@ -129,21 +129,18 @@ function ChatPage() {
     <div>
       <Header />
       <h3>Your conversation with {otherperson_username}</h3>
-      {/* Render old messages (LEENA YOU CAN MODIFY/DELETE THIS, ONLY FOR TESTING PURPOSES)*/}
       {old_messages.map((message, index) => {
         //for parsing the timestamp
         const timestamp = new Date(message.timestamp);
         //format timestamp for month, day, hour, and minute
         const formattedTimestamp = `${(timestamp.getMonth() + 1)}/${timestamp.getDate()} ${timestamp.getHours()}:${(timestamp.getMinutes() < 10 ? '0' : '') + timestamp.getMinutes()}`;
 
-        //combine everything
-        const displayMessage = `[<strong>${message.sender}</strong>] [${formattedTimestamp}] ${message.messagetext}`;
-
-        return (
-          <div key={index}>
-            <p dangerouslySetInnerHTML={{ __html: displayMessage }}></p>
-          </div>
-        );
+        //displays message histroy to look like normal messages
+        if (message.sender === user) {
+           return <ChatBoxSender key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
+        }else {
+        return <ChatBoxReceiver key={index} message={message.messagetext} user={message.recipient} time={formattedTimestamp} />
+        }
       })}
       <ChatExchange />
 
