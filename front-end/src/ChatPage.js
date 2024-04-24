@@ -9,11 +9,11 @@ import InputTxt from './sockets/InputTxt';
 import { useLocation } from 'react-router-dom';
 
 function ChatPage() {
-  const location = useLocation(); //for extracting username
-  const otherperson_username = location.pathname.split('/').pop(); //for extracting username
+  const location = useLocation(); //for extracting receiver username
+  const otherperson_username = location.pathname.split('/').pop(); //for extracting receiver username
 
-  const [user, setUser] = useState('')
-  const [chats, setChats] = useState([]);
+  const [user, setUser] = useState(''); //stores the sending user
+  const [chats, setChats] = useState([]); //stores ongoing messages
   const [old_messages, setOldMessages] = useState([]); // New state for storing old messages
 
   useEffect(() => {
@@ -70,7 +70,7 @@ function ChatPage() {
 
   //sends the message to the backend
   function sendToSocket(msg) {
-    socket.emit('chat_message', msg);
+    socket.emit('chat_message', msg, otherperson_username);
   }
 
   const getUser = async () => {
