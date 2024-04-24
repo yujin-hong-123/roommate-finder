@@ -34,9 +34,7 @@ io.on('connection', (socket) => {
     console.log(`a user has connected, user id = ${socket.id}`);
 
     socket.on('chat_message', (msg, otherUser) => {
-        console.log(`Other user: ${otherUser}`);
-        console.log(msg);
-        io.emit('chat_message', msg);
+        io.to(otherUser).emit('chat_message', msg); //I think this will work...
     });
 
     socket.on('disconnect', () => {
