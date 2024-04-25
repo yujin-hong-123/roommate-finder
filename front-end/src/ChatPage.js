@@ -70,7 +70,7 @@ function ChatPage() {
 
   //sends the message to the backend
   function sendToSocket(msg) {
-    socket.emit('chat_message', msg, otherperson_username);
+    socket.emit('chat_message', msg);
   }
 
   const getUser = async () => {
@@ -139,7 +139,7 @@ function ChatPage() {
         if (message.sender === user) {
            return <ChatBoxSender key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
         }else {
-        return <ChatBoxReceiver key={index} message={message.messagetext} user={message.recipient} time={formattedTimestamp} />
+        return <ChatBoxReceiver key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
         }
       })}
       <ChatExchange />

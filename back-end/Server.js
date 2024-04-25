@@ -33,8 +33,8 @@ io.use((socket, next) => {
 io.on('connection', (socket) => {
     console.log(`a user has connected, user id = ${socket.id}`);
 
-    socket.on('chat_message', (msg, otherUser) => {
-        io.to(otherUser).emit('chat_message', msg); //I think this will work...
+    socket.on('chat_message', (msg) => {
+        io.emit('chat_message', msg); 
     });
 
     socket.on('disconnect', () => {
