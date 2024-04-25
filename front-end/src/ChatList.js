@@ -13,25 +13,32 @@ const Chatlist = props => {
   const [feedback, setFeedback] = useState('')
   const [chats, setChats] = useState([]);
 
-  const fetchChats = () => {
-    axios
-      .get('http://localhost:3001/chatlist')
-      .then(response => {
-        const chatsData = response.data; //response is an array of JSON objects
-        setChats(chatsData);
-      })
-      .catch(err => {
-        const errMsg = JSON.stringify(err, null, 2);
-        setError(errMsg);
-      })
-      .finally(() => {
-        setLoaded(true);
+
+
+
+  const fetchChats = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/chatlist', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
       });
+      const chatsData = response.data; //response is an array of JSON objects
+      console.log('Fetching chats data...');
+      console.log('response is ...', response);
+      console.log('chatsData is ...', chatsData);
+      setChats(chatsData);
+    } catch (error) {
+      console.error('Error fetching profile data :(:', error);
+      setError('Error fetching profile data: ' + error.message);
+    }
   };
+
 
   useEffect(() => {
 
     fetchChats()
+
 
     //set timer to load every n sec
     const intervalHandle = setInterval(() => {
@@ -45,11 +52,16 @@ const Chatlist = props => {
     }
   }, [])
 
+  const handleProfileClick = async (username) => {
+    console.log("right before navigate")
+    navigate(`/chatpage/${username}`);
+  };
+
   return (
     <div className="ChatList">
       <Header />
-      {chats.map((user, index) => (
-        <button key={index} onClick={() => navigate('/chatpage')} className="rowbutton">
+      {Array.isArray(chats) && chats.map((user, index) => (
+        <button key={index} onClick={() => handleProfileClick(user.username)} className="rowbutton">
           <img src={profilepic} className="profilepic_chat" alt="profilepic" />
           <ul className="chatentry">
             <li className="username_chat">{user.profile.name}</li>

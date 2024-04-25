@@ -1,7 +1,10 @@
 //const { Socket } = require("dgram");
 require('./config.js');
 require('./db.js');
+require('dotenv').config();
 
+const connectDB = require('./db');
+connectDB();
 const express = require("express");
 const cors = require('cors'); // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
 const session = require('express-session')
@@ -9,8 +12,14 @@ const mongoose = require('mongoose');
 const fs = require("fs");
 const path = require("path");
 const compat = require("./Compatibility")
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const bodyParser = require('body-parser');
 
-const newUser = mongoose.model('User');
+
+const User = mongoose.model('User');
+const newUser = new User({});
 
 const messageSchema = new mongoose.Schema({
   sender: String,
@@ -27,36 +36,37 @@ const dbPath = path.join(__dirname, 'mockDatabase.json');
 
 // Import user data
 const userData = require('./mockDatabase.json');
+const { profile } = require('console');
 
-app.use(cors()); // allow cross-origin resource sharing
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' })); // allow cross-origin resource sharing
 
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
 
 //sessions middleware
 const sessionOptions = {
-  secret: 'secret for signing session id',
-  saveUninitialized: false,
-  resave: false
+  secret: 'secret-for-signing-session-id',
+  saveUninitialized: true,
+  resave: false,
+  cookie: {
+    httpOnly: true,
+    maxAge: 3600000
+  }
 };
 app.use(session(sessionOptions));
 
 app.use(function (req, res, next) {
-  req.session.user = req.session.user || "";
-  req.session.matches = req.session.matches || {};
+  console.log(req.session.user);
+  req.session.user = req.session.user || "a";
+  req.session.matches = req.session.matches || [];
+  //console.log(req.session)
   next();
 });
 
 console.log("created backend server!!!!!!!!!!!!!!!!");
-let surveyDataArray = []; //This will store new incoming survey data. Its purpose is to simuate the new survey data being sent to the backend
 let edit_profile_array = [];
 
-//placeholder variables until authentication code is complete
-let user;
-let pw;
-let userList = [];
-let unsortedMatches = []
-let sortedMatches = [];
 
 // Function to load the current database state
 function loadDatabase() {
@@ -68,6 +78,26 @@ function loadDatabase() {
 function saveDatabase(data) {
   fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf8');
 }
+
+function generateToken(user) {
+  return jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '24h' });
+  console.log("signed token with username ", user.username);
+}
+
+const authenticateToken = (req, res, next) => {
+  console.log("attempting to authenticate token")
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    console.log("token was authenticated successfully")
+    next();
+  });
+};
 
 
 //This is basically just the survey responses, for now we have just 1
@@ -83,85 +113,114 @@ app.get("/", (req, res) => {
 app.get('/login', (req, res) => {
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log('Received login attempt:', username, password); // Debug
+  console.log('Received login attempt:', username);
 
-  let foundUser = false;
-  for (const key in userData) {
-    if (userData[key].login.username === username && userData[key].login.password === password) {
-      foundUser = true;
-      break; // Stop the loop once the user is found
+  try {
+    const user = await User.findOne({ username: username.trim() });
+    if (!user) {
+      console.log(`User not found for username: ${username}`);
+      return res.status(401).json({ message: "Invalid username or password" });
     }
-  }
 
-  if (foundUser) {
-    console.log('Login successful for:', username); // Debug
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      console.log(`Password mismatch for user: ${username}`);
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
 
-    //this part is a placeholder code until authentication is complete 
-    req.session.user = username;
-    user = username;
-    pw = password;
-    console.log('setting req.session.user to be', req.session.user); //debug
-
-    res.json({ message: "Login successful" });
-  } else {
-    console.log('Login failed for:', username); // Debug
-    res.status(401).json({ message: "Invalid username or password" });
+    const token = generateToken(user);
+    console.log(`Login successful for user: ${username}, token: ${token}`);
+    res.json({ message: "Login successful", token: token });
+  } catch (err) {
+    console.error("Error during login for username: " + username, err);
+    res.status(500).json({ message: "Internal server error", error: err.toString() });
   }
 });
+
+
+
+
+
+app.get('/register', (req, res) => {
+})
 
 // Signup route
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
   const { username, password } = req.body;
-  // Password validation criteria
-  const passwordCriteria = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
-  if (!passwordCriteria.test(password)) {
-    return res.status(400).json({ message: "Password does not meet criteria." });
+  try {
+    console.log(`Trying to register user: ${username}`);
+
+    const existingUser = await User.findOne({ username: username.trim() });
+    if (existingUser) {
+      console.log('User already exists');
+      return res.status(400).json({ message: "Username already exists." });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // const newUser = new User({
+    //     username,
+    //     password: hashedPassword
+    // });
+
+    newUser.username = username;
+    newUser.password = hashedPassword;
+
+    //await newUser.save();
+    console.log('User registered successfully');
+    res.status(201).json({ message: "User registered successfully." });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ message: "Internal server error", error: err.message });
   }
-
-  const usersDb = loadDatabase();
-
-  // Check if username already exists
-  if (usersDb[username]) {
-    return res.status(400).json({ message: "Username already exists." });
-  }
-
-  // Add user to database
-  usersDb[username] = {
-    login: { username, password },
-    profile: {}, // Add additional signup information as needed
-    answers: {},
-    preferences: {}
-  };
-
-  // Save the updated database state
-  saveDatabase(usersDb);
-
-   //this part is a placeholder code until authentication code is complete 
-   user = username;
-   pw = password;
-
-  res.json({ message: "Signup successful." });
 });
+
+
+
 
 //expecting json object with handle sumbit attruputes -- in Survey.js
 //should push to surveyData arr
 app.post('/survey', (req, res) => {
   const surveyData = req.body;
-  surveyDataArray.push(surveyData);
-  console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
-  res.sendStatus(200); //Now tell the frontend that it is safe to proceed (the frontend survey.js will navigate to matches after this)
+  //console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
+
+
+  profiledict = { name: surveyData.name, year: surveyData.year, bio: "" }
+  answersdict = {
+    gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns,
+    guests: surveyData.guestsAns, smoke: surveyData.smokeAns, drink: surveyData.drinkAns,
+    rent_max: surveyData.maxRent, rent_min: surveyData.minRent,
+    bedtime: surveyData.bedAns, quietness: surveyData.quietAns, cleanliness: surveyData.cleanAns
+  }
+  preferencesdict = {
+    gender: surveyData.genderPref, year: surveyData.yearPref, pets: surveyData.petsPref,
+    guests: surveyData.guestsPref, smoke: surveyData.smokePref, drink: surveyData.drinkPref,
+    bedtime: surveyData.bedPref, quietness: surveyData.quietPref, cleanliness: surveyData.cleanPref
+  }
+
+  newUser.profile = profiledict;
+  newUser.answers = answersdict;
+  newUser.preferences = preferencesdict;
+
+  newUser.save()
+    .then(() => {
+      console.log("saved user info into database");
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send('server error');
+    });
 });
 
 app.get('/matches', async (req, res) => {
-  console.log(req.session.user)
+  //console.log('matches:', req.session.user)
+  req.session.user = req.session.user || "randomname";
   try {
-
-    newUser.find()
+    User.find()
       .then(foundUser => {
         //jsonArray.push(foundUser);
-        console.log("HERE!")
         res.json(foundUser)
       })
       .catch(err => {
@@ -178,45 +237,115 @@ app.get('/matches', async (req, res) => {
 });
 
 //returns a bunch of json objects as an array
-app.get('/chatlist', async (req, res) => {
+app.get('/chatlist', authenticateToken, async (req, res) => {
   try {
-    //Here, we will send a request to the database, searching for users that the user currently has an active chat with (not sure that determiend at the moment)
-    const jsonArray = await newUser.find();
+    const user = await User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime');
 
-    //jsonArray will be a list of all the user jsons retrieved from the database
-    //We could maybe sort this based on the most recent message first
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const username = req.user.username;
+    console.log('Username extracted from JWT token:', username);
+
+    //This will query the database for all messages where either sender or recipient is the current user 
+    try {
+      const userMessages = await MessageModel.find({
+        $or: [
+          { sender: username },
+          { recipient: username }
+        ]
+      }).lean().exec();
+
+      //console.log('Messages associated with the current user:', userMessages);
+
+      //This SET will hold unique sender and recipients username associated with the current user
+      const uniqueUsersSet = new Set();
+
+      //populate the set with all the senders and recipeints (will be no duplicates)
+      userMessages.forEach(message => {
+        uniqueUsersSet.add(message.sender);
+        uniqueUsersSet.add(message.recipient);
+      });
+
+      //convert to array
+      let uniqueUsersArray = Array.from(uniqueUsersSet);
+
+      //remove the current users username from that array (so we cant see a convo with ourselves)
+      uniqueUsersArray = uniqueUsersArray.filter(name => name !== username);
+
+      console.log('Unique senders and recipients associated with:', username, uniqueUsersArray);
+
+      const jsonArray = await User.find();//this gets an array of ALL user jsons
+
+      //Now this FILTERS that array
+      //...to only include the user JSONs mataching the unique usernames array
+      const filteredJsonArray = jsonArray.filter(user => uniqueUsersArray.includes(user.username));
 
 
-    res.json(jsonArray)//Now, send the array to the front end
-    //NOTE: THERE IS CURRENTLY NO "MOST RECENT MESSAGE FIELD"
-    //...So the frontend just displays the bio for now under the username insted
+      //Now we send the filtered JSON array to the frontend to be displayed
+      //The filtered JSON array should contain users JSONs of any user who has interedacted (sender/recipient)
+      //...with the current user
+      console.log('Sending all user JSONs associated with these usernames to the frontend.');
+      res.json(filteredJsonArray);
 
-
-
-
+    } catch (err) {
+      console.error('Error fetching messages:', err);
+    }
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-app.get('/chatpage', async (req, res) => {
+//this is the route used to display fetch old messages between 2 users (this does NOT include new/live socket messages with sockets that were just sent)
+app.get('/chatpage/:username', authenticateToken, async (req, res) => {
+  console.log("got to here..............");
   try {
-    //Here, we will send a request to the database, searching for the relevant messages for this chat
-    //for now it will just display all messages in the database
-    const chatArray = await MessageModel.find();
+    const { username } = req.params;//"username" is the other(target) user who current user want to see conversation with
 
-    //jsonArray will be a list of all the user jsons retrieved from the database
-    //We could maybe sort this based on the most recent message firs
+    //this gets the username who requsted the chat history
+    const user = await User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime');
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.json(chatArray)//Now, send the array to the front end
-    //NOTE: THERE IS CURRENTLY NO "MOST RECENT MESSAGE FIELD"
-    //...So the frontend just displays the bio for now under the username insted
 
+    const requester_username = req.user.username; //requester_username is the account who is requesting the messages
+    console.log('Username extracted from JWT token:', requester_username);
+
+    console.log(requester_username, "has requsted to see their chat history with", username)
+
+    //This will query the database for all messages where sender is username and recipient is requester_username and vice versa
+    try {
+      const userMessages = await MessageModel.find({
+        $or: [
+          { sender: username, recipient: requester_username },
+          { sender: requester_username, recipient: username }
+        ]
+      }).lean().exec();//execute the query
+
+      console.log("Their message history from the database:")
+
+
+      //Now sort the messages by timestamp (oldest messages first)
+      userMessages.sort((a, b) => {
+        return new Date(a.timestamp) - new Date(b.timestamp);
+      });
+      console.log(userMessages)
+      console.log("Sending message history to frontend.")
+
+      res.json(userMessages);//Send the array of messages to frontend
+
+
+    } catch (err) {
+      console.error('Error fetching messages:', err);
+    }
+
+    //console.log("GOT TO THE END!!!")
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
+//used when a new message is sent so it can be saved to the database (POST)
 app.post('/chatpage2', async (req, res) => {
   try {
     const sender = req.body.sender;
@@ -246,117 +375,87 @@ app.post('/chatpage2', async (req, res) => {
   }
 });
 
-
-
-app.get('/profile', (req, res) => {
-  const body1 = {
-    bio: "Hello, here is some information about me. Please note, that this bio came from a mock profile hard coded into the backend. ",
-    imagePath: "/static/images/donkey.jpg",
-    user_id: "rkTV8JXlO1",
-    name: "Bobby Impatato",
-    pets: "no",
-    guests: "yes",
-    rent_max: 10000,
-    rent_min: 300,
-    bedtime: "irregular"
-  }
-
-  const body2 = {
-    bio: "I'm an avid book reader and love to discuss literature. My ideal weekend involves a good book and a cup of coffee.",
-    imagePath: "/static/images/cat.png",
-    user_id: "u2LZxG3kA2",
-    name: "Samantha Doe",
-    pets: "yes",
-    guests: "no",
-    rent_max: 800,
-    rent_min: 400,
-    bedtime: "early"
-  };
-
-  const body3 = {
-    bio: "Outdoor enthusiast and tech startup founder. I enjoy hiking and discussing new technology trends.",
-    imagePath: "/static/images/dog.png",
-    user_id: "b3Jk9F4mA3",
-    name: "Alex Smith",
-    pets: "no",
-    guests: "sometimes",
-    rent_max: 1200,
-    rent_min: 600,
-    bedtime: "late"
-  };
-
-  const body4 = {
-    bio: "Music producer and DJ. Love to host small gatherings and share new music. Looking for someone who appreciates music.",
-    imagePath: "/static/images/parrot.png",
-    user_id: "d4PkS7ZnB4",
-    name: "Jordan Miles",
-    pets: "yes",
-    guests: "often",
-    rent_max: 1500,
-    rent_min: 700,
-    bedtime: "very late"
-  };
-
-  const body5 = {
-    bio: "Professional chef and food blogger. I spend most of my time experimenting with recipes. Prefer a clean and quiet living space.",
-    imagePath: "/static/images/rabbit.png",
-    user_id: "e5QtV8FoC5",
-    name: "Casey Rivera",
-    pets: "no",
-    guests: "rarely",
-    rent_max: 1000,
-    rent_min: 500,
-    bedtime: "irregular"
-  };
-  //send mock data to frontend
-  res.json(body1);
-
+app.get('/chatUser', authenticateToken, (req, res) => {
+  User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')
+      .then(user => {
+          if (!user) return res.status(404).json({ message: "User not found" });
+          console.log('User data to send:', user);  // Log the user data
+          res.json(user.username);
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).json({ message: "Internal server error" });
+      });
 });
+
+app.get('/profile', authenticateToken, (req, res) => {
+  // Add 'year' to the list of fields to return
+  User.findById(req.user.id, 'username profile.year profile.bio imagePath')
+    .then(user => {
+      if (!user) return res.status(404).json({ message: "User not found" });
+      res.json(user);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    });
+});
+
 
 app.get('/mypreferences', (req, res) => {
-
-  const body1 = {
-    bio: "Hello, here is some information about me. Please note, that this bio came from a mock profile hard coded into the backend. ",
-    imagePath: "/static/images/donkey.jpg",
-    user_id: "rkTV8JXlO1",
-    name: "Bobby Impatato",
-    pets: "no",
-    guests: "yes",
-    rent_max: 10000,
-    rent_min: 300,
-    bedtime: "3AM",
-    roommates: 1
-  }
-
-  //send mock data to frontend
-  res.json(body1);
 });
 
-app.post('/editprofile', (req, res) => {
-  const body4 = {
-    database_old_password: "password7", //This is for test purpose, however
-    //you MUST use this password for now to properly update the password
-    //When connecting the database, we will search for the current users JSON file which stores their password
-  };
+app.post('/editprofile', authenticateToken, async (req, res) => {
+  console.log("Received update request for user:", req.user.id);
+  console.log("Request data:", req.body);
 
-  const surveyData2 = req.body;
-  console.log("Trying to edit profile, we will check if password matches our database")
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ message: 'User not found.' });
+    }
 
-  if (body4.database_old_password == surveyData2.old_password) {
-    //Old password matches, proceed with updating profile!!!
-    console.log("Old password matches our record! Pushing new data")
-    edit_profile_array.push(surveyData2);
+    // If old_password is provided, verify it
+    if (req.body.old_password) {
+      const passwordIsValid = await bcrypt.compare(req.body.old_password, user.password);
+      if (!passwordIsValid) {
+        console.error('Old password does not match');
+        return res.status(400).json({ message: "Old password does not match." });
+      }
+    }
 
-    console.log('Backend has received updated profile data:', surveyData2);
-    res.sendStatus(200);
-    //that will allow frontend to proceed with navigating us back to profile
-  } else {
-    //Old password doesn't match, send an error :(
-    //and this will trigger error message to be shown on frontend
-    console.log('Error: Old password does not match.');
-    res.status(400).send('Old password does not match.');
+    // If new_password is provided, hash it and update
+    if (req.body.new_password) {
+      const hashedPassword = await bcrypt.hash(req.body.new_password, 10);
+      user.password = hashedPassword;
+    }
+
+    // Update profile fields if provided
+    user.profile = {
+      ...user.profile,
+      bio: req.body.bio || user.profile.bio,
+      year: req.body.year || user.profile.year,
+    };
+
+    // Update username if provided
+    user.username = req.body.username || user.username;
+
+    await user.save();
+    console.log('User updated:', user);
+    
+    res.json({ message: 'Profile updated successfully.' });
+  } catch (err) {
+    console.error("Error during profile update:", err);
+    res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 });
+
+
+
+
+
+
 
 
 module.exports = app;

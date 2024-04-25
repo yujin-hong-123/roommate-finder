@@ -1,51 +1,70 @@
-import LoginForm from "./LoginForm";
-import "./Profile.css"
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Button from './Button';
 import profilePicture from './ProfilePic.png';
+import "./Profile.css";
+import { socket } from './sockets/ReactSocket';
 
 function Profile() {
-    const [profileData, setProfileData] = useState([]);
+    const [profileData, setProfileData] = useState({});
+    const [username, setUsername] = useState(''); // Separate state for username
     const [error, setError] = useState('');
-    const [loaded, setLoaded] = useState(false);
+    const navigate = useNavigate();
+
+    const fetchProfileData = async () => {
+        try {
+            const response = await axios.get('http://localhost:3001/profile', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            console.log('Fetching profile data', response.data);
+            if (response.data && response.data.profile) {
+                setProfileData(response.data.profile); // Set the profile-specific data
+                setUsername(response.data.username); // Set username separately
+            } else {
+                throw new Error('Profile data is missing');
+            }
+        } catch (error) {
+            console.error('Error fetching profile data:', error);
+            setError('Error fetching profile data: ' + error.message);
+        }
+    };
 
     useEffect(() => {
-        const fetchProfileData = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/profile');
-                setProfileData(response.data);
-            } catch (error) {
-                setError('Error fetching profile data: ' + error.message);
-            } finally {
-                setLoaded(true);
-            }
-        };
-
         fetchProfileData();
-
-        return () => {
-        };
     }, []);
+
+    const handleLogout = () => {
+        console.log("Logging out...");
+        localStorage.removeItem('token');
+        socket.disconnect(); //disconnect the socket that was in use
+        navigate('/login', { replace: true });
+    };
+
+    if (!profileData || Object.keys(profileData).length === 0) {
+        return <p>Loading...</p>;
+    }
+
+
+    if (error) {
+        return <p>{error}</p>
+    }
 
     return (
         <>
             <Header />
-            <div className="Heading">
-                <Button text="Edit Profile" location="/editprofile" />
-                <Button text="Retake Survey" location="/survey" />
-            </div>
             <div className="Profile">
-                <img src={profilePicture} alt="Profile" />
-                <h2>{profileData.name}</h2>
-            </div>
-            <div className="About">
-                <p className="AboutText">{profileData.bio}</p>
+                <img src={profileData.imagePath || profilePicture} alt="Profile" />
+                <h2>{username || 'Username not set'}</h2>
+                <h4>{profileData.year || 'Year not set'}</h4>
+                <p className="AboutText">{profileData.bio || 'No bio available.'}</p>
             </div>
             <div className="Footer">
-                <Button text="Preferences" location="/mypreferences" />
-                <Button text="Logout" location="/login" />
+                <Button text="Edit Profile" location="/editprofile" />
+                <button onClick={handleLogout} className="logout-button">Logout</button>
             </div>
         </>
     );

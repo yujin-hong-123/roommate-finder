@@ -19,4 +19,5 @@ The user starts by filling out a form with their preferences for a roomate, such
 To contribute to this project, please see the [CONTRIBUTING.md](https://github.com/agiledev-students-spring2024/roomate-finder/blob/master/CONTRIBUTING.md) document and strictly adhere to our protocols.
 
 ### Building & Testing
-This will be updated after some future developments.
+To test run "npm test" on the back-end folder. 
+To run the project run "npm install" on the front-end and the back-end folder to make sure you have all the dependencies, then make sure you have put our .env file from our Discord channel in the back-end folder, finally run "npm start" on both the front-end and back-end folders. 

@@ -160,5 +160,68 @@
     "profile": {},
     "answers": {},
     "preferences": {}
+  },
+  "sarah": {
+    "login": {
+      "username": "sarah",
+      "password": "Sarah123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "sarah1": {
+    "login": {
+      "username": "sarah1",
+      "password": "Sarah123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "sarahh": {
+    "login": {
+      "username": "sarahh",
+      "password": "Sarah12!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "sarahhh": {
+    "login": {
+      "username": "sarahhh",
+      "password": "Sarah12!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "sarahhhh": {
+    "login": {
+      "username": "sarahhhh",
+      "password": "Sarah123!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "katniss": {
+    "login": {
+      "username": "katniss",
+      "password": "Katniss12!"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
+  },
+  "ethanDelgado": {
+    "login": {
+      "username": "ethanDelgado",
+      "password": "$2a$10$AqOWaldkgkGIN0YhnqDtju0GM/JRBsfwBdM2KCC77hjabTbd1IwfG"
+    },
+    "profile": {},
+    "answers": {},
+    "preferences": {}
   }
 }

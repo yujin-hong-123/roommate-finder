@@ -162,7 +162,7 @@ function Survey() {
             axios
                 .post('http://localhost:3001/survey', surveyData)
                 .then(response => {
-                    navigate('/matches');
+                    navigate('/login');
                 })
                 .catch(error => {
                     console.error('Error submitting survey:', error);

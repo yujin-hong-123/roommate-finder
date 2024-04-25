@@ -1,8 +1,11 @@
 const { create } = require("domain");
 const server = require("./App");
+const connectDB = require('./db');
+connectDB();
 
 const {createServer} = require('http')
 const { Server } = require('socket.io');
+const { error } = require("console");
 const httpServer = createServer();
 const io = new Server(httpServer, {cors: {
     origin: ['http://localhost:3000'],
@@ -16,6 +19,15 @@ io.on('connection_error', (err) => {
     console.log(err);
 });
 
+io.use((socket) => {
+    const sockUsername = socket.handshake.auth.username;
+    if(!sockUsername) {
+        console.log("No username received");
+    }
+    socket.username = sockUsername;
+    console.log(`Socket username: ${socket.username}`);
+});
+
 io.on('connection', (socket) => {
     console.log(`a user has connected, user id = ${socket.id}`);
 
@@ -26,6 +38,10 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
       console.log("a user has disconnected");
+    });
+
+    socket.off('disconnect', () => {
+        console.log("socket is off");
     });
 });
 

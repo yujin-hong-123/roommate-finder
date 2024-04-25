@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { socket } from './sockets/ReactSocket';
 import './landingPages.css';
 
 function RegistrationForm() {
@@ -35,6 +36,10 @@ function RegistrationForm() {
         // If the server responds with a non-OK HTTP status, display the error message
         setErrorMessage(data.message || 'Failed to sign up.');
       } else {
+        //connect chat socket and register username
+        socket.auth.username = username;
+        socket.connect();
+
         // On successful registration, navigate to the survey page
         console.log('Registration successful:', data);
         navigate('/survey');
