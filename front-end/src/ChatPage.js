@@ -66,6 +66,7 @@ function ChatPage() {
   //This hook is so you can view the old_messages array once it is populated
   useEffect(() => {
     console.log("Old messages array updated:", old_messages);
+    setChats([]);
   }, [old_messages]);
 
   //sends the message to the backend
@@ -92,7 +93,7 @@ function ChatPage() {
   function sendMessage(msg) {
     const msgTime = new Date().toLocaleTimeString();
     const newMsg = { ...msg, user, msgTime };
-    console.log(`Sending message as ${user}`);
+    //console.log(`Sending message as ${user}`);
     setChats([...chats, newMsg]);
     sendToSocket([...chats, newMsg]);
 
