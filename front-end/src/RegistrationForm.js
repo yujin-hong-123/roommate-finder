@@ -37,7 +37,7 @@ function RegistrationForm() {
         setErrorMessage(data.message || 'Failed to sign up.');
       } else {
         //connect chat socket and register username
-        socket.auth.username = username;
+        socket.auth = { username };
         socket.connect();
 
         // On successful registration, navigate to the survey page
