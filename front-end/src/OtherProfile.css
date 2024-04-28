@@ -31,9 +31,14 @@
     padding-top: 60px;
 }
 
-.logout-button {
+.message-button {
     text-align: center;
     font-family: 'Montserrat';
     font-weight: bold;
     font-size: medium;
+}
+
+.ButtonText {
+    text-align: center;
+    font-family: 'Montserrat';
 }

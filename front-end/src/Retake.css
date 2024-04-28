@@ -1,8 +1,7 @@
-
 .Survey {
   display: flex;
   flex-direction: column;
-  background-color: #e8e8e8;
+  background-color: #e0e0e0;
 }
   
 .survey-question {

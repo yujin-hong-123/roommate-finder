@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "./Retake.css";
+import "./Survey.css";
 import Header from "./Header";
 import axios from 'axios';
 import { set } from 'mongoose';
@@ -655,7 +655,6 @@ function Retake() {
                     </label>
                 </div>
 
-                <br></br>
                 <div className='section'>
                     <h3>Now tell us what you are looking for in a roommate.</h3>
                 </div>
