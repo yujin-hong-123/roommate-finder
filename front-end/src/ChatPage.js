@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ChatPage.css';
 import axios from 'axios'
@@ -15,7 +15,7 @@ function ChatPage() {
   const [user, setUser] = useState(''); //stores the sending user
   const [chats, setChats] = useState([]); //stores ongoing messages
   const [old_messages, setOldMessages] = useState([]); // New state for storing old messages
- 
+
   //const [userList, setUserList] = useState([]);
   //let selectedUser = { otherperson_username, chats: []};
 
@@ -79,8 +79,6 @@ function ChatPage() {
   //This hook is so you can view the old_messages array once it is populated
   useEffect(() => {
     console.log("Old messages array updated:", old_messages);
-    //setChats([]);
-    //console.log(chats);
   }, [old_messages]);
 
   //sends the message to the backend
@@ -154,21 +152,22 @@ function ChatPage() {
     <div>
       <Header />
       <h3>Your conversation with {otherperson_username}</h3>
-      {old_messages.map((message, index) => {
-        //for parsing the timestamp
-        const timestamp = new Date(message.timestamp);
-        //format timestamp for month, day, hour, and minute
-        const formattedTimestamp = `${(timestamp.getMonth() + 1)}/${timestamp.getDate()} ${timestamp.getHours()}:${(timestamp.getMinutes() < 10 ? '0' : '') + timestamp.getMinutes()}`;
+      <div className="MessageList">
+        {old_messages.map((message, index) => {
+          //for parsing the timestamp
+          const timestamp = new Date(message.timestamp);
+          //format timestamp for month, day, hour, and minute
+          const formattedTimestamp = `${(timestamp.getMonth() + 1)}/${timestamp.getDate()} ${timestamp.getHours()}:${(timestamp.getMinutes() < 10 ? '0' : '') + timestamp.getMinutes()}`;
 
-        //displays message histroy to look like normal messages
-        if (message.sender === user) {
-           return <ChatBoxSender key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
-        }else {
-        return <ChatBoxReceiver key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
-        }
-      })}
-      <ChatExchange />
-
+          //displays message histroy to look like normal messages
+          if (message.sender === user) {
+            return <ChatBoxSender key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
+          }else {
+          return <ChatBoxReceiver key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
+          }
+        })}
+        <ChatExchange />
+      </div>
       <InputTxt sendMessage={sendMessage} />
     </div>
   );
