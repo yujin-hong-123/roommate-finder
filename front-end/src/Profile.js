@@ -9,6 +9,7 @@ import { socket } from './sockets/ReactSocket';
 
 function Profile() {
     const [profileData, setProfileData] = useState({});
+    const [year, setYear] = useState('');
     const [username, setUsername] = useState(''); // Separate state for username
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ function Profile() {
             if (response.data && response.data.profile) {
                 setProfileData(response.data.profile); // Set the profile-specific data
                 setUsername(response.data.username); // Set username separately
+                setYear(response.data.answers.year)
             } else {
                 throw new Error('Profile data is missing');
             }
@@ -59,12 +61,15 @@ function Profile() {
             <div className="Profile">
                 <img src={profileData.imagePath || profilePicture} alt="Profile" />
                 <h2>{username || 'Username not set'}</h2>
-                <h4>{profileData.year || 'Year not set'}</h4>
+                <h4>{year || 'Year not set'}</h4>
                 <p className="AboutText">{profileData.bio || 'No bio available.'}</p>
             </div>
             <div className="Footer">
                 <Button text="Edit Profile" location="/editprofile" />
                 <Button text="Retake Survey" location="/retake" />
+            </div>
+            <br></br>
+            <div className='BottomFooter'>
                 <button onClick={handleLogout} className="logout-button">Logout</button>
             </div>
         </>

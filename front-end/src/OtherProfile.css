@@ -10,6 +10,8 @@
     align-items: center;
     margin: 20px;
     font-family: 'Montserrat';
+    padding-top: 70px;
+    padding-bottom: 30px;
 }
 
 .AboutText{
@@ -21,4 +23,17 @@
 .Footer{
     display: flex;
     justify-content: space-evenly;
+}
+
+.BottomFooter{
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 60px;
+}
+
+.logout-button {
+    text-align: center;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    font-size: medium;
 }

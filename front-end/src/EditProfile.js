@@ -8,7 +8,6 @@ function EditProfile() {
     const navigate = useNavigate();
     const [userName, setUserName] = useState("");
     const [bio, setBio] = useState("");
-    const [year, setYear] = useState(""); // Added year state
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -18,7 +17,6 @@ function EditProfile() {
             new_password: newPassword,
             old_password: oldPassword,
             bio: bio,
-            year: year, 
             username: userName,
         };
 
@@ -61,10 +59,6 @@ function EditProfile() {
                 <h3 className="UpdateHeader">Update Bio</h3>
                 <label>
                     <textarea rows={7} cols={45} value={bio} onChange={e => setBio(e.target.value)} />
-                </label>
-                <h3 className="UpdateHeader">Update Year</h3>
-                <label>
-                    <input type="text" value={year} onChange={e => setYear(e.target.value)} />
                 </label>
                 <h3 className="UpdateHeader">Old Password (if changing password)</h3>
                 <label>

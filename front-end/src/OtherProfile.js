@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Button from './Button';
 import profilePicture from './ProfilePic.png';
-import "./Profile.css";
+import "./OtherProfile.css";
 import { socket } from './sockets/ReactSocket';
 
 function OtherProfile() {
     const [profileData, setProfileData] = useState({});
     const [username, setUsername] = useState(''); // Separate state for username
+    const [year, setYear] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -24,6 +25,7 @@ function OtherProfile() {
             if (response.data && response.data.profile) {
                 setProfileData(response.data.profile); // Set the profile-specific data
                 setUsername(response.data.username); // Set username separately
+                setYear(response.data.answers.year);
             } else {
                 throw new Error('Profile data is missing');
             }
@@ -36,13 +38,6 @@ function OtherProfile() {
     useEffect(() => {
         fetchProfileData();
     }, []);
-
-    const handleLogout = () => {
-        console.log("Logging out...");
-        localStorage.removeItem('token');
-        socket.disconnect(); //disconnect the socket that was in use
-        navigate('/login', { replace: true });
-    };
 
     if (!profileData || Object.keys(profileData).length === 0) {
         return <p>Loading...</p>;
@@ -59,7 +54,7 @@ function OtherProfile() {
             <div className="Profile">
                 <img src={profileData.imagePath || profilePicture} alt="Profile" />
                 <h2>{username || 'Username not set'}</h2>
-                <h4>{profileData.year || 'Year not set'}</h4>
+                <h4>{year || 'Year not set'}</h4>
                 <p className="AboutText">{profileData.bio || 'No bio available.'}</p>
             </div>
             <div className="Footer">
