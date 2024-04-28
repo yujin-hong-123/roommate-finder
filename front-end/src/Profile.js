@@ -64,6 +64,7 @@ function Profile() {
             </div>
             <div className="Footer">
                 <Button text="Edit Profile" location="/editprofile" />
+                <Button text="Retake Survey" location="/retake" />
                 <button onClick={handleLogout} className="logout-button">Logout</button>
             </div>
         </>

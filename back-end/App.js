@@ -58,7 +58,7 @@ app.use(session(sessionOptions));
 
 app.use(function (req, res, next) {
   console.log(req.session.user);
-  req.session.user = req.session.user || "a";
+  req.session.user = req.session.user || "";
   req.session.matches = req.session.matches || [];
   //console.log(req.session)
   next();
@@ -139,10 +139,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-
-
-
-
 app.get('/register', (req, res) => {
 })
 
@@ -175,9 +171,6 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ message: "Internal server error", error: err.message });
   }
 });
-
-
-
 
 //expecting json object with handle sumbit attruputes -- in Survey.js
 //should push to surveyData arr
@@ -403,6 +396,57 @@ app.get('/profile', authenticateToken, (req, res) => {
 
 
 app.get('/mypreferences', (req, res) => {
+});
+
+app.get('/retake', authenticateToken, async(req, res) => {
+  User.findById(req.user.id, 'answers.gender answers.year ' +
+  'answers.pets answers.guests answers.smoke answers.drink answers.rent_max answers.rent_min answers.bedtime answers.quietness answers.cleanliness preferences.gender preferences.year preferences.pets preferences.guests preferences.smoke preferences.drink preferences.bedtime preferences.quietness preferences.cleanliness')
+  .then(user => {
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  })
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  });
+});
+
+app.post('/retake', authenticateToken, async(req, res) => {
+  console.log("Received update request for user:", req.user.id);
+  console.log("Request data:", req.body);
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const surveyData = req.body;
+
+    profiledict = { name: surveyData.name, year: surveyData.year, bio: "" }
+    answersdict = {
+      gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns,
+      guests: surveyData.guestsAns, smoke: surveyData.smokeAns, drink: surveyData.drinkAns,
+      rent_max: surveyData.maxRent, rent_min: surveyData.minRent,
+      bedtime: surveyData.bedAns, quietness: surveyData.quietAns, cleanliness: surveyData.cleanAns
+    }
+    preferencesdict = {
+      gender: surveyData.genderPref, year: surveyData.yearPref, pets: surveyData.petsPref,
+      guests: surveyData.guestsPref, smoske: surveyData.smokePref, drink: surveyData.drinkPref,
+      bedtime: surveyData.bedPref, quietness: surveyData.quietPref, cleanliness: surveyData.cleanPref
+    }
+    user.profile = profileDict;
+    user.answers = answersdict;
+    user.preferences = preferencesdict;
+
+    await user.save();
+    console.log('User updated: ', user);
+    res.json({message: 'Survey updated successfully'});
+  } catch (err) {
+    console.error("Error during survey retake update:", err);
+    res.status(500).json({ message: 'Internal server error', error: err.message });
+  }
 });
 
 app.post('/editprofile', authenticateToken, async (req, res) => {

@@ -8,6 +8,7 @@ import Matches from './Matches';
 import Survey from './Survey';
 import Profile from './Profile'
 import EditProfile from './EditProfile';
+import Retake from './Retake'
 import MyPreferences from './MyPreferences'
 import OtherProfile from './OtherProfile';
 import ProtectedRoute from './ProtectedRoute';
@@ -27,6 +28,7 @@ function App() {
         <Route path="/survey" element={<ProtectedRoute><Survey /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/editprofile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+        <Route path="/retake" element={<ProtectedRoute><Retake /></ProtectedRoute>} />
         <Route path="/mypreferences" element={<ProtectedRoute><MyPreferences /></ProtectedRoute>} />
         <Route path="/otheruser" element={<ProtectedRoute><OtherProfile /></ProtectedRoute>} />
         {/* Redirect all other paths to "/login" */}
