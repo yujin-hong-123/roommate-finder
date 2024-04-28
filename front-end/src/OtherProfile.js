@@ -63,7 +63,7 @@ function OtherProfile() {
                 <p className="AboutText">{profileData.bio || 'No bio available.'}</p>
             </div>
             <div className="Footer">
-                <Button text="Survey Answers" location="/" />
+                <Button text="Survey Answers" location="/useranswers" />
                 <Button text="Message" location="/chatpage" />
             </div>
         </>

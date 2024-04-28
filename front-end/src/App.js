@@ -9,8 +9,8 @@ import Survey from './Survey';
 import Profile from './Profile'
 import EditProfile from './EditProfile';
 import Retake from './Retake'
-import MyPreferences from './MyPreferences'
 import OtherProfile from './OtherProfile';
+import UserAnswers from './UserAnswers';
 import ProtectedRoute from './ProtectedRoute';
 import axios from 'axios'
 
@@ -29,8 +29,8 @@ function App() {
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/editprofile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
         <Route path="/retake" element={<ProtectedRoute><Retake /></ProtectedRoute>} />
-        <Route path="/mypreferences" element={<ProtectedRoute><MyPreferences /></ProtectedRoute>} />
         <Route path="/otheruser" element={<ProtectedRoute><OtherProfile /></ProtectedRoute>} />
+        <Route path="/useranswers" element={<ProtectedRoute><UserAnswers /></ProtectedRoute>} />
         {/* Redirect all other paths to "/login" */}
         <Route path="*" element={<Navigate replace to="/login" />} />
       </Routes>

@@ -266,20 +266,13 @@ app.post('/matches', authenticateToken, async (req, res) => {
 });
 
 app.get('/otheruser', authenticateToken, (req, res) => {
-  // Add 'year' to the list of fields to return
-  console.log('in other user rn:', req.session.otheruser);
-
   try {
     User.find()
       .then(foundUser => {
         if (!foundUser) return res.status(404).json({ message: "User not found" });
 
-        //res.json(foundUser)
-
         for (const user of foundUser) {
-          console.log(user.username, req.session.otheruser)
           if(user.username === req.session.otheruser) {
-            console.log("found it")
             res.json(user);
           }
         }
@@ -291,7 +284,27 @@ app.get('/otheruser', authenticateToken, (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
 
+app.get('/useranswers', authenticateToken, (req, res) => {
+  console.log('in user answers', req.session.otheruser)
+  try {
+    User.find()
+      .then(foundUser => {
+        if (!foundUser) return res.status(404).json({ message: "User not found" });
+        for (const user of foundUser) {
+          if(user.username === req.session.otheruser) {
+            res.json(user);
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).send('server error');
+      });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 
@@ -459,9 +472,6 @@ app.get('/profile', authenticateToken, (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     });
 });
-
-
-
 
 app.get('/retake', authenticateToken, async(req, res) => {
   User.findById(req.user.id, 'profile.name answers.gender answers.year answers.pets ' + 
