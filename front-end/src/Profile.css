@@ -22,3 +22,10 @@
     display: flex;
     justify-content: space-evenly;
 }
+
+.logout-button {
+    text-align: center;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    font-size: medium;
+}
