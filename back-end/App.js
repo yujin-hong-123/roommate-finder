@@ -57,10 +57,8 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 
 app.use(function (req, res, next) {
-  console.log(req.session.user);
-  req.session.user = req.session.user || "";
-  req.session.matches = req.session.matches || [];
-  //console.log(req.session)
+  req.session.otheruser = req.session.otheruser || "";
+  console.log("otheruser:", req.session.otheruser);
   next();
 });
 
@@ -178,7 +176,6 @@ app.post('/survey', (req, res) => {
   const surveyData = req.body;
   //console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
 
-
   profiledict = { name: surveyData.name, year: surveyData.year, bio: "" }
   answersdict = {
     gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns,
@@ -208,12 +205,11 @@ app.post('/survey', (req, res) => {
 });
 
 app.get('/matches', authenticateToken, async (req, res) => {
-  //console.log('matches:', req.session.user)
-  //req.session.user = req.session.user || "randomname";
-
   try {
     User.find()
       .then(foundUser => {
+        if (!foundUser) return res.status(404).json({ message: "User not found" });
+
         const foundOtherUser = [];
         const matches = [];
         var thisUser = new User({});
@@ -221,7 +217,7 @@ app.get('/matches', authenticateToken, async (req, res) => {
         for (const user of foundUser) {
           if (user._id && req.user.id) {
             if (String(user._id) === req.user.id) {
-              console.log(user.username);
+              //console.log(user.username);
               thisUser = user;
             }
             else {
@@ -249,16 +245,55 @@ app.get('/matches', authenticateToken, async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
 
-  // if (user === 'TaylorSwift') {
-  //   userList = [BobbyImpasto, BarackObama]
-  //   keys = compat.createMatches(TaylorSwift, userList);
-  //   jsonArray = keys.map((key) => dict[key])
-  // }
+app.post('/matches', authenticateToken, async (req, res) => {
+  const username = req.body.username;
+  req.session.otheruser = username;
+  //console.log('the clicked user is', username)
 
-  //res.json(jsonArray)
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    res.json({ message: 'Profile updated successfully.' });
+  } catch (err) {
+    console.error("Error during profile update:", err);
+    res.status(500).json({ message: 'Internal server error', error: err.message });
+  }
+});
+
+app.get('/otheruser', authenticateToken, (req, res) => {
+  // Add 'year' to the list of fields to return
+  console.log('in other user rn:', req.session.otheruser);
+
+  try {
+    User.find()
+      .then(foundUser => {
+        if (!foundUser) return res.status(404).json({ message: "User not found" });
+
+        //res.json(foundUser)
+
+        for (const user of foundUser) {
+          console.log(user.username, req.session.otheruser)
+          if(user.username === req.session.otheruser) {
+            console.log("found it")
+            res.json(user);
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).send('server error');
+      });
+  } catch (err) {
+    console.log(err);
+  }
 
 });
+
 
 //returns a bunch of json objects as an array
 app.get('/chatlist', authenticateToken, async (req, res) => {
@@ -426,8 +461,7 @@ app.get('/profile', authenticateToken, (req, res) => {
 });
 
 
-app.get('/mypreferences', (req, res) => {
-});
+
 
 app.get('/retake', authenticateToken, async(req, res) => {
   User.findById(req.user.id, 'profile.name answers.gender answers.year answers.pets ' + 
