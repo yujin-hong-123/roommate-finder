@@ -55,6 +55,11 @@ button:hover {
   color: white
 }
 
+.MessageList {
+  height: 77vh;
+  overflow-y: scroll;
+}
+
 /* Additional styles specific to the survey page */
 /* You may need to customize or add more styles based on your design requirements */
 
