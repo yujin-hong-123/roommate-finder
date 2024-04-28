@@ -462,7 +462,7 @@ app.get('/chatUser', authenticateToken, (req, res) => {
 
 app.get('/profile', authenticateToken, (req, res) => {
   // Add 'year' to the list of fields to return
-  User.findById(req.user.id, 'username profile.year profile.bio imagePath')
+  User.findById(req.user.id, 'username answers.year profile.bio imagePath')
     .then(user => {
       if (!user) return res.status(404).json({ message: "User not found" });
       res.json(user);
