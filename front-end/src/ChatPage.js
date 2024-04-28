@@ -7,6 +7,7 @@ import { socket } from './sockets/ReactSocket';
 import { ChatBoxSender, ChatBoxReceiver } from './sockets/ChatBox';
 import InputTxt from './sockets/InputTxt';
 import { useLocation } from 'react-router-dom';
+import {animateScroll} from 'react-scroll'
 
 function ChatPage() {
   const location = useLocation(); //for extracting receiver username
@@ -65,6 +66,7 @@ function ChatPage() {
       .catch(error => {
         console.error('Error fetching messages:', error);
       })
+    scrollToBottom();
   }, []);
 
   //listen for chat_message event from the socket
@@ -79,7 +81,16 @@ function ChatPage() {
   //This hook is so you can view the old_messages array once it is populated
   useEffect(() => {
     console.log("Old messages array updated:", old_messages);
+    scrollToBottom();
   }, [old_messages]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chats])
+
+  function scrollToBottom() {
+    animateScroll.scrollToBottom({containerId: "msgContainer"});
+  }
 
   //sends the message to the backend
   function sendToSocket(msg) {
@@ -109,6 +120,7 @@ function ChatPage() {
     //console.log(`Sending message as ${user}`);
     setChats([...chats, newMsg]);
     sendToSocket([...chats, newMsg]);
+    scrollToBottom();
 
     console.log(`Other user = ${newMsg.otherUser}`);
     let messagestring = newMsg.message;
@@ -135,7 +147,7 @@ function ChatPage() {
   //displays the chat messages to the user
   function ChatExchange() {
     return chats.map((chat, index) => {
-      console.log(`Other user in chat: ${chat.otherUser}`);
+      //console.log(`Other user in chat: ${chat.otherUser}`);
       if (chat.user === user && chat.otherUser === otherperson_username) {
         return <ChatBoxSender key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
       }
@@ -152,7 +164,7 @@ function ChatPage() {
     <div>
       <Header />
       <h3>Your conversation with {otherperson_username}</h3>
-      <div className="MessageList">
+      <div className="MessageList" id="msgContainer">
         {old_messages.map((message, index) => {
           //for parsing the timestamp
           const timestamp = new Date(message.timestamp);
