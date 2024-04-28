@@ -40,7 +40,7 @@ function Profile() {
     const handleLogout = () => {
         console.log("Logging out...");
         localStorage.removeItem('token');
-        socket.disconnect(); //disconnect the socket that was in use
+        //socket.disconnect(); //disconnect the socket that was in use
         navigate('/login', { replace: true });
     };
 

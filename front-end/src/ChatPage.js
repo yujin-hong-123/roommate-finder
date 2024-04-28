@@ -15,6 +15,9 @@ function ChatPage() {
   const [user, setUser] = useState(''); //stores the sending user
   const [chats, setChats] = useState([]); //stores ongoing messages
   const [old_messages, setOldMessages] = useState([]); // New state for storing old messages
+  const [userList, setUserList] = useState([]);
+
+  //let selectedUser = { otherperson_username, chats: []};
 
   useEffect(() => {
     function onConnect() {
@@ -34,6 +37,14 @@ function ChatPage() {
     }
   }, []);
 
+  socket.on('users', (users) => {
+    console.log(`User list: ${users}`);
+  });
+
+  socket.on('user_connected', (newUser) => {
+    setUserList([...userList, newUser]);
+  });
+  
   useEffect(() => {
     getUser();
 
@@ -58,15 +69,18 @@ function ChatPage() {
 
   //listen for chat_message event from the socket
   useEffect(() => {
+    console.log('Listening for chat messages...');
     socket.on('chat_message', (senderMsg) => {
+      console.log("Message received");
       setChats(senderMsg);
-    })
+    });
   });
 
   //This hook is so you can view the old_messages array once it is populated
   useEffect(() => {
     console.log("Old messages array updated:", old_messages);
-    setChats([]);
+    //setChats([]);
+    //console.log(chats);
   }, [old_messages]);
 
   //sends the message to the backend
@@ -92,11 +106,13 @@ function ChatPage() {
   //the post request to the backend with the new message should probably go here
   function sendMessage(msg) {
     const msgTime = new Date().toLocaleTimeString();
-    const newMsg = { ...msg, user, msgTime };
+    const otherUser = otherperson_username;
+    const newMsg = { ...msg, user, msgTime, otherUser};
     //console.log(`Sending message as ${user}`);
     setChats([...chats, newMsg]);
     sendToSocket([...chats, newMsg]);
 
+    console.log(`Other user = ${newMsg.otherUser}`);
     let messagestring = newMsg.message;
     const currentTime = new Date().toISOString(); //This should be formatted eventually (go see what it looks like in the database messages collection)
     const msg_post = {
@@ -121,8 +137,16 @@ function ChatPage() {
   //displays the chat messages to the user
   function ChatExchange() {
     return chats.map((chat, index) => {
-      if (chat.user === user) return <ChatBoxSender key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
-      return <ChatBoxReceiver key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
+      console.log(`Other user in chat: ${chat.otherUser}`);
+      if (chat.user === user && chat.otherUser === otherperson_username) {
+        return <ChatBoxSender key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
+      }
+      else if(chat.otherUser === user && chat.user === otherperson_username) {
+        return <ChatBoxReceiver key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
+      }
+      else {
+        return
+      }
     });
   }
 

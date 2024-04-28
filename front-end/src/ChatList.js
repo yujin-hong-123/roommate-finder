@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import "./ChatList.css"
 import Header from "./Header"
 import profilepic from './ProfilePic.png';
+import { socket } from './sockets/ReactSocket';
 
 const Chatlist = props => {
   const navigate = useNavigate();
@@ -12,9 +13,6 @@ const Chatlist = props => {
   const [error, setError] = useState('')
   const [feedback, setFeedback] = useState('')
   const [chats, setChats] = useState([]);
-
-
-
 
   const fetchChats = async () => {
     try {
@@ -33,7 +31,6 @@ const Chatlist = props => {
       setError('Error fetching profile data: ' + error.message);
     }
   };
-
 
   useEffect(() => {
 
