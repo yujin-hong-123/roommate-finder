@@ -15,7 +15,7 @@ function ChatPage() {
   const [user, setUser] = useState(''); //stores the sending user
   const [chats, setChats] = useState([]); //stores ongoing messages
   const [old_messages, setOldMessages] = useState([]); // New state for storing old messages
-  const [userList, setUserList] = useState([]);
+  //const [userList, setUserList] = useState([]);
 
   //let selectedUser = { otherperson_username, chats: []};
 
