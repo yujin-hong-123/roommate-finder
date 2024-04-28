@@ -57,10 +57,8 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 
 app.use(function (req, res, next) {
-  console.log(req.session.user);
-  req.session.user = req.session.user || "a";
-  req.session.matches = req.session.matches || [];
-  //console.log(req.session)
+  req.session.otheruser = req.session.otheruser || "";
+  console.log("otheruser:", req.session.otheruser);
   next();
 });
 
@@ -139,10 +137,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-
-
-
-
 app.get('/register', (req, res) => {
 })
 
@@ -176,15 +170,11 @@ app.post('/register', async (req, res) => {
   }
 });
 
-
-
-
 //expecting json object with handle sumbit attruputes -- in Survey.js
 //should push to surveyData arr
 app.post('/survey', (req, res) => {
   const surveyData = req.body;
   //console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
-
 
   profiledict = { name: surveyData.name, year: surveyData.year, bio: "" }
   answersdict = {
@@ -214,27 +204,109 @@ app.post('/survey', (req, res) => {
     });
 });
 
-app.get('/matches', async (req, res) => {
-  //console.log('matches:', req.session.user)
-  req.session.user = req.session.user || "randomname";
+app.get('/matches', authenticateToken, async (req, res) => {
   try {
     User.find()
       .then(foundUser => {
-        //jsonArray.push(foundUser);
-        res.json(foundUser)
+        if (!foundUser) return res.status(404).json({ message: "User not found" });
+
+        const foundOtherUser = [];
+        const matches = [];
+        var thisUser = new User({});
+
+        for (const user of foundUser) {
+          if (user._id && req.user.id) {
+            if (String(user._id) === req.user.id) {
+              //console.log(user.username);
+              thisUser = user;
+            }
+            else {
+              foundOtherUser.push(user);
+            }
+          }
+        }
+        keys = compat.createMatches(thisUser, foundOtherUser);
+        //console.log(keys);
+
+        for (const key of keys) {
+          for (const user of foundUser) {
+            if (user.username === key) {
+              matches.push(user);
+            }
+          }
+        }
+
+        res.json(matches);
       })
       .catch(err => {
         console.log(err);
         res.status(500).send('server error');
       });
-
-    //res.json(jsonArray)//Now, send the array to the front end
-
-
   } catch (err) {
     console.log(err);
   }
 });
+
+app.post('/matches', authenticateToken, async (req, res) => {
+  const username = req.body.username;
+  req.session.otheruser = username;
+  //console.log('the clicked user is', username)
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    res.json({ message: 'Profile updated successfully.' });
+  } catch (err) {
+    console.error("Error during profile update:", err);
+    res.status(500).json({ message: 'Internal server error', error: err.message });
+  }
+});
+
+app.get('/otheruser', authenticateToken, (req, res) => {
+  try {
+    User.find()
+      .then(foundUser => {
+        if (!foundUser) return res.status(404).json({ message: "User not found" });
+
+        for (const user of foundUser) {
+          if(user.username === req.session.otheruser) {
+            res.json(user);
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).send('server error');
+      });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/useranswers', authenticateToken, (req, res) => {
+  console.log('in user answers', req.session.otheruser)
+  try {
+    User.find()
+      .then(foundUser => {
+        if (!foundUser) return res.status(404).json({ message: "User not found" });
+        for (const user of foundUser) {
+          if(user.username === req.session.otheruser) {
+            res.json(user);
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).send('server error');
+      });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 
 //returns a bunch of json objects as an array
 app.get('/chatlist', authenticateToken, async (req, res) => {
@@ -401,8 +473,60 @@ app.get('/profile', authenticateToken, (req, res) => {
     });
 });
 
+app.get('/retake', authenticateToken, async(req, res) => {
+  User.findById(req.user.id, 'profile.name answers.gender answers.year answers.pets ' + 
+  'answers.guests answers.smoke answers.drink ' +
+  'answers.rent_max answers.rent_min ' +
+  'answers.bedtime answers.quietness answers.cleanliness ' +
+  'preferences.gender preferences.year preferences.pets ' +
+  'preferences.guests preferences.smoke preferences.drink ' +
+  'preferences.bedtime preferences.quietness preferences.cleanliness')
+  .then(user => {
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  })
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  });
+});
 
-app.get('/mypreferences', (req, res) => {
+app.post('/retake', authenticateToken, async(req, res) => {
+  console.log("Received update request for user:", req.user.id);
+  console.log("Request data:", req.body);
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const surveyData = req.body;
+
+    profiledict = { name: surveyData.name, year: surveyData.year, bio: "" }
+    answersdict = {
+      gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns,
+      guests: surveyData.guestsAns, smoke: surveyData.smokeAns, drink: surveyData.drinkAns,
+      rent_max: surveyData.maxRent, rent_min: surveyData.minRent,
+      bedtime: surveyData.bedAns, quietness: surveyData.quietAns, cleanliness: surveyData.cleanAns
+    }
+    preferencesdict = {
+      gender: surveyData.genderPref, year: surveyData.yearPref, pets: surveyData.petsPref,
+      guests: surveyData.guestsPref, smoke: surveyData.smokePref, drink: surveyData.drinkPref,
+      bedtime: surveyData.bedPref, quietness: surveyData.quietPref, cleanliness: surveyData.cleanPref
+    }
+    user.profile = profiledict;
+    user.answers = answersdict;
+    user.preferences = preferencesdict;
+
+    await user.save();
+    console.log('User updated: ', user);
+    res.json({message: 'Survey updated successfully'});
+  } catch (err) {
+    console.error("Error during survey retake update:", err);
+    res.status(500).json({ message: 'Internal server error', error: err.message });
+  }
 });
 
 app.post('/editprofile', authenticateToken, async (req, res) => {

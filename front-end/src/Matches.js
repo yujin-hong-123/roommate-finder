@@ -13,21 +13,25 @@ const Matches = props => {
   const [error, setError] = useState('')
   const [feedback, setFeedback] = useState('')
   const [matches, setMatches] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchMatches = () => {
-    axios
-      .get('http://localhost:3001/matches')//, { withCredentials: true})
-      .then(response => {
-        const matchesData = response.data; //response is an array of JSON objects
-        setMatches(matchesData);
-      })
-      .catch(err => {
-        const errMsg = JSON.stringify(err, null, 2);
-        setError(errMsg);
-      })
-      .finally(() => {
-        setLoaded(true);
+  const fetchMatches = async() => {
+    try {
+      const response = await axios.get('http://localhost:3001/matches', {
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
       });
+      console.log('Fetching profile data', response.data);
+      if (response.data) {
+          setMatches(response.data);
+      } else {
+          throw new Error('Matches data is missing');
+      }
+    } catch (error) {
+        console.error('Error fetching matches data:', error);
+        setError('Error fetching matches data: ' + error.message);
+    }
   };
 
   useEffect(() => {
@@ -46,6 +50,29 @@ const Matches = props => {
     }
   }, []) // putting a blank array as second argument will cause this function to run only once when component first loads
 
+  const handleClick = async (match) => {
+    console.log("Sending data of user: ", match.username);
+
+    try {
+        const response = await axios.post('http://localhost:3001/matches', match, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}` // Include the JWT token in the request
+            }
+        });
+        console.log("Update response:", response.data);
+        if (response.status === 200) {
+            console.log("Match info sent successfully");
+            navigate('/otheruser', { state: { updated: true } }); // Pass state to trigger re-fetch
+        }
+    } catch (error) {
+        console.error("Update error:", error);
+        const message = error.response?.data?.message || "An error occurred while updating the profile.";
+        setErrorMessage(message);
+    }
+}; 
+
+//() => navigate('/otheruser')
+
   return (
     <>
       <div className="MatchList">
@@ -53,8 +80,7 @@ const Matches = props => {
         {error && <h1>{error}</h1>} {/* To fix allignment I made error only show up if it is defined*/}
         {matches.map((match, index) => (
           <div key={index}>
-
-            <button onClick={() => navigate('/otheruser')} className="rowbutton">
+            <button onClick={() => handleClick(match)} className="rowbutton">
               <img src={profilepic} className="profilepic_match" alt="profilepic" />
               <ul className="matchentry">
                 <li className="username_match">{match.profile.name}</li>
