@@ -15,8 +15,8 @@ function ChatPage() {
   const [user, setUser] = useState(''); //stores the sending user
   const [chats, setChats] = useState([]); //stores ongoing messages
   const [old_messages, setOldMessages] = useState([]); // New state for storing old messages
+ 
   //const [userList, setUserList] = useState([]);
-
   //let selectedUser = { otherperson_username, chats: []};
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function ChatPage() {
       socket.off('disconnect', onDisconnect);
     }
   }, []);
-
+  /*
   socket.on('users', (users) => {
     console.log(`User list: ${users}`);
   });
@@ -44,7 +44,7 @@ function ChatPage() {
   socket.on('user_connected', (newUser) => {
     setUserList([...userList, newUser]);
   });
-  
+  */
   useEffect(() => {
     getUser();
 
