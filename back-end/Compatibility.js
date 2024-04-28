@@ -290,7 +290,7 @@ function createMatches(arg1, [...args]) {
 
     for (const arg of args) {
         if (match(arg1, arg) !== -1) {
-            matchList[arg.login.username] = match(arg1, arg);
+            matchList[arg.username] = match(arg1, arg);
         }
     }
 

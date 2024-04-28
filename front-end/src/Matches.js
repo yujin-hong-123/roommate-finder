@@ -14,20 +14,39 @@ const Matches = props => {
   const [feedback, setFeedback] = useState('')
   const [matches, setMatches] = useState([]);
 
-  const fetchMatches = () => {
-    axios
-      .get('http://localhost:3001/matches')//, { withCredentials: true})
-      .then(response => {
-        const matchesData = response.data; //response is an array of JSON objects
-        setMatches(matchesData);
-      })
-      .catch(err => {
-        const errMsg = JSON.stringify(err, null, 2);
-        setError(errMsg);
-      })
-      .finally(() => {
-        setLoaded(true);
+  const fetchMatches = async() => {
+    try {
+      const response = await axios.get('http://localhost:3001/matches', {
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
       });
+      console.log('Fetching profile data', response.data);
+      if (response.data) {
+          setMatches(response.data);
+      } else {
+          throw new Error('Matches data is missing');
+      }
+  } catch (error) {
+      console.error('Error fetching matches data:', error);
+      setError('Error fetching matches data: ' + error.message);
+  }
+
+
+    // axios
+    //   .get('http://localhost:3001/matches')//, { withCredentials: true})
+    //   .then(response => {
+    //     const matchesData = response.data; //response is an array of JSON objects
+    //     setMatches(matchesData);
+    //   })
+    //   .catch(err => {
+    //     const errMsg = JSON.stringify(err, null, 2);
+    //     setError(errMsg);
+    //   })
+    //   .finally(() => {
+    //     setLoaded(true);
+    //   });
+    
   };
 
   useEffect(() => {

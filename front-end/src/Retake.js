@@ -8,7 +8,9 @@ import { set } from 'mongoose';
 function Retake() {
     const navigate = useNavigate();
     const [error, setError] = useState('');
+    const [errorMessage, setErrorMessage] = useState("");
 
+    const[name, setName] = useState(null);
     const [year, setYear] = useState(null);
     const [genderAns, setGenderAns] = useState(null);
     const [petsAns, setPetsAns] = useState(null);
@@ -40,6 +42,7 @@ function Retake() {
             });
             console.log('Fetching profile data', response.data);
             if (response.data) {
+                setName(response.data.profile.name)
                 setYear(response.data.answers.year)
                 setGenderAns(response.data.answers.gender)
                 setPetsAns(response.data.answers.pets)
@@ -74,10 +77,15 @@ function Retake() {
         fetchSurveyData();
     }, []);
 
-    //Answers
+    //Profile
+    const handleNameChange = (value) => {
+        setName(value);
+    };
     const handleYearChange = (value) => {
         setYear(value);
     };
+
+    //Answers
     const handleGenderAnsChange = (value) => {
         setGenderAns(value);
     };
@@ -143,7 +151,7 @@ function Retake() {
         setCleanPref(value)
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // Check if any required questions are unanswered
         if (
             !year ||
@@ -172,6 +180,7 @@ function Retake() {
         } else {
             // If all questions are answered, proceed with submitting the survey
             const surveyData = {
+                name,
                 year,
                 genderAns,
                 petsAns,
@@ -193,15 +202,24 @@ function Retake() {
                 quietPref,
                 cleanPref
             };
-    
-            axios
-                .post('http://localhost:3001/retake', surveyData)
-                .then(response => {
-                    navigate('/login');
-                })
-                .catch(error => {
-                    console.error('Error submitting survey:', error);
+
+            try {
+                const response = await axios.post('http://localhost:3001/retake', surveyData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}` // Include the JWT token in the request
+                    }
                 });
+                console.log("Update response:", response.data);
+                if (response.status === 200) {
+                    console.log("Survey updated successfully");
+                    navigate('/profile', { state: { updated: true } }); // Pass state to trigger re-fetch
+                }
+            } catch (error) {
+                console.error("Update error:", error);
+                const message = error.response?.data?.message || "An error occurred while updating the profile.";
+                setErrorMessage(message);
+            }
+
         }
     };
 
@@ -210,7 +228,18 @@ function Retake() {
         <div className="Survey">
             <Header />
             <div className='section'>
-                <h3>Tell us about yourself.</h3>
+                <h3>Let's set up your profile!</h3>
+            </div>
+            
+            <div className="survey-question">
+                <p>What is your first and last name? (i.e. Barack Obama)</p>
+                <input
+                    id='name'
+                    type='text'
+                    name='name'
+                    value={name}
+                    onChange={(e) => handleNameChange(e.target.value)}
+                />
             </div>
 
             <div className='survey-question'>
@@ -259,6 +288,10 @@ function Retake() {
                         />
                     Senior
                 </label>
+            </div>
+
+            <div className='section'>
+                <h3>Tell us about yourself.</h3>
             </div>
 
             <div className='survey-question'>
