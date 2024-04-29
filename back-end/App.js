@@ -19,7 +19,7 @@ const bodyParser = require('body-parser');
 
 
 const User = mongoose.model('User');
-const newUser = new User({});
+var newUser;
 
 const messageSchema = new mongoose.Schema({
   sender: String,
@@ -157,7 +157,8 @@ app.post('/register', async (req, res) => {
     //     username,
     //     password: hashedPassword
     // });
-
+    
+    newUser= new User({})
     newUser.username = username;
     newUser.password = hashedPassword;
 
@@ -170,13 +171,17 @@ app.post('/register', async (req, res) => {
   }
 });
 
+app.get('/survey', (req, res) => {
+  console.log('in survey')
+})
+
 //expecting json object with handle sumbit attruputes -- in Survey.js
 //should push to surveyData arr
 app.post('/survey', (req, res) => {
   const surveyData = req.body;
   //console.log('Backend has received new survey data:', surveyData);//We should see a message on the backend console with the data that was sent
 
-  profiledict = { name: surveyData.name, year: surveyData.year, bio: "" }
+  profiledict = { name: surveyData.name, year: surveyData.year, bio: "", picture: "" }
   answersdict = {
     gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns,
     guests: surveyData.guestsAns, smoke: surveyData.smokeAns, drink: surveyData.drinkAns,
