@@ -16,14 +16,14 @@
 
 .SenderChat {
     padding: 10px;
-    background-color:rgb(194, 194, 194);
+    background-color:#C3B1E1;
     border-radius: 10px;
     max-width: 60%;
 }
 
 .ReceiverChat {
     padding: 10px;
-    background-color:#cf8afd;
+    background-color: #BEBEBE;
     border-radius: 10px;
     max-width: 60%;
 }

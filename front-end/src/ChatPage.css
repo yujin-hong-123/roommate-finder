@@ -83,3 +83,18 @@ button:hover {
     padding: 0.5rem 1rem;
   }
 }
+
+.chat_header {
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Adjust as needed */
+  background-color: rgb(105 105 105 / 75%);
+  padding: 0rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat';
+  margin-bottom: 0.2rem;
+  color: black;
+}

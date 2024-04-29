@@ -18,6 +18,7 @@
   font-size: calc(18px + 1vmin);
   color: white;
   font-family: 'Montserrat';
+  margin-bottom: 0.2rem;
 }
 
 .chat-header {
