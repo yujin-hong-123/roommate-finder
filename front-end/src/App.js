@@ -22,10 +22,10 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegistrationForm />} />
+        <Route path="/survey" element={<Survey />} />
         <Route path="/chatpage/:username" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
         <Route path="/chatlist" element={<ProtectedRoute><ChatList /></ProtectedRoute>} />
         <Route path="/matches" element={<ProtectedRoute><Matches /></ProtectedRoute>} />
-        <Route path="/survey" element={<ProtectedRoute><Survey /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/editprofile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
         <Route path="/retake" element={<ProtectedRoute><Retake /></ProtectedRoute>} />
