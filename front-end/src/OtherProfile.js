@@ -42,10 +42,17 @@ function OtherProfile() {
     if (!profileData || Object.keys(profileData).length === 0) {
         return <p>Loading...</p>;
     }
-
-
     if (error) {
         return <p>{error}</p>
+    }
+
+    const handleProfileClick = async (username) => {
+        console.log("right before navigate")
+        navigate(`/chatpage/${username}`);
+    };
+
+    const handleClick = async () => {
+        navigate('/profile');
     }
 
     return (
@@ -59,7 +66,7 @@ function OtherProfile() {
             </div>
             <div className="Footer">
                 <Button text="Survey Answers" location="/useranswers" />
-                <Button text="Message" location="/chatpage" />
+                <button className='message-button' onClick={() => handleProfileClick(username)}>Message</button>
             </div>
         </>
     );

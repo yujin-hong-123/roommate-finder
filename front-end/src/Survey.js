@@ -238,7 +238,6 @@ function Survey() {
                     </label>
                 </div>
 
-                <br></br>
                 <div className='section'>
                     <h3>Tell us about yourself.</h3>
                 </div>
@@ -603,7 +602,6 @@ function Survey() {
                     </label>
                 </div>
 
-                <br></br>
                 <div className='section'>
                     <h3>Now tell us what you are looking for in a roommate.</h3>
                 </div>
@@ -823,9 +821,8 @@ function Survey() {
                         Not particularly
                     </label>
                 </div>
+                <button className='submit_survey' onClick={handleSubmit}>Submit the Survey!</button>
             </div>
-
-            <button onClick={handleSubmit}>Submit the Survey!</button>
         </div>
     );
 }

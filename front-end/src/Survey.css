@@ -1,8 +1,8 @@
-
 .Survey {
   display: flex;
   flex-direction: column;
-  background-color: #e8e8e8;
+  background-color: #e0e0e0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
 .survey-question {
@@ -15,7 +15,8 @@
 .section {
   padding: 0rem 0rem 0rem 1rem;
   background-color: #BEBEBE;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  margin-top: 0.25rem;
 }
 
 label {
@@ -53,4 +54,8 @@ button:hover {
   padding: 1rem;
   background-color: #57068C;
   color: white;
+}
+
+.submit_survey {
+  padding-bottom: 10px;
 }

@@ -163,8 +163,8 @@ function ChatPage() {
   return (
     <div>
       <Header />
-      <h3>Your conversation with {otherperson_username}</h3>
       <div className="MessageList" id="msgContainer">
+        <div className='chat_header'><h3>{otherperson_username}</h3></div>
         {old_messages.map((message, index) => {
           //for parsing the timestamp
           const timestamp = new Date(message.timestamp);

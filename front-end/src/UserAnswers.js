@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "./UserAnswers.css";
+import "./Survey.css";
 import Header from "./Header";
 import Button from './Button';
 import axios from 'axios';
@@ -60,39 +60,41 @@ function UserAnswers() {
 
 
     return (
-        <div className="Survey">
+        <div>
             <Header />
-            <div className='section'>
-                <h3>Status</h3>
+            <div className="Survey">
+                <div className='section'>
+                    <h3>Status</h3>
+                </div>
+                <div className="survey-question">
+                    <p>Name: {name} </p>
+                    <p>Year: {year}</p>
+                    <p>Gender: {genderAns} </p>
+                    <p>Do you have pets? {petsAns} </p>
+                </div>
+
+                <div className='section'>
+                    <h3>Rent Range</h3>
+                </div>
+                <div className="survey-question">
+                    <p>Max Rent: {maxRent} </p>
+                    <p>Min Rent: {minRent} </p>
+                </div>
+
+                <div className='section'>
+                    <h3>Living Habits</h3>
+                </div>
+                <div className="survey-question">
+                    <p>How often do you bring over guests? {guestsAns} </p>
+                    <p>How often do you smoke? {smokeAns} </p>
+                    <p>How often do you drink? {drinkAns} </p>
+                    <p>When is your usual bedtime(1: Before 10, 2: Between 10 pm and 12 am, 3: Between 12 am and 2 am, 
+                        4: Between 2 am and 4 am, 5:After 4 am, 6: Irregular)?  {bedAns} </p>
+                    <p>How would you rate your loudness from 1 to 5(1 being quiet and 5 being loud)?  {quietAns} </p>
+                    <p>How would you rate your cleanliness from 1 to 5(1 being messy and 5 being clean)?  {cleanAns} </p>
+                </div>
+                <Button text="Back" location="/otheruser" />
             </div>
-            <div className="survey-question">
-                <p>Name: {name} </p>
-                <p>Year: {year}</p>
-                <p>Gender: {genderAns} </p>
-                <p>Do you have pets? {petsAns} </p>
-            </div>
-            <br></br>
-            <div className='section'>
-                <h3>Rent Range</h3>
-            </div>
-            <div className="survey-question">
-                <p>Max Rent: {maxRent} </p>
-                <p>Min Rent: {minRent} </p>
-            </div>
-            <br></br>
-            <div className='section'>
-                <h3>Living Habits</h3>
-            </div>
-            <div className="survey-question">
-                <p>How often do you bring over guests? {guestsAns} </p>
-                <p>How often do you smoke? {smokeAns} </p>
-                <p>How often do you drink? {drinkAns} </p>
-                <p>When is your usual bedtime(1: Before 10, 2: Between 10 pm and 12 am, 3: Between 12 am and 2 am, 
-                    4: Between 2 am and 4 am, 5:After 4 am, 6: Irregular)?  {bedAns} </p>
-                <p>How would you rate your loudness from 1 to 5(1 being quiet and 5 being loud)?  {quietAns} </p>
-                <p>How would you rate your cleanliness from 1 to 5(1 being messy and 5 being clean)?  {cleanAns} </p>
-            </div>
-            <Button text="Back" location="/otheruser" />
         </div>
     );
 }
