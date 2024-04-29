@@ -30,18 +30,17 @@
   color: white;
 }
 
-.logo {
-  display: inline-block;
-}
-
 ul.nav-links {
   list-style: none;
-  padding: 0; /* Remove default padding */
+  padding: 5px 30px 5px 10px; /* Remove default padding */
   margin: 0; /* Remove default margin */
+  display: flex;
+  text-align: center;
 }
-.nav-item {
+
+li.nav-item {
   display: inline-block;
-  padding: 10px 15px;
+  padding: 5px 10px 0px 10px;
 }
 .nav-item a {
   color: white;
@@ -52,9 +51,14 @@ ul.nav-links {
   color: gray;
 }
 
-.logo img {
-  width: 175px;
-  vertical-align: middle;
+.icons_logo {
+  height: 70px;
+  padding: 0px 10px 0px 15px
+}
+
+.icons {
+  height: 45px;
+  padding: 10px 15px 0px 10px
 }
 
 body {
