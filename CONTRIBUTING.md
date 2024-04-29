@@ -1,11 +1,10 @@
 # Guide to Contributing
 
-Team Names: Yujin Hong, Leena Vieltojarvi, Robert (Bobby) Impastato, Ethan
+Team Names: Yujin Hong, Leena Vieltojarvi, Robert (Bobby) Impastato, Ethan Delgado
 
 Sprint 0
 1. Scrum Master: Leena Vieltojarvi
 2. Product Owner: Bobby Impastato
-3. Estimated Time: 1 week
 
 Sprint 1
 1. Scrum Master: Bobby Impastato
@@ -18,6 +17,10 @@ Sprint 2
 Sprint 3
 1. Scrum Master: Ethan Delgado
 2. Product Owner: Leena Vieltojarvi
+
+Sprint 4
+1. Scrum Master: Yujin Hong
+2. Product Owner: Ethan Delgado
 
 Team Norms:
 1. Always respond to Discord within the same day.
