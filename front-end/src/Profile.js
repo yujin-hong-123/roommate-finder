@@ -62,7 +62,6 @@ function Profile() {
     }
 
     var avatar;
-
     if (profileData.picture === 'bear') {
         avatar = bear;
     }
@@ -90,15 +89,14 @@ function Profile() {
             <Header />
             <div className="Profile">
                 <img className='profilepic' src={avatar} alt="Profile" />
-                <h2>{username || 'Username not set'}</h2>
-                <h4>{year || 'Year not set'}</h4>
+                <h2 className='profile-text'>{username || 'Username not set'}</h2>
+                <h4 className='profile-text'>{year || 'Year not set'}</h4>
                 <p className="AboutText">{profileData.bio || 'No bio available.'}</p>
             </div>
             <div className="Footer">
                 <Button text="Edit Profile" location="/editprofile" />
                 <Button text="Retake Survey" location="/retake" />
             </div>
-            <br></br>
             <div className='BottomFooter'>
                 <button onClick={handleLogout} className="logout-button">Logout</button>
             </div>

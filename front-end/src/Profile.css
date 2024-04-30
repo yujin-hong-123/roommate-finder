@@ -1,7 +1,7 @@
 .Heading{
     display: flex;
     justify-content: space-evenly;
-    padding-top: 10px;
+    padding-top: 0px;
 }
 
 .Profile{
@@ -10,14 +10,19 @@
     align-items: center;
     margin: 20px;
     font-family: 'Montserrat';
-    padding-top: 70px;
-    padding-bottom: 30px;
+    padding-top: 50px;
+    padding-bottom: 20px;
 }
 
 .AboutText{
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.profile-text {
+    padding: 0px;
+    margin-bottom: 0px;
 }
 
 .Footer{
@@ -28,7 +33,7 @@
 .BottomFooter{
     display: flex;
     justify-content: space-evenly;
-    padding-top: 60px;
+    padding-top: 50px;
 }
 
 .logout-button {
@@ -40,7 +45,7 @@
 
 .profilepic {
     width: 300px;
-    padding: 30px
+    margin-bottom: 20px;
 }
 
 .message-button {
