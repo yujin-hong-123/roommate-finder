@@ -39,7 +39,7 @@ const userData = require('./mockDatabase.json');
 const { profile } = require('console');
 
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' })); // allow cross-origin resource sharing
+app.use(cors({ credentials: true, origin: 'http://64.23.166.166:3000' })); // allow cross-origin resource sharing http://64.23.166.166:3000
 
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
@@ -157,8 +157,8 @@ app.post('/register', async (req, res) => {
     //     username,
     //     password: hashedPassword
     // });
-    
-    newUser= new User({})
+
+    newUser = new User({})
     newUser.username = username;
     newUser.password = hashedPassword;
 
@@ -277,7 +277,7 @@ app.get('/otheruser', authenticateToken, (req, res) => {
         if (!foundUser) return res.status(404).json({ message: "User not found" });
 
         for (const user of foundUser) {
-          if(user.username === req.session.otheruser) {
+          if (user.username === req.session.otheruser) {
             res.json(user);
           }
         }
@@ -298,7 +298,7 @@ app.get('/useranswers', authenticateToken, (req, res) => {
       .then(foundUser => {
         if (!foundUser) return res.status(404).json({ message: "User not found" });
         for (const user of foundUser) {
-          if(user.username === req.session.otheruser) {
+          if (user.username === req.session.otheruser) {
             res.json(user);
           }
         }
@@ -454,15 +454,15 @@ app.post('/chatpage2', async (req, res) => {
 
 app.get('/chatUser', authenticateToken, (req, res) => {
   User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')
-      .then(user => {
-          if (!user) return res.status(404).json({ message: "User not found" });
-          console.log('User data to send:', user);  // Log the user data
-          res.json(user.username);
-      })
-      .catch(err => {
-          console.error(err);
-          res.status(500).json({ message: "Internal server error" });
-      });
+    .then(user => {
+      if (!user) return res.status(404).json({ message: "User not found" });
+      console.log('User data to send:', user);  // Log the user data
+      res.json(user.username);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    });
 });
 
 app.get('/profile', authenticateToken, (req, res) => {
@@ -478,25 +478,25 @@ app.get('/profile', authenticateToken, (req, res) => {
     });
 });
 
-app.get('/retake', authenticateToken, async(req, res) => {
-  User.findById(req.user.id, 'profile.name answers.gender answers.year answers.pets ' + 
-  'answers.guests answers.smoke answers.drink ' +
-  'answers.rent_max answers.rent_min ' +
-  'answers.bedtime answers.quietness answers.cleanliness ' +
-  'preferences.gender preferences.year preferences.pets ' +
-  'preferences.guests preferences.smoke preferences.drink ' +
-  'preferences.bedtime preferences.quietness preferences.cleanliness')
-  .then(user => {
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.json(user);
-  })
-  .catch(err => {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
-  });
+app.get('/retake', authenticateToken, async (req, res) => {
+  User.findById(req.user.id, 'profile.name answers.gender answers.year answers.pets ' +
+    'answers.guests answers.smoke answers.drink ' +
+    'answers.rent_max answers.rent_min ' +
+    'answers.bedtime answers.quietness answers.cleanliness ' +
+    'preferences.gender preferences.year preferences.pets ' +
+    'preferences.guests preferences.smoke preferences.drink ' +
+    'preferences.bedtime preferences.quietness preferences.cleanliness')
+    .then(user => {
+      if (!user) return res.status(404).json({ message: "User not found" });
+      res.json(user);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    });
 });
 
-app.post('/retake', authenticateToken, async(req, res) => {
+app.post('/retake', authenticateToken, async (req, res) => {
   console.log("Received update request for user:", req.user.id);
   console.log("Request data:", req.body);
 
@@ -527,7 +527,7 @@ app.post('/retake', authenticateToken, async(req, res) => {
 
     await user.save();
     console.log('User updated: ', user);
-    res.json({message: 'Survey updated successfully'});
+    res.json({ message: 'Survey updated successfully' });
   } catch (err) {
     console.error("Error during survey retake update:", err);
     res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -572,7 +572,7 @@ app.post('/editprofile', authenticateToken, async (req, res) => {
 
     await user.save();
     console.log('User updated:', user);
-    
+
     res.json({ message: 'Profile updated successfully.' });
   } catch (err) {
     console.error("Error during profile update:", err);
