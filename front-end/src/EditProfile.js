@@ -57,30 +57,32 @@ function EditProfile() {
             <div className="UpdateFields">
                 {errorMessage && <div className="error" style={{ fontSize: '1.5rem', color: 'red', fontWeight: 'bold' }}>{errorMessage}</div>}
                 <h3 className="UpdateHeader">Update Profile Picture</h3>
-                <label>
-                    <input type='radio' name='picture' value='bear' checked={picture==='bear'} onChange={(e) => setPicture(e.target.value)}></input>
-                    <img className='avatar' src={bear}/>
-                </label>
-                <label>
-                    <input type='radio' name='picture' value='cat' checked={picture==='cat'} onChange={(e) => setPicture(e.target.value)}></input>
-                    <img className='avatar' src={cat}/>
-                </label>
-                <label>
-                    <input type='radio' name='picture' value='dog' checked={picture==='dog'} onChange={(e) => setPicture(e.target.value)}></input>
-                    <img className='avatar' src={dog}/>
-                </label>
-                <label>
-                    <input type='radio' name='picture' value='duck' checked={picture==='duck'} onChange={(e) => setPicture(e.target.value)}></input>
-                    <img className='avatar' src={duck}/>
-                </label>
-                <label>
-                    <input type='radio' name='picture' value='panda' checked={picture==='panda'} onChange={(e) => setPicture(e.target.value)}></input>
-                    <img className='avatar' src={panda}/>
-                </label>
-                <label>
-                    <input type='radio' name='picture' value='rabbit' checked={picture==='rabbit'} onChange={(e) => setPicture(e.target.value)}></input>
-                    <img className='avatar' src={rabbit}/>
-                </label>
+                <div className="ProfilePictures">
+                    <label>
+                        <input type='radio' name='picture' value='bear' checked={picture==='bear'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={bear}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='cat' checked={picture==='cat'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={cat}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='dog' checked={picture==='dog'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={dog}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='duck' checked={picture==='duck'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={duck}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='panda' checked={picture==='panda'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={panda}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='rabbit' checked={picture==='rabbit'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={rabbit}/>
+                    </label>
+                </div>
 
                 <h3 className="UpdateHeader">Update Username</h3>
                 <label>
