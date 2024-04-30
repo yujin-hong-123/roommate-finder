@@ -23,7 +23,7 @@ const Matches = props => {
 
   const fetchMatches = async () => {
     try {
-      const response = await axios.get('http://64.23.166.166:3001/matches', {
+      const response = await axios.get('http://167.99.54.107:3001/matches', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -60,7 +60,7 @@ const Matches = props => {
     console.log("Sending data of user: ", match.username);
 
     try {
-      const response = await axios.post('http://64.23.166.166:3001/matches', match, {
+      const response = await axios.post('http://167.99.54.107:3001/matches', match, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}` // Include the JWT token in the request
         }

@@ -26,7 +26,7 @@ function UserAnswers() {
 
     const fetchSurveyData = async () => {
         try {
-            const response = await axios.get('http://64.23.166.166:3001/useranswers', {
+            const response = await axios.get('http://167.99.54.107:3001/useranswers', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }

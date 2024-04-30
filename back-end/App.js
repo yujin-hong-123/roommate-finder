@@ -39,7 +39,7 @@ const userData = require('./mockDatabase.json');
 const { profile } = require('console');
 
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: 'http://64.23.166.166:3000' })); // allow cross-origin resource sharing http://64.23.166.166:3000
+app.use(cors({ credentials: true, origin: 'http://167.99.54.107:3000' })); // allow cross-origin resource sharing http://167.99.54.107:3000
 
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data

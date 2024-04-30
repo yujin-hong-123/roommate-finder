@@ -160,7 +160,7 @@ function Survey() {
             };
 
             axios
-                .post('http://64.23.166.166:3001/survey', surveyData)
+                .post('http://167.99.54.107:3001/survey', surveyData)
                 .then(response => {
                     navigate('/login');
                 })

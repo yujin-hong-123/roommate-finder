@@ -51,7 +51,7 @@ function ChatPage() {
 
     console.log("Fetching chat history...")
     //request chat history between yourself and target user (otherperson_username) that you just clicked on
-    axios.get(`http://64.23.166.166:3001/chatpage/${otherperson_username}`, {
+    axios.get(`http://167.99.54.107:3001/chatpage/${otherperson_username}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -99,7 +99,7 @@ function ChatPage() {
 
   const getUser = async () => {
     try {
-      const response = await axios.get('http://64.23.166.166:3001/chatUser', {
+      const response = await axios.get('http://167.99.54.107:3001/chatUser', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -133,7 +133,7 @@ function ChatPage() {
     };
 
     //Send the message to the backend
-    axios.post('http://64.23.166.166:3001/chatpage2', msg_post)
+    axios.post('http://167.99.54.107:3001/chatpage2', msg_post)
       .then(response => {
         console.log('Message sent successfully:', response.data);
       })

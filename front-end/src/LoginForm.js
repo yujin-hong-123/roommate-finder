@@ -15,7 +15,7 @@ function LoginForm() {
         console.log('Login with:', username, password);
 
         try {
-            const response = await fetch('http://64.23.166.166:3001/login', {
+            const response = await fetch('http://167.99.54.107:3001/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
