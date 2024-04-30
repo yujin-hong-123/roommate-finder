@@ -452,7 +452,7 @@ app.post('/chatpage2', async (req, res) => {
   }
 });
 
-app.get('http://64.23.166.166:3000/chatUser', authenticateToken, (req, res) => {
+app.get('64.23.166.166:3000/chatUser', authenticateToken, (req, res) => {
   User.findById(req.user.id, 'username name bio imagePath pets guests rent_max rent_min bedtime')
     .then(user => {
       if (!user) return res.status(404).json({ message: "User not found" });
