@@ -16,7 +16,7 @@ function OtherProfile() {
 
     const fetchProfileData = async () => {
         try {
-            const response = await axios.get('http://152.42.152.196:3001/otheruser', {
+            const response = await axios.get('http://64.23.166.166:3001/otheruser', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
