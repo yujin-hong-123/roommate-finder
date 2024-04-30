@@ -32,7 +32,7 @@
 
 ul.nav-links {
   list-style: none;
-  padding: 5px 20px 5px 5px; /* Remove default padding */
+  padding: 5px 15px 5px 5px; /* Remove default padding */
   margin: 0; /* Remove default margin */
   display: flex;
   text-align: center;
@@ -40,7 +40,7 @@ ul.nav-links {
 
 li.nav-item {
   display: inline-block;
-  padding: 5px 10px 0px 10px;
+  padding: 5px 5px 0px 5px;
 }
 .nav-item a {
   color: white;
