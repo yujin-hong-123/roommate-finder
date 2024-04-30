@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom'
 import "./ChatList.css"
 import Header from "./Header"
 import profilepic from './ProfilePic.png';
+import bear from './assets/bear.png';
+import cat from './assets/cat.png';
+import dog from './assets/dog.png';
+import duck from './assets/duck.png';
+import panda from './assets/panda.png';
+import rabbit from './assets/rabbit.png'
 import { socket } from './sockets/ReactSocket';
 
 const Chatlist = props => {
@@ -54,12 +60,22 @@ const Chatlist = props => {
     navigate(`/chatpage/${username}`);
   };
 
+  const avatarMap = {
+    'bear': bear,
+    'cat': cat,
+    'dog': dog,
+    'duck': duck,
+    'panda': panda,
+    'rabbit': rabbit,
+    '': profilepic
+  };
+
   return (
     <div className="ChatList">
       <Header />
       {Array.isArray(chats) && chats.map((user, index) => (
         <button key={index} onClick={() => handleProfileClick(user.username)} className="rowbutton">
-          <img src={profilepic} className="profilepic_chat" alt="profilepic" />
+          <img src={avatarMap[user.profile.picture]} className="profilepic_chat" alt="profilepic" />
           <ul className="chatentry">
             <li className="username_chat">{user.profile.name}</li>
             <li className="lastchat">{user.profile.bio}</li>

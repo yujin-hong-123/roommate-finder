@@ -20,3 +20,22 @@
     display: flex;
     justify-content: space-evenly;
 }
+
+.ProfilePictures {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.avatar_choice {
+    width: 100px;
+}
+
+.avatar {
+    width: 100px;
+}
+
+input[type="radio"] {
+    display: inline;
+    margin-right: 10px;
+}

@@ -3,10 +3,17 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import "./EditProfile.css";
+import bear from './assets/bear.png';
+import cat from './assets/cat.png';
+import dog from './assets/dog.png';
+import duck from './assets/duck.png';
+import panda from './assets/panda.png';
+import rabbit from './assets/rabbit.png'
 
 function EditProfile() {
     const navigate = useNavigate();
     const [userName, setUserName] = useState("");
+    const [picture, setPicture] = useState("");
     const [bio, setBio] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -18,6 +25,7 @@ function EditProfile() {
             old_password: oldPassword,
             bio: bio,
             username: userName,
+            picture: picture
         };
 
         console.log("Updating profile with data:", profileData);
@@ -49,9 +57,33 @@ function EditProfile() {
             <div className="UpdateFields">
                 {errorMessage && <div className="error" style={{ fontSize: '1.5rem', color: 'red', fontWeight: 'bold' }}>{errorMessage}</div>}
                 <h3 className="UpdateHeader">Update Profile Picture</h3>
-                <label>
-                    <input type="image"></input>
-                </label>
+                <div className="ProfilePictures">
+                    <label>
+                        <input type='radio' name='picture' value='bear' checked={picture==='bear'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={bear}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='cat' checked={picture==='cat'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={cat}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='dog' checked={picture==='dog'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={dog}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='duck' checked={picture==='duck'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={duck}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='panda' checked={picture==='panda'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={panda}/>
+                    </label>
+                    <label>
+                        <input type='radio' name='picture' value='rabbit' checked={picture==='rabbit'} onChange={(e) => setPicture(e.target.value)}></input>
+                        <img className='avatar' src={rabbit}/>
+                    </label>
+                </div>
+
                 <h3 className="UpdateHeader">Update Username</h3>
                 <label>
                     <input type="text" value={userName} onChange={e => setUserName(e.target.value)} />

@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom'
 import "./Matches.css"
 import Header from "./Header"
 import profilepic from './ProfilePic.png';
+import bear from './assets/bear.png';
+import cat from './assets/cat.png';
+import dog from './assets/dog.png';
+import duck from './assets/duck.png';
+import panda from './assets/panda.png';
+import rabbit from './assets/rabbit.png'
 
 const Matches = props => {
   const navigate = useNavigate();
@@ -71,7 +77,15 @@ const Matches = props => {
     }
   };
 
-  //() => navigate('/otheruser')
+  const avatarMap = {
+    'bear': bear,
+    'cat': cat,
+    'dog': dog,
+    'duck': duck,
+    'panda': panda,
+    'rabbit': rabbit,
+    '': profilepic
+  };
 
   return (
     <>
@@ -81,7 +95,7 @@ const Matches = props => {
         {matches.map((match, index) => (
           <div key={index}>
             <button onClick={() => handleClick(match)} className="rowbutton">
-              <img src={profilepic} className="profilepic_match" alt="profilepic" />
+              <img src={avatarMap[match.profile.picture]} className="profilepic_match" alt="profilepic" />
               <ul className="matchentry">
                 <li className="username_match">{match.profile.name}</li>
                 <li className="bio">{match.profile.bio}</li>
