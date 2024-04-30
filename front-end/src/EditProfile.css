@@ -20,3 +20,16 @@
     display: flex;
     justify-content: space-evenly;
 }
+
+.avatar_choice {
+    width: 100px;
+}
+
+.avatar {
+    width: 100px;
+}
+
+input[type="radio"] {
+    display: inline;
+    margin-right: 10px;
+}
