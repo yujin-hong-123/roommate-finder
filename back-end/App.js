@@ -565,7 +565,7 @@ app.post('/editprofile', authenticateToken, async (req, res) => {
       ...user.profile,
       bio: req.body.bio || user.profile.bio,
       year: req.body.year || user.profile.year,
-      picture: req.body.picture || user.body.picture
+      picture: req.body.picture || user.profile.picture
     };
 
     // Update username if provided
