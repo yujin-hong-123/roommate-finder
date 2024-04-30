@@ -157,7 +157,7 @@ app.post('/register', async (req, res) => {
     //     username,
     //     password: hashedPassword
     // });
-    
+
     newUser= new User({})
     newUser.username = username;
     newUser.password = hashedPassword;
@@ -467,7 +467,7 @@ app.get('/chatUser', authenticateToken, (req, res) => {
 
 app.get('/profile', authenticateToken, (req, res) => {
   // Add 'year' to the list of fields to return
-  User.findById(req.user.id, 'username answers.year profile.bio imagePath')
+  User.findById(req.user.id, 'username answers.year profile.bio profile.picture')
     .then(user => {
       if (!user) return res.status(404).json({ message: "User not found" });
       res.json(user);
@@ -565,6 +565,7 @@ app.post('/editprofile', authenticateToken, async (req, res) => {
       ...user.profile,
       bio: req.body.bio || user.profile.bio,
       year: req.body.year || user.profile.year,
+      picture: req.body.picture || user.body.picture
     };
 
     // Update username if provided

@@ -4,7 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Button from './Button';
 import profilePicture from './ProfilePic.png';
-import "./OtherProfile.css";
+import bear from './assets/bear.png';
+import cat from './assets/cat.png';
+import dog from './assets/dog.png';
+import duck from './assets/duck.png';
+import panda from './assets/panda.png';
+import rabbit from './assets/rabbit.png'
+import "./Profile.css";
 import { socket } from './sockets/ReactSocket';
 
 function OtherProfile() {
@@ -55,11 +61,34 @@ function OtherProfile() {
         navigate('/profile');
     }
 
+    var avatar;
+    if (profileData.picture === 'bear') {
+        avatar = bear;
+    }
+    else if (profileData.picture === 'cat') {
+        avatar = cat
+    }
+    else if (profileData.picture === 'dog') {
+        avatar = dog
+    }
+    else if (profileData.picture === 'duck') {
+        avatar = duck
+    }
+    else if (profileData.picture === 'panda') {
+        avatar = panda
+    }
+    else if (profileData.picture === 'rabbit') {
+        avatar = rabbit
+    }
+    else {
+        avatar = profilePicture;
+    }
+
     return (
         <>
             <Header />
             <div className="Profile">
-                <img src={profileData.imagePath || profilePicture} alt="Profile" />
+                <img className='profilepic' src={avatar} alt="Profile" />
                 <h2>{username || 'Username not set'}</h2>
                 <h4>{year || 'Year not set'}</h4>
                 <p className="AboutText">{profileData.bio || 'No bio available.'}</p>
