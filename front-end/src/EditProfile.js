@@ -23,7 +23,7 @@ function EditProfile() {
         console.log("Updating profile with data:", profileData);
 
         try {
-            const response = await axios.post('http://152.42.152.196:3001/editprofile', profileData, {
+            const response = await axios.post('http://64.23.166.166:3001/editprofile', profileData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}` // Include the JWT token in the request
                 }

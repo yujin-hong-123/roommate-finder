@@ -16,7 +16,7 @@ function Profile() {
 
     const fetchProfileData = async () => {
         try {
-            const response = await axios.get('http://152.42.152.196:3001/profile', {
+            const response = await axios.get('http://64.23.166.166:3001/profile', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
