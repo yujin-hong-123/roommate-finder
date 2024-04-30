@@ -78,7 +78,7 @@ const Chatlist = props => {
           <img src={avatarMap[user.profile.picture]} className="profilepic_chat" alt="profilepic" />
           <ul className="chatentry">
             <li className="username_chat">{user.profile.name}</li>
-            <li className="lastchat">{user.profile.bio}</li>
+
           </ul>
         </button>
       ))}
