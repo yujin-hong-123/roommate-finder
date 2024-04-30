@@ -15,7 +15,7 @@ function LoginForm() {
         console.log('Login with:', username, password);
 
         try {
-            const response = await fetch('http://localhost:3001/login', {
+            const response = await fetch('http://64.23.166.166:3001/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ function LoginForm() {
 
             if (response.ok) {
                 console.log('Login successful:', data);
-                
+
                 //connect the chat socket and register its username
                 //socket.auth = { username };
                 //socket.connect();

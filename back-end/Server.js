@@ -3,15 +3,18 @@ const server = require("./App");
 const connectDB = require('./db');
 connectDB();
 
-const {createServer} = require('http')
+const { createServer } = require('http')
 const { Server } = require('socket.io');
 const { error } = require("console");
 const httpServer = createServer();
-const io = new Server(httpServer, {cors: {
-    origin: ['http://localhost:3000'],
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,}});
+const io = new Server(httpServer, {
+    cors: {
+        origin: ['http://64.23.166.166:3000'],
+        methods: ['GET', 'POST'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        credentials: true,
+    }
+});
 
 const port = 3001;
 
@@ -52,11 +55,11 @@ io.on('connection', (socket) => {
     });
     */
     socket.on('chat_message', (msg) => {
-        socket.broadcast.emit('chat_message', msg); 
+        socket.broadcast.emit('chat_message', msg);
     });
 
     socket.on('disconnect', () => {
-      console.log("a user has disconnected");
+        console.log("a user has disconnected");
     });
 });
 
@@ -64,7 +67,7 @@ httpServer.listen(3002, () => {
     console.log("Socket server running on port 3002");
 });
 
-const listener = server.listen(port, function() {
+const listener = server.listen(port, function () {
     console.log(`Server running on port: ${port}`);
 })
 
