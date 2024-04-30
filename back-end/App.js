@@ -510,7 +510,7 @@ app.post('/retake', authenticateToken, async (req, res) => {
 
     const surveyData = req.body;
 
-    profiledict = { name: surveyData.name, year: surveyData.year, bio: "" }
+    profiledict = { name: surveyData.name, year: surveyData.year, bio: user.profile.bio, picture:user.profile.picture }
     answersdict = {
       gender: surveyData.genderAns, year: surveyData.year, pets: surveyData.petsAns,
       guests: surveyData.guestsAns, smoke: surveyData.smokeAns, drink: surveyData.drinkAns,
