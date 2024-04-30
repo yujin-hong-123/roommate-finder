@@ -11,7 +11,7 @@ function UserAnswers() {
     const [error, setError] = useState('');
     const [errorMessage, setErrorMessage] = useState("");
 
-    const[name, setName] = useState(null);
+    const [name, setName] = useState(null);
     const [year, setYear] = useState(null);
     const [genderAns, setGenderAns] = useState(null);
     const [petsAns, setPetsAns] = useState(null);
@@ -26,7 +26,7 @@ function UserAnswers() {
 
     const fetchSurveyData = async () => {
         try {
-            const response = await axios.get('http://localhost:3001/useranswers', {
+            const response = await axios.get('http://152.42.152.196:3001/useranswers', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -88,7 +88,7 @@ function UserAnswers() {
                     <p>How often do you bring over guests? {guestsAns} </p>
                     <p>How often do you smoke? {smokeAns} </p>
                     <p>How often do you drink? {drinkAns} </p>
-                    <p>When is your usual bedtime(1: Before 10, 2: Between 10 pm and 12 am, 3: Between 12 am and 2 am, 
+                    <p>When is your usual bedtime(1: Before 10, 2: Between 10 pm and 12 am, 3: Between 12 am and 2 am,
                         4: Between 2 am and 4 am, 5:After 4 am, 6: Irregular)?  {bedAns} </p>
                     <p>How would you rate your loudness from 1 to 5(1 being quiet and 5 being loud)?  {quietAns} </p>
                     <p>How would you rate your cleanliness from 1 to 5(1 being messy and 5 being clean)?  {cleanAns} </p>

@@ -15,22 +15,22 @@ const Matches = props => {
   const [matches, setMatches] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchMatches = async() => {
+  const fetchMatches = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/matches', {
-          headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
+      const response = await axios.get('http://152.42.152.196:3001/matches', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
       });
       console.log('Fetching profile data', response.data);
       if (response.data) {
-          setMatches(response.data);
+        setMatches(response.data);
       } else {
-          throw new Error('Matches data is missing');
+        throw new Error('Matches data is missing');
       }
     } catch (error) {
-        console.error('Error fetching matches data:', error);
-        setError('Error fetching matches data: ' + error.message);
+      console.error('Error fetching matches data:', error);
+      setError('Error fetching matches data: ' + error.message);
     }
   };
 
@@ -54,24 +54,24 @@ const Matches = props => {
     console.log("Sending data of user: ", match.username);
 
     try {
-        const response = await axios.post('http://localhost:3001/matches', match, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}` // Include the JWT token in the request
-            }
-        });
-        console.log("Update response:", response.data);
-        if (response.status === 200) {
-            console.log("Match info sent successfully");
-            navigate('/otheruser', { state: { updated: true } }); // Pass state to trigger re-fetch
+      const response = await axios.post('http://localhost:3001/matches', match, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}` // Include the JWT token in the request
         }
+      });
+      console.log("Update response:", response.data);
+      if (response.status === 200) {
+        console.log("Match info sent successfully");
+        navigate('/otheruser', { state: { updated: true } }); // Pass state to trigger re-fetch
+      }
     } catch (error) {
-        console.error("Update error:", error);
-        const message = error.response?.data?.message || "An error occurred while updating the profile.";
-        setErrorMessage(message);
+      console.error("Update error:", error);
+      const message = error.response?.data?.message || "An error occurred while updating the profile.";
+      setErrorMessage(message);
     }
-}; 
+  };
 
-//() => navigate('/otheruser')
+  //() => navigate('/otheruser')
 
   return (
     <>

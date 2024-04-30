@@ -16,7 +16,7 @@ const Chatlist = props => {
 
   const fetchChats = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/chatlist', {
+      const response = await axios.get('http://152.42.152.196:3001/chatlist', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }

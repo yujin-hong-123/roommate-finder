@@ -7,7 +7,7 @@ import { socket } from './sockets/ReactSocket';
 import { ChatBoxSender, ChatBoxReceiver } from './sockets/ChatBox';
 import InputTxt from './sockets/InputTxt';
 import { useLocation } from 'react-router-dom';
-import {animateScroll} from 'react-scroll'
+import { animateScroll } from 'react-scroll'
 
 function ChatPage() {
   const location = useLocation(); //for extracting receiver username
@@ -51,7 +51,7 @@ function ChatPage() {
 
     console.log("Fetching chat history...")
     //request chat history between yourself and target user (otherperson_username) that you just clicked on
-    axios.get(`http://localhost:3001/chatpage/${otherperson_username}`, {
+    axios.get(`http://152.42.152.196:3001/chatpage/${otherperson_username}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -89,7 +89,7 @@ function ChatPage() {
   }, [chats])
 
   function scrollToBottom() {
-    animateScroll.scrollToBottom({containerId: "msgContainer"});
+    animateScroll.scrollToBottom({ containerId: "msgContainer" });
   }
 
   //sends the message to the backend
@@ -116,7 +116,7 @@ function ChatPage() {
   function sendMessage(msg) {
     const msgTime = new Date().toLocaleTimeString();
     const otherUser = otherperson_username;
-    const newMsg = { ...msg, user, msgTime, otherUser};
+    const newMsg = { ...msg, user, msgTime, otherUser };
     //console.log(`Sending message as ${user}`);
     setChats([...chats, newMsg]);
     sendToSocket([...chats, newMsg]);
@@ -151,7 +151,7 @@ function ChatPage() {
       if (chat.user === user && chat.otherUser === otherperson_username) {
         return <ChatBoxSender key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
       }
-      else if(chat.otherUser === user && chat.user === otherperson_username) {
+      else if (chat.otherUser === user && chat.user === otherperson_username) {
         return <ChatBoxReceiver key={index} message={chat.message} user={chat.user} time={chat.msgTime} />
       }
       else {
@@ -174,8 +174,8 @@ function ChatPage() {
           //displays message histroy to look like normal messages
           if (message.sender === user) {
             return <ChatBoxSender key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
-          }else {
-          return <ChatBoxReceiver key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
+          } else {
+            return <ChatBoxReceiver key={index} message={message.messagetext} user={message.sender} time={formattedTimestamp} />
           }
         })}
         <ChatExchange />

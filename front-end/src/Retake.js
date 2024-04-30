@@ -10,7 +10,7 @@ function Retake() {
     const [error, setError] = useState('');
     const [errorMessage, setErrorMessage] = useState("");
 
-    const[name, setName] = useState(null);
+    const [name, setName] = useState(null);
     const [year, setYear] = useState(null);
     const [genderAns, setGenderAns] = useState(null);
     const [petsAns, setPetsAns] = useState(null);
@@ -35,7 +35,7 @@ function Retake() {
 
     const fetchSurveyData = async () => {
         try {
-            const response = await axios.get('http://localhost:3001/retake', {
+            const response = await axios.get('http://152.42.152.196:3001/retake', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -204,7 +204,7 @@ function Retake() {
             };
 
             try {
-                const response = await axios.post('http://localhost:3001/retake', surveyData, {
+                const response = await axios.post('http://152.42.152.196:3001/retake', surveyData, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}` // Include the JWT token in the request
                     }
@@ -231,7 +231,7 @@ function Retake() {
                 <div className='section'>
                     <h3>Let's set up your profile!</h3>
                 </div>
-                
+
                 <div className="survey-question">
                     <p>What is your first and last name? (i.e. Barack Obama)</p>
                     <input
@@ -246,7 +246,7 @@ function Retake() {
                 <div className='survey-question'>
                     <p>What is your year?</p>
                     <label for='year'>
-                        <input 
+                        <input
                             id='year'
                             type='radio'
                             name='year'
@@ -257,36 +257,36 @@ function Retake() {
                         Freshman
                     </label>
                     <label for='year'>
-                        <input 
+                        <input
                             id='year'
                             type='radio'
                             name='year'
                             value='sophomore'
                             checked={year === 'sophomore'}
                             onChange={() => handleYearChange('sophomore')}
-                            />
+                        />
                         Sophomore
                     </label>
                     <label for='year'>
-                        <input 
+                        <input
                             id='year'
                             type='radio'
                             name='year'
                             value='junior'
                             checked={year === 'junior'}
                             onChange={() => handleYearChange('junior')}
-                            />
+                        />
                         Junior
                     </label>
                     <label for='year'>
-                        <input 
+                        <input
                             id='year'
                             type='radio'
                             name='year'
                             value='senior'
                             checked={year === 'senior'}
                             onChange={() => handleYearChange('senior')}
-                            />
+                        />
                         Senior
                     </label>
                 </div>
@@ -298,36 +298,36 @@ function Retake() {
                 <div className='survey-question'>
                     <p>What is your gender?</p>
                     <label for='genderAns'>
-                        <input 
+                        <input
                             id='genderAns'
                             type='radio'
                             name='genderAns'
                             value='male'
                             checked={genderAns === 'male'}
                             onChange={() => handleGenderAnsChange('male')}
-                            />
+                        />
                         Male
                     </label>
                     <label for='genderAns'>
-                        <input 
+                        <input
                             id='genderAns'
                             type='radio'
                             name='genderAns'
                             value='female'
                             checked={genderAns === 'female'}
                             onChange={() => handleGenderAnsChange('female')}
-                            />
+                        />
                         Female
                     </label>
                     <label for='genderAns'>
-                        <input 
+                        <input
                             id='genderAns'
                             type='radio'
                             name='genderAns'
                             value='other'
                             checked={genderAns === 'other'}
                             onChange={() => handleGenderAnsChange('other')}
-                            />
+                        />
                         Other
                     </label>
                 </div>
@@ -357,28 +357,28 @@ function Retake() {
                 </div>
 
                 <div className="survey-question">
-                <p>Specify your desired rent per person in dollars:</p>
-                <div className="rent-inputs">
-                    <p></p>
-                    <label>
-                        Minimum Rent Share:
-                        <input
-                            type='number'
-                            name='minRent'
-                            value={minRent}
-                            onChange={(e) => handleMinRentChange(parseInt(e.target.value))}
-                        />
-                    </label><br />
-                    <label>
-                        Maximum Rent Share:
-                        <input
-                            type='number'
-                            name='maxRent'
-                            value={maxRent}
-                            onChange={(e) => handleMaxRentChange(parseInt(e.target.value))}
-                        />
-                    </label>
-                </div>
+                    <p>Specify your desired rent per person in dollars:</p>
+                    <div className="rent-inputs">
+                        <p></p>
+                        <label>
+                            Minimum Rent Share:
+                            <input
+                                type='number'
+                                name='minRent'
+                                value={minRent}
+                                onChange={(e) => handleMinRentChange(parseInt(e.target.value))}
+                            />
+                        </label><br />
+                        <label>
+                            Maximum Rent Share:
+                            <input
+                                type='number'
+                                name='maxRent'
+                                value={maxRent}
+                                onChange={(e) => handleMaxRentChange(parseInt(e.target.value))}
+                            />
+                        </label>
+                    </div>
                 </div>
 
                 <div className='survey-question'>
@@ -496,7 +496,7 @@ function Retake() {
                         Before 10
                     </label>
                     <label>
-                    <input
+                        <input
                             type='radio'
                             name='bedAns'
                             value={2}
@@ -506,7 +506,7 @@ function Retake() {
                         Between 10 pm and 12 am
                     </label>
                     <label>
-                    <input
+                        <input
                             type='radio'
                             name='bedAns'
                             value={3}
