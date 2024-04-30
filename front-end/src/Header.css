@@ -40,7 +40,7 @@ ul.nav-links {
 
 li.nav-item {
   display: inline-block;
-  padding: 5px 5px 0px 5px;
+  margin-top: 5px;
 }
 .nav-item a {
   color: white;
@@ -53,12 +53,15 @@ li.nav-item {
 
 .icons_logo {
   height: 70px;
-  padding: 0px 10px 0px 15px
+  margin-right: 20px;
+  margin-left: 10px;
 }
 
 .icons {
   height: 45px;
-  padding: 10px 15px 0px 10px
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-top: 13px
 }
 
 body {
