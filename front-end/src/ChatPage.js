@@ -99,7 +99,7 @@ function ChatPage() {
 
   const getUser = async () => {
     try {
-      const response = await axios.get('http://64.23.166.166/chatUser', {
+      const response = await axios.get('http://64.23.166.166:3000/chatUser', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
