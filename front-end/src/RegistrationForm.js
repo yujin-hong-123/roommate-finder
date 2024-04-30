@@ -22,7 +22,7 @@ function RegistrationForm() {
 
     try {
       // Attempt to register the user
-      const response = await fetch('http://64.23.166.166:3001/register', {
+      const response = await fetch('http://{$process.env.host}:3001/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
