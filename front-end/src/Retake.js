@@ -35,7 +35,7 @@ function Retake() {
 
     const fetchSurveyData = async () => {
         try {
-            const response = await axios.get('http://{$process.env.host}:3001/retake', {
+            const response = await axios.get('http://{$process.env.HOST}:3001/retake', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -204,7 +204,7 @@ function Retake() {
             };
 
             try {
-                const response = await axios.post('http://{$process.env.host}:3001/retake', surveyData, {
+                const response = await axios.post('http://{$process.env.HOST}:3001/retake', surveyData, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}` // Include the JWT token in the request
                     }

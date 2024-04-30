@@ -160,7 +160,7 @@ function Survey() {
             };
 
             axios
-                .post('http://{$process.env.host}:3001/survey', surveyData)
+                .post('http://{$process.env.HOST}:3001/survey', surveyData)
                 .then(response => {
                     navigate('/login');
                 })

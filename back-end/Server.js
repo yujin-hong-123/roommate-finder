@@ -9,7 +9,7 @@ const { error } = require("console");
 const httpServer = createServer();
 const io = new Server(httpServer, {
     cors: {
-        origin: ['http://{$process.env.host}:3000'],
+        origin: ['http://{$process.env.HOST}:3000'],
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,

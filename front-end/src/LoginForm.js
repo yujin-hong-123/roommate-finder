@@ -15,7 +15,7 @@ function LoginForm() {
         console.log('Login with:', username, password);
 
         try {
-            const response = await fetch('http://{$process.env.host}:3001/login', {
+            const response = await fetch('http://{$process.env.HOST}:3001/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
