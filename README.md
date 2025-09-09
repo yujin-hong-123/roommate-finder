@@ -9,9 +9,9 @@ NYU Roommate Finder is a simple web app that easily connects students looking fo
 
 ### Team Members
 1. [Robert (Bobby) Impastato](https://github.com/bobbyimpastato)
-2. [Yujin Hong](https://github.com/hongsimmon) ([second account](https://github.com/))
-3. [Leena Vieltojarvi](https://github.com/Shadowcat567)
-4. [Ethan Delgado](https://github.com/ethan-delgado)
+2. [Yujin Hong](https://github.com/hongsimmon) ([second account](https://github.com/yujin-hong-123))
+4. [Leena Vieltojarvi](https://github.com/Shadowcat567)
+5. [Ethan Delgado](https://github.com/ethan-delgado)
 
 ### Why are we making this?
 At NYU, students looking to transition out of the dormitories often have problems finding good roommates. The NYC apartment search can be quite cutthroat, so preferences must be laid out far in advance before signing a lease. Even if a student finds a potential roommate, they often have to make sacrifices during or after signing a lease when they suddenly find that their preferences don't match up. They might be strict about their share of the rent, but not want some "morning person" making a ruckus at 5am. We wanted to build a platform that allows students to find roommates from a large pool of potential candidates who are also currently looking, so that they can quickly find the best match, and initiate a conversation with them. Ultimately, this will allow students to start looking for an apartment as soon as possible, not just with those that qualify, but with those who are the best possible matches for them. It's kind of like Tinder, but for roommates.
