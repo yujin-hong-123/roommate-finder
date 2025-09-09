@@ -1,7 +1,7 @@
 # NYU Roomate Finder
 
 ### Link to the Live Site:
-http://167.99.54.107:3000/
+http://34.227.111.151:3000/
 
 
 ###  Product Vision Statement:
