@@ -1,15 +1,15 @@
-# NYU Roomate Finder
+# NYU Roommate Finder
 
 ### Link to the Live Site:
 http://34.227.111.151:3000/
 
 
 ###  Product Vision Statement:
-NYU Roomate Finder is a simple web app that easily connects students looking for roomates with similar preferences so that they can start looking for an apartment together.
+NYU Roommate Finder is a simple web app that easily connects students looking for roommates with similar preferences so that they can start looking for an apartment together.
 
 ### Team Members
 1. [Robert (Bobby) Impastato](https://github.com/bobbyimpastato)
-2. [Yujin Hong](https://github.com/hongsimmon)
+2. [Yujin Hong](https://github.com/hongsimmon) ([second account](https://github.com/))
 3. [Leena Vieltojarvi](https://github.com/Shadowcat567)
 4. [Ethan Delgado](https://github.com/ethan-delgado)
 
